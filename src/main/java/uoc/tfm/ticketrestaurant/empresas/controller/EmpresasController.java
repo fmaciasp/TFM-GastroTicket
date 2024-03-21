@@ -35,7 +35,7 @@ public class EmpresasController {
                 HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("editar")
     public ResponseEntity<?> editarEmpresa(@RequestBody EmpresasDTO empresa) {
         EmpresasDTO _empresa = empresasService.getEmpresaById(empresa.getId());
         if (_empresa != null) {
@@ -53,7 +53,7 @@ public class EmpresasController {
             empresasService.eliminarEmpresa(id);
             return ResponseEntity.ok(Collections.singletonMap("mensaje", "La empresa se ha eliminado correctamente"));
         }
-        return new ResponseEntity<>(Collections.singletonMap("mensaje", "No se ha encontrado la empresa"),
+        return new ResponseEntity<>(Collections.singletonMap("mensaje", "No se ha encontrado la empresa con id " + id),
                 HttpStatus.NOT_FOUND);
     }
 }

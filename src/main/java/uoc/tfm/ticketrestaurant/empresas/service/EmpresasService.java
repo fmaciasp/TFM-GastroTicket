@@ -33,20 +33,13 @@ public class EmpresasService {
     }
 
     public EmpresasDTO editarEmpresa(long id, String nombre) {
-        Optional<EmpresasDTO> _emp = empresaRepo.findById(id);
-        if (_emp.isPresent()) {
-            EmpresasDTO _empresa = _emp.get();
-            _empresa.setNombre(nombre);
-            empresaRepo.save(_empresa);
-            return _empresa;
-        }
-        return null;
+        EmpresasDTO _empresa = empresaRepo.findById(id).get();
+        _empresa.setNombre(nombre);
+        empresaRepo.save(_empresa);
+        return _empresa;
     }
 
     public void eliminarEmpresa(long id) {
-        Optional<EmpresasDTO> _emp = empresaRepo.findById(id);
-        if (_emp.isPresent()) {
-            empresaRepo.deleteById(id);
-        }
+        empresaRepo.deleteById(id);
     }
 }
