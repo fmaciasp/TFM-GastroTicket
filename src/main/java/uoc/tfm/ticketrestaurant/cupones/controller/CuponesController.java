@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import uoc.tfm.ticketrestaurant.cupones.model.CuponesDTO;
@@ -24,7 +23,6 @@ public class CuponesController {
     CuponesService cuponService;
 
     @GetMapping
-    @ResponseBody
     public ResponseEntity<List<CuponesDTO>> getAllCuponesDtos() {
         return new ResponseEntity<List<CuponesDTO>>(cuponService.getCupones(), HttpStatus.OK);
     }
@@ -37,7 +35,6 @@ public class CuponesController {
     }
 
     @PostMapping("canjear")
-    @ResponseBody
     public ResponseEntity<?> canjearCupon(@RequestBody Long id) {
         CuponesDTO cupon = cuponService.getById(id);
         if (cupon == null) {
