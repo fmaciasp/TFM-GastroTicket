@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>uoc.tfm</groupId>
-	<artifactId>ticketrestaurant</artifactId>
+	<artifactId>gastroticket</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ticketrestaurant</name>
-	<description>Ticket Restaurant</description>
+	<name>gastroticket</name>
+	<description>Gastro Ticket</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
