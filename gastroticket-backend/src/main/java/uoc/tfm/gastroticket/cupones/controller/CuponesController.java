@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import uoc.tfm.gastroticket.cupones.model.CanjearCuponDTO;
 import uoc.tfm.gastroticket.cupones.model.CuponesDTO;
 import uoc.tfm.gastroticket.cupones.service.CuponesService;
 import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
@@ -64,13 +66,13 @@ public class CuponesController {
     }
 
     @PostMapping("canjear")
-    public ResponseEntity<?> canjearCupon(@RequestBody Long id) {
-        CuponesDTO cupon = cuponService.getById(id);
+    public ResponseEntity<?> canjearCupon(@RequestBody CanjearCuponDTO cuponRequestDTO) {
+        CuponesDTO cupon = cuponService.getById(cuponRequestDTO.getId());
         if (cupon == null) {
             return new ResponseEntity<>(Collections.singletonMap("mensaje", "El cupón no existe"),
                     HttpStatus.NOT_FOUND);
         }
-        cuponService.canjear(id);
+        cuponService.canjear(cuponRequestDTO.getId(), cuponRequestDTO.getRestauranteId());
         return new ResponseEntity<>(Collections.singletonMap("mensaje", "Cupón validado correctamente"), HttpStatus.OK);
     }
 

@@ -41,7 +41,7 @@ public class EmpresasController {
         if (_empresa != null) {
             _empresa.setNombre(empresa.getNombre());
             empresasService.editarEmpresa(_empresa.getId(), empresa.getNombre());
-            return ResponseEntity.ok(Collections.singletonMap("mensaje", "La empresa se ha editadi correctamente"));
+            return ResponseEntity.ok(Collections.singletonMap("mensaje", "La empresa se ha editado correctamente"));
         }
         return new ResponseEntity<>(Collections.singletonMap("mensaje", "No se ha encontrado la empresa"),
                 HttpStatus.NOT_FOUND);

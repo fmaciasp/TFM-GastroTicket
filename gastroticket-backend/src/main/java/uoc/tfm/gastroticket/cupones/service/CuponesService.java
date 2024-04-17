@@ -39,6 +39,16 @@ public class CuponesService {
         return cuponRepo.findById(id).orElse(null);
     }
 
+    public List<CuponesDTO> getByRestauranteId(long restauranteId) {
+        return cuponRepo.findByRestauranteId(restauranteId);
+    }
+
+    public void eliminarCupones(List<CuponesDTO> cupones) {
+        for (CuponesDTO cupon : cupones) {
+            cuponRepo.delete(cupon);
+        }
+    }
+
     public void createCupon(long empleadoId, long empresaId) {
 
         String codigo = generarCodigo().toString();
@@ -81,16 +91,16 @@ public class CuponesService {
         return codigo.toString();
     }
 
-    public void canjear(Long id) {
+    public void canjear(Long id, Long restauranteId) {
 
         @SuppressWarnings("null")
         Optional<CuponesDTO> cuponDto = cuponRepo.findById(id);
         if (cuponDto.isPresent()) {
             CuponesDTO _cuponDto = cuponDto.get();
             _cuponDto.setCanjeado(true);
+            _cuponDto.setRestauranteId(restauranteId);
             cuponRepo.save(_cuponDto);
         }
-
     }
 
 }

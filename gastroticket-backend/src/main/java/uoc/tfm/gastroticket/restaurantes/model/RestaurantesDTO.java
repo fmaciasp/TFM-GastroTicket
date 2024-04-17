@@ -1,6 +1,4 @@
-package uoc.tfm.gastroticket.cupones.model;
-
-import java.util.Date;
+package uoc.tfm.gastroticket.restaurantes.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,14 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CuponesDTO {
+public class RestaurantesDTO {
     @Id
     @GeneratedValue
     private Long id;
-    private String codigo;
-    private Long empresaId;
-    private Long empleadoId;
-    private Long restauranteId;
-    private boolean canjeado;
-    private Date fechaFin;
+    private String nombre;
+    private String direccion;
 }
