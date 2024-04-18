@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import uoc.tfm.gastroticket.cupones.model.CuponesDTO;
@@ -53,18 +54,18 @@ public class RestaurantesController {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteRestaurante(@RequestBody Long id, @RequestBody Long restauranteId) {
-        if (restaurantesService.getRestauranteById(id) != null) {
+    public ResponseEntity<?> deleteRestaurante(@RequestParam Long restauranteId) {
+        if (restaurantesService.getRestauranteById(restauranteId) != null) {
             List<CuponesDTO> _cupones = cuponesService.getByRestauranteId(restauranteId);
             if (!_cupones.isEmpty()) {
                 cuponesService.eliminarCupones(_cupones);
             }
-            restaurantesService.eliminarRestaurante(id);
+            restaurantesService.eliminarRestaurante(restauranteId);
             return ResponseEntity
                     .ok(Collections.singletonMap("mensaje", "El restaurante se ha eliminado correctamente"));
         }
         return new ResponseEntity<>(
-                Collections.singletonMap("mensaje", "No se ha encontrado el restaurante con id " + id),
+                Collections.singletonMap("mensaje", "No se ha encontrado el restaurante con id " + restauranteId),
                 HttpStatus.NOT_FOUND);
     }
 }

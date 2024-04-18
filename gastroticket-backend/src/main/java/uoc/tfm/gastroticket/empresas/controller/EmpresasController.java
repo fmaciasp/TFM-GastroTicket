@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
@@ -48,7 +49,7 @@ public class EmpresasController {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteEmpresa(@RequestBody Long id) {
+    public ResponseEntity<?> deleteEmpresa(@RequestParam Long id) {
         if (empresasService.getEmpresaById(id) != null) {
             empresasService.eliminarEmpresa(id);
             return ResponseEntity.ok(Collections.singletonMap("mensaje", "La empresa se ha eliminado correctamente"));

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
@@ -26,7 +27,7 @@ public class EmpleadosController {
     EmpresasService empresasService;
 
     @GetMapping("por-empresa")
-    public ResponseEntity<?> getEmpleadosByEmpresaId(@RequestBody long empresaId) {
+    public ResponseEntity<?> getEmpleadosByEmpresaId(@RequestParam long empresaId) {
         if (empresasService.getEmpresaById(empresaId) != null) {
             return ResponseEntity.ok(empleadosService.getEmpleadosPorEmpresa(empresaId));
         }
@@ -63,7 +64,7 @@ public class EmpleadosController {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<?> deleteEmpleado(@RequestBody Long id) {
+    public ResponseEntity<?> deleteEmpleado(@RequestParam Long id) {
         if (empleadosService.getEmpleadoById(id) != null) {
             empleadosService.eliminarEmpleado(id);
             return ResponseEntity.ok(Collections.singletonMap("mensaje", "El empleado se ha eliminado correctamente"));
