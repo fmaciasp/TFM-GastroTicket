@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uoc.tfm.gastroticket.user.Role;
 
 @Data
 @Builder
@@ -11,4 +12,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthResponse {
     String token;
+    Role role;
 }

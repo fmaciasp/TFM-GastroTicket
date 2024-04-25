@@ -24,11 +24,12 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
         authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
         String token = jwtService.getToken(user);
 
         return AuthResponse.builder()
                 .token(token)
+                .role(user.getRole())
                 .build();
     }
 
@@ -36,7 +37,7 @@ public class AuthService {
         User user = User.builder()
                 .username(request.username)
                 .password(passwordEncoder.encode(request.password))
-                .role(Role.ADMIN)
+                .role(request.role)
                 .build();
 
         userRepository.save(user);
