@@ -13,6 +13,9 @@ import { HeaderComponent } from './Components/header/header.component';
 import { RestaurantesComponent } from './Components/restaurantes/restaurantes.component';
 import { AdministracionComponent } from './Components/administracion/administracion.component';
 import { EmpleadoComponent } from './Components/empleado/empleado.component';
+import { NavbarComponent } from './Components/navbar/navbar.component';
+import { DashEmpresasComponent } from './Components/dashboard/dash-empresas/dash-empresas.component';
+import { DashRestaurantesComponent } from './Components/dashboard/dash-restaurantes/dash-restaurantes.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { EmpleadoComponent } from './Components/empleado/empleado.component';
     HeaderComponent,
     RestaurantesComponent,
     AdministracionComponent,
-    EmpleadoComponent
+    EmpleadoComponent,
+    NavbarComponent,
+    DashEmpresasComponent,
+    DashRestaurantesComponent
   ],
   imports: [
     BrowserModule,
