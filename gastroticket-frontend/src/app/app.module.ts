@@ -7,7 +7,7 @@ import { EmpresaFormularioComponent } from './Components/empresas/empresa-formul
 import { EmpresaListadoComponent } from './Components/empresas/empresa-listado/empresa-listado.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './Components/login/login.component';
 import { FooterComponent } from './Components/footer/footer.component';
 import { HeaderComponent } from './Components/header/header.component';
 import { RestaurantesComponent } from './Components/restaurantes/restaurantes.component';
