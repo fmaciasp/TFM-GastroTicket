@@ -1,1 +1,16 @@
 <p>empresa-listado works!</p>
+<table>
+    <thead>
+        <tr>Nombre</tr>
+        <tr>Acciones</tr>
+    </thead>
+    <tbody>
+        <tr *ngFor=" let empresa of empresas">
+            <td>{{ empresa.nombre }}</td>
+            <td>
+                <button (click)="editarEmpresa(empresa.id)">EDITAR</button>
+                <button (click)="eliminarEmpresa(empresa.id)">ELIMINAR</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -7,12 +7,24 @@ import { EmpresaFormularioComponent } from './Components/empresas/empresa-formul
 import { EmpresaListadoComponent } from './Components/empresas/empresa-listado/empresa-listado.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './login/login.component';
+import { FooterComponent } from './Components/footer/footer.component';
+import { HeaderComponent } from './Components/header/header.component';
+import { RestaurantesComponent } from './Components/restaurantes/restaurantes.component';
+import { AdministracionComponent } from './Components/administracion/administracion.component';
+import { EmpleadoComponent } from './Components/empleado/empleado.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EmpresaFormularioComponent,
-    EmpresaListadoComponent
+    EmpresaListadoComponent,
+    LoginComponent,
+    FooterComponent,
+    HeaderComponent,
+    RestaurantesComponent,
+    AdministracionComponent,
+    EmpleadoComponent
   ],
   imports: [
     BrowserModule,

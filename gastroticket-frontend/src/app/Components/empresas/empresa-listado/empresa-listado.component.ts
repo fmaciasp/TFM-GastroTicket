@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EmpresaDTO } from 'src/app/Models/empresa';
@@ -9,7 +9,7 @@ import { EmpresaService } from 'src/app/Services/empresa.service';
   templateUrl: './empresa-listado.component.html',
   styleUrls: ['./empresa-listado.component.css']
 })
-export class EmpresaListadoComponent {
+export class EmpresaListadoComponent implements OnInit {
 
   empresas!: EmpresaDTO[];
 
@@ -18,5 +18,24 @@ export class EmpresaListadoComponent {
     private empresaService: EmpresaService,
     private router: Router
   ){}
+
+  ngOnInit(): void {
+    this.empresaService.getEmpresas().subscribe({
+      next: (empresas) => {
+        this.empresas = empresas;
+      },
+      error: (error) => {
+        console.error('kakafuti error', error);
+      }
+    });
+  }
+
+  editarEmpresa(idEmpresa: number): void{
+    console.log('kakafuti editar empresa');
+  }
+
+  eliminarEmpresa(idEmpresa: number): void{
+    console.log('kakafuti eliminar empresa');
+  }
 
 }
