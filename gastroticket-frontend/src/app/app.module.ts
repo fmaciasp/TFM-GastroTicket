@@ -16,6 +16,7 @@ import { EmpleadoComponent } from './Components/empleado/empleado.component';
 import { NavbarComponent } from './Components/navbar/navbar.component';
 import { DashEmpresasComponent } from './Components/dashboard/dash-empresas/dash-empresas.component';
 import { DashRestaurantesComponent } from './Components/dashboard/dash-restaurantes/dash-restaurantes.component';
+import { PersonalDetailsComponent } from './Components/personal-details/personal-details.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { DashRestaurantesComponent } from './Components/dashboard/dash-restauran
     EmpleadoComponent,
     NavbarComponent,
     DashEmpresasComponent,
-    DashRestaurantesComponent
+    DashRestaurantesComponent,
+    PersonalDetailsComponent
   ],
   imports: [
     BrowserModule,

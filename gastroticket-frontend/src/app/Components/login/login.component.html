@@ -1,15 +1,15 @@
 <div class="container">
     <form [formGroup]="loginForm">
-
+        <p class="text-danger">{{loginError}}</p>
         <div class="mb-3">
-          <label for="email" class="form-label">Email address</label>
-          <input formControlName="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
-          <div *ngIf="email.invalid && (email.dirty || email.touched)"
+          <label for="username" class="form-label">Email address</label>
+          <input formControlName="username" type="email" class="form-control" id="username" aria-describedby="emailHelp">
+          <div *ngIf="username.invalid && (username.dirty || username.touched)"
             class="text-danger">
-            <div *ngIf="email.errors?.['required']">
+            <div *ngIf="username.errors?.['required']">
               El email es obligatorio
             </div>
-            <div *ngIf="email.errors?.['email']">
+            <div *ngIf="username.errors?.['email']">
               El email debe tener un formato válido
             </div>
           </div>
