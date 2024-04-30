@@ -1,4 +1,3 @@
-<p>empresa-listado works!</p>
 <table>
     <thead>
         <tr>Nombre</tr>
@@ -8,7 +7,7 @@
         <tr *ngFor=" let empresa of empresas">
             <td>{{ empresa.nombre }}</td>
             <td>
-                <button (click)="editarEmpresa(empresa.id)">EDITAR</button>
+                <button [routerLink]="['/empresa/editar', empresa.id]">EDITAR</button>
                 <button (click)="eliminarEmpresa(empresa.id)">ELIMINAR</button>
             </td>
         </tr>

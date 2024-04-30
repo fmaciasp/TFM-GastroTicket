@@ -1,12 +1,11 @@
 export class UserDTO{
     id!: number;
-    nombre: string;
-    apellidos: string;
-    email: string;
+    token: string;
+    role: string;
 
-    constructor(nombre: string, apellidos: string, email: string){
-        this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.email = email;
+    constructor(id: number, token: string, role: string){
+        this.id = id;
+        this.token = token;
+        this.role = role;
     }
 }

@@ -35,8 +35,22 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.valid){
       this.loginService.login(this.loginForm.value as LoginRequest).subscribe({
         next: (userData) => {
-          console.log(userData);
-          this.router.navigateByUrl("/dashboard");
+          console.log("userdata: ",userData);
+          if(userData.role=='ADMIN'){
+            this.router.navigateByUrl("/empresas");
+          }
+          else if(userData.role=='EMPRESA'){
+            this.router.navigateByUrl("/empresas");
+          }
+          else if(userData.role=='RESTAURANTE'){
+            this.router.navigateByUrl("/restaurantes");
+          }
+          else if(userData.role=='EMPLEADO'){
+            this.router.navigateByUrl("/mis-cupones");
+          }
+          else{
+            this.router.navigateByUrl("/dashboard");
+          }
           this.loginForm.reset();
         },
         error: (errorData) => {

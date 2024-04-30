@@ -16,7 +16,7 @@
                 <a class="nav-link" routerLink="/login">Iniciar Sesión</a>
             </li>
             <li *ngIf="userLoginOn" class="nav-item">
-                <a class="nav-link" routerLink="/restaurantes">Cerrar Sesión</a>
+                <a class="nav-link" (click)="logout()" routerLink="/inicio">Cerrar Sesión</a>
             </li>
         </ul>
       </div>

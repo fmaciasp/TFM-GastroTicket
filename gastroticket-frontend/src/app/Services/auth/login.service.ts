@@ -15,19 +15,27 @@ const BACK_URL = environment.APIHost;
 export class LoginService {
 
   currentUserLoginOn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  currentUserData: BehaviorSubject<User> = new BehaviorSubject<User>({id:0, name:'', apellidos:'', email:''});
+  currentUserData: BehaviorSubject<String> = new BehaviorSubject<String>("");
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.currentUserLoginOn=new BehaviorSubject<boolean>(sessionStorage.getItem("token")!=null);
+    this.currentUserData=new BehaviorSubject<String>(sessionStorage.getItem("token") || "");
+   }
 
   login(credentials: LoginRequest): Observable<User>{
-    console.log('credentials ', credentials)
     return this.http.post<User>(BACK_URL + 'auth/login', credentials).pipe(
       tap((userData: User) => {
+        sessionStorage.setItem("token", userData.token);
         this.currentUserLoginOn.next(true);
-        this.currentUserData.next(userData);
+        this.currentUserData.next(userData.token);
       }),
       catchError(this.handleError)
     );
+  }
+
+  logout():void{
+    sessionStorage.removeItem("token");
+    this.currentUserLoginOn.next(false);
   }
 
   private handleError(error:HttpErrorResponse){
@@ -42,5 +50,13 @@ export class LoginService {
 
   get userLoginOn(): Observable<boolean>{
     return this.currentUserLoginOn.asObservable();
+  }
+
+  get userData(): Observable<String>{
+    return this.currentUserData.asObservable();
+  }
+
+  get userToken(): String{
+    return this.currentUserData.value;
   }
 }
