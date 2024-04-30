@@ -31,6 +31,11 @@ public class EmpresasController {
         return ResponseEntity.ok(empresasService.getEmpresas());
     }
 
+    @GetMapping("empresa")
+    public ResponseEntity<EmpresasDTO> getEmpresa(@RequestParam Long id) {
+        return ResponseEntity.ok(empresasService.getEmpresaById(id));
+    }
+
     @PostMapping("create")
     public ResponseEntity<?> createEmpresa(@RequestBody EmpresasDTO empresa) {
         empresasService.createEmpresa(empresa.getNombre(), empresa.getEmail());
