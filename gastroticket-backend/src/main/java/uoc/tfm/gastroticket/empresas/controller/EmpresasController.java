@@ -43,12 +43,11 @@ public class EmpresasController {
                 HttpStatus.CREATED);
     }
 
-    @PutMapping("editar")
+    @PostMapping("editar")
     public ResponseEntity<?> editarEmpresa(@RequestBody EmpresasDTO empresa) {
         EmpresasDTO _empresa = empresasService.getEmpresaById(empresa.getId());
         if (_empresa != null) {
-            _empresa.setNombre(empresa.getNombre());
-            empresasService.editarEmpresa(_empresa.getId(), empresa.getNombre());
+            empresasService.editarEmpresa(_empresa.getId(), empresa.getNombre(), empresa.getEmail());
             return ResponseEntity.ok(Collections.singletonMap("mensaje", "La empresa se ha editado correctamente"));
         }
         return new ResponseEntity<>(Collections.singletonMap("mensaje", "No se ha encontrado la empresa"),
