@@ -1,14 +1,14 @@
 <div class="container">
     <h1>Editar empresa</h1>
-    <form [formGroup]="empresaForm">
+    <form [formGroup]="empresaForm"
+    (ngSubmit)="editarEmpresa()">
         <p class="text-danger">{{empresaError}}</p>
 
         <div class="mb-3">
             <label for="nombre" class="form-label">nombre</label>
-            <input formControlName="nombre" type="text" class="form-control" id="nombre">
-            <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"
-              class="text-danger">
-              <div *ngIf="nombre.errors?.['required']">
+            <input formControlName="nombre" type="text" class="form-control" id="nombre" name="nombre">
+            <div *ngIf="empresaForm?.get('nombre')?.invalid && (empresaForm?.get('nombre')?.dirty || empresaForm?.get('nombre')?.touched)" class="text-danger">
+              <div *ngIf="nombre?.errors?.['required']">
                 El nombre es obligatorio
               </div>
             </div>
@@ -16,19 +16,18 @@
 
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
-          <input formControlName="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
-          <div *ngIf="email.invalid && (email.dirty || email.touched)"
-            class="text-danger">
-            <div *ngIf="email.errors?.['required']">
+          <input formControlName="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email">
+          <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-danger">
+            <div *ngIf="email?.errors?.['required']">
               El email es obligatorio
             </div>
-            <div *ngIf="email.errors?.['email']">
+            <div *ngIf="email?.errors?.['email']">
               El email debe tener un formato válido
             </div>
           </div>
         </div>
 
-        <button type="submit"  class="btn btn-primary">Guardar</button>
+        <button class="btn btn-primary">Guardar</button>
       </form>
     
 </div>

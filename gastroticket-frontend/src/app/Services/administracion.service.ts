@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { EmpresaDTO } from '../Models/empresa';
 import { environment } from 'src/environments/environment.development';
 import { RestauranteDTO } from '../Models/restaurante';
+import { Router } from '@angular/router';
 
 const API_URL = environment.APIEndpoint;
 
@@ -12,7 +13,7 @@ const API_URL = environment.APIEndpoint;
 })
 export class AdministracionService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   getEmpresas(): Observable<EmpresaDTO[]> {
     return this.http.get<EmpresaDTO[]>(API_URL + "empresas");
@@ -30,13 +31,13 @@ export class AdministracionService {
     return this.http.post<any>(API_URL + 'empresas/create', empresa);
   }
 
-  public editarEmpresa(empresa: EmpresaDTO): Observable<any> {
+  editarEmpresa(empresa: EmpresaDTO): Observable<any>  {
     return this.http.post<any>(API_URL + 'empresas/editar', empresa);
   }
 
   public eliminarEmpresa(idEmpresa: number): Observable<any> {
-    return this.http.post<any>(
-      API_URL + 'empresa/delete?id='+idEmpresa,
+    return this.http.delete<any>(
+      API_URL + 'empresas/delete?id='+idEmpresa,
       {}
     );
   }

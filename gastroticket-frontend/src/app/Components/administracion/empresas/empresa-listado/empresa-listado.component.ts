@@ -19,7 +19,7 @@ export class EmpresaListadoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private administracionService: AdministracionService,
     private router: Router,
-    private loginService: LoginService
+    private loginService: LoginService,
   ){}
 
   ngOnInit(): void {
@@ -42,12 +42,31 @@ export class EmpresaListadoComponent implements OnInit {
     })
   }
 
-  editarEmpresa(idEmpresa: number): void{
-    console.log('editarEmpresa empresa-listado.component editar empresa');
-  }
-
   eliminarEmpresa(idEmpresa: number): void{
-    console.log('eliminarEmpresa empresa-listado.component eliminar empresa');
+    if(idEmpresa > -1){
+      this.administracionService.getEmpresa(idEmpresa).subscribe({
+        next: (empresa) => {
+          let result = confirm(
+            "Vas a eliminar la empresa "+empresa.nombre.toUpperCase()+", ¿deseas confirmar?"
+          );
+          if(result){
+            this.administracionService.eliminarEmpresa(idEmpresa).subscribe({
+              next: (res) => {
+                console.log("Se ha eliminado la empresa correctamente");
+                this.empresas = this.empresas.filter(e => e.id !== idEmpresa);
+              },
+              error: (error) => {
+                console.error("No se ha podido eliminar la empresa", error)
+              }
+            })
+          }
+        },
+        error: (error) => {
+          console.error("No se ha podido recuperar la empresa", error)
+        }
+      })
+    }
   }
+  
 
 }

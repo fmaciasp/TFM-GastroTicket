@@ -15,17 +15,30 @@ import { environment } from 'src/environments/environment.development';
 export class EmpresaFormularioComponent implements OnInit {
 
   userLoginOn:boolean=false;
+  isUpdateMode: boolean;
   empresaError: string = "";
   empresa!: EmpresaDTO;
-  empresaForm = this.formBuilder.group({
-    nombre:['', Validators.required],
-    email:['', [Validators.required, Validators.email]]
-  })
+  editEmpresa!: EmpresaDTO;
+  empresaForm: FormGroup;
   modoEditar = false;
-  id = 0;
+  empresaId: number | null;
+  //empresa
+  nombre!: FormControl;
+  email!: FormControl;
   datosEmpresa: any;
 
-  constructor(private loginService: LoginService, private formBuilder: FormBuilder, private router: Router, private route:ActivatedRoute, private administracionService: AdministracionService){ }
+  constructor(private loginService: LoginService, private formBuilder: FormBuilder, private router: Router, private route:ActivatedRoute, private administracionService: AdministracionService){ 
+    this.isUpdateMode = false;
+    this.empresaId = parseInt(this.route.snapshot.paramMap.get('id') ?? "", 10); 
+
+    this.empresaForm = this.formBuilder.group({
+      nombre:['', Validators.required],
+      email:['', [Validators.required, Validators.email]]
+    })
+
+    this.nombre = this.empresaForm.get('nombre') as FormControl;
+    this.email = this.empresaForm.get('email') as FormControl;
+  }
 
   ngOnInit(): void {
     this.loginService.currentUserLoginOn.subscribe({
@@ -34,8 +47,8 @@ export class EmpresaFormularioComponent implements OnInit {
 
         if(this.userLoginOn){
           this.route.params.subscribe(params => {
-            this.id = params['idEmpresa'];
-            this.modoEditar = !!this.id;
+            this.empresaId = params['idEmpresa'];
+            this.modoEditar = !!this.empresaId;
           })
       
           this.inicializarFormulario();
@@ -47,17 +60,13 @@ export class EmpresaFormularioComponent implements OnInit {
     })
   }
 
-  get nombre(){
-    return this.empresaForm.controls.nombre;
-  }
-
-  get email(){
-    return this.empresaForm.controls.email;
-  }
-
   cargarDatosEmpresa() {
-    this.administracionService.getEmpresa(this.id).subscribe({
+    if(this.empresaId == null){
+      this.empresaId = -1;
+    }
+    this.administracionService.getEmpresa(this.empresaId).subscribe({
       next: (empresa) => {
+        console.log("empresa: " + empresa.nombre);
         this.empresa = {
           id: empresa.id,
           nombre: empresa.nombre,
@@ -69,7 +78,7 @@ export class EmpresaFormularioComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.error('cargarDatosEmpresa empresa-listado.component error', error);
+        console.error('cargarDatosEmpresa empresa-formulario.component error', error);
       }}
     );
   }
@@ -85,33 +94,42 @@ export class EmpresaFormularioComponent implements OnInit {
     }
   }
 
-  /*empresa: EmpresaDTO;
-  empresaId: number;
-  nombre: FormControl;
-  email: FormControl;
-  empresaForm: FormGroup;
+  editarEmpresa(): void{
+    const nombre = this.empresaForm.get('nombre')?.value;
+    const email = this.empresaForm.get('email')?.value;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private empresaService: EmpresaService,
-    private router: Router
-  ){
-    this.empresaId = this.activatedRoute.snapshot.paramMap.get('id');
-
-    this.empresa = 
-    this.nombre = new FormControl(this.)
-  }*/
-
-  /*ngOnInit(): void {
-    this.nombre = new FormControl('', Validators.required);
-    this.email = new FormControl('', Validators.required);
-
-    this.empresaForm = this.formBuilder.group({
-      nombre: this.nombre,
-      email: this.email
-    });
-  }*/
-
-
+    if(this.empresaId){
+      this.editEmpresa = {
+          id: this.empresaId,
+          nombre: nombre,
+          email: email,
+      };
+      this.administracionService.editarEmpresa(this.editEmpresa).subscribe({
+        next: (res) => {
+          console.log(res);
+          this.router.navigate(['/empresas']);
+        },
+        error: (error) => {
+          console.error('editarEmpresa empresa-formulario.component error', error);
+        }
+      });
+    }
+    else{
+      this.editEmpresa = {
+        id: -1,
+        nombre: nombre,
+        email: email,
+    };
+      this.administracionService.crearEmpresa(this.editEmpresa).subscribe({
+        next: (res) => {
+          console.log(res);
+          this.router.navigate(['/empresas']);
+        },
+        error: (error) => {
+          console.error('No se ha podido crear una nueva empresa', error);
+        }
+      })
+    }
+  }
 
 }

@@ -20,6 +20,7 @@ import { JwtInterceptorService } from './Services/auth/jwt-interceptor.service';
 import { ErrorInterceptorService } from './Services/auth/error-interceptor.service';
 import { RestauranteListadoComponent } from './Components/administracion/restaurantes/restaurante-listado/restaurante-listado.component';
 import { RestauranteFormularioComponent } from './Components/administracion/restaurantes/restaurante-formulario/restaurante-formulario.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -36,13 +37,14 @@ import { RestauranteFormularioComponent } from './Components/administracion/rest
     DashRestaurantesComponent,
     PersonalDetailsComponent,
     RestauranteListadoComponent,
-    RestauranteFormularioComponent
+    RestauranteFormularioComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    MatDialogModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptorService, multi:true},
