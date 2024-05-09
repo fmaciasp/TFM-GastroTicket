@@ -6,7 +6,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
+import uoc.tfm.gastroticket.empresas.repository.EmpresasRepository;
 import uoc.tfm.gastroticket.jwt.JwtService;
+import uoc.tfm.gastroticket.restaurantes.model.RestaurantesDTO;
+import uoc.tfm.gastroticket.restaurantes.repository.RestaurantesRepository;
 import uoc.tfm.gastroticket.user.User;
 import uoc.tfm.gastroticket.user.UserRepository;
 
@@ -15,6 +19,8 @@ import uoc.tfm.gastroticket.user.UserRepository;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final EmpresasRepository empresaRepository;
+    private final RestaurantesRepository restauranteRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -39,9 +45,24 @@ public class AuthService {
                 .role(request.role)
                 .build();
 
-        userRepository.save(user);
+        User _user = userRepository.save(user);
 
-        return AuthResponse.builder().token(jwtService.getToken(user)).build();
+        String _role = request.role.toString();
+
+        if (_role.equals("EMPRESA")) {
+            EmpresasDTO empresa = new EmpresasDTO();
+            empresa.setNombre(request.nombre);
+            empresa.setEmail(request.username);
+            empresa.setUserId(_user.getId());
+            empresaRepository.save(empresa);
+        } else if (_role.equals("RESTAURANTE")) {
+            RestaurantesDTO restaurante = new RestaurantesDTO();
+            restaurante.setNombre(request.nombre);
+            restaurante.setDireccion(request.direccion);
+            restaurante.setUserId(_user.getId());
+        }
+
+        return AuthResponse.builder().token(jwtService.getToken(user)).role(user.getRole()).build();
     }
 
 }

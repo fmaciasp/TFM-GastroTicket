@@ -17,5 +17,5 @@ public class EmpresasDTO {
     private Long id;
     private String nombre;
     private String email;
-
+    private Integer userId;
 }

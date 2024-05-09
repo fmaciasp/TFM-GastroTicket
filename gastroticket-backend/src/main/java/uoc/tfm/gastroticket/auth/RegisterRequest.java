@@ -13,6 +13,8 @@ import uoc.tfm.gastroticket.user.Role;
 public class RegisterRequest {
     String username;
     String password;
+    String nombre;
+    String direccion;
     String apellido1;
     String apellido2;
     Role role;
