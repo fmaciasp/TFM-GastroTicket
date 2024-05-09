@@ -14,6 +14,7 @@ export class EmpresaListadoComponent implements OnInit {
 
   userLoginOn:boolean=false;
   empresas!: EmpresaDTO[];
+  displayedColumns: string[] = ['nombre', 'email', 'acciones'];
 
   constructor(
     private formBuilder: FormBuilder,

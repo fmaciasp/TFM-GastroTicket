@@ -12,7 +12,6 @@ import { FooterComponent } from './Components/footer/footer.component';
 import { HeaderComponent } from './Components/header/header.component';
 import { AdministracionComponent } from './Components/administracion/administracion.component';
 import { EmpleadoComponent } from './Components/empleado/empleado.component';
-import { NavbarComponent } from './Components/navbar/navbar.component';
 import { DashEmpresasComponent } from './Components/dashboard/dash-empresas/dash-empresas.component';
 import { DashRestaurantesComponent } from './Components/dashboard/dash-restaurantes/dash-restaurantes.component';
 import { PersonalDetailsComponent } from './Components/personal-details/personal-details.component';
@@ -21,6 +20,13 @@ import { ErrorInterceptorService } from './Services/auth/error-interceptor.servi
 import { RestauranteListadoComponent } from './Components/administracion/restaurantes/restaurante-listado/restaurante-listado.component';
 import { RestauranteFormularioComponent } from './Components/administracion/restaurantes/restaurante-formulario/restaurante-formulario.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+import {MatIconModule} from '@angular/material/icon';
+import {MatSelectModule} from '@angular/material/select';
+import { RegistroComponent } from './registro/registro.component';
+import { EmpresaDashboardComponent } from './Components/empresa-dashboard/empresa-dashboard.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -32,19 +38,25 @@ import { MatDialogModule } from '@angular/material/dialog';
     HeaderComponent,
     AdministracionComponent,
     EmpleadoComponent,
-    NavbarComponent,
     DashEmpresasComponent,
     DashRestaurantesComponent,
     PersonalDetailsComponent,
     RestauranteListadoComponent,
     RestauranteFormularioComponent,
+    RegistroComponent,
+    EmpresaDashboardComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTableModule,
+    MatIconModule,
+    MatSelectModule,
+    BrowserAnimationsModule,
+    MatInputModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptorService, multi:true},

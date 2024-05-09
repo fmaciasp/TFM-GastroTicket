@@ -1,31 +1,45 @@
 <div class="container">
-    <form [formGroup]="loginForm">
-        <p class="text-danger">{{loginError}}</p>
-        <div class="mb-3">
-          <label for="username" class="form-label">Email address</label>
-          <input formControlName="username" type="email" class="form-control" id="username" aria-describedby="emailHelp">
-          <div *ngIf="username.invalid && (username.dirty || username.touched)"
-            class="text-danger">
-            <div *ngIf="username.errors?.['required']">
-              El email es obligatorio
-            </div>
-            <div *ngIf="username.errors?.['email']">
-              El email debe tener un formato válido
-            </div>
-          </div>
+  <form [formGroup]="loginForm">
+    <div class="d-flex justify-content-center">
+      <div class="w-50">
+        <div class="mb-4">
+          <mat-form-field class="w-100">
+              <mat-label>Email</mat-label>
+              <input type="email" matInput formControlName="username" [errorStateMatcher]="matcher"
+                  placeholder="Ex. pat@example.com">
+              <mat-error *ngIf="username.hasError('email') && !username.hasError('required')">
+                  Por favor, introduzca el formato correcto
+              </mat-error>
+              <mat-error *ngIf="username.hasError('required')">
+                  Email is <strong>obligatorio</strong>
+              </mat-error>
+          </mat-form-field>
+          
         </div>
+      </div>
+    </div>
 
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input formControlName="password" type="password" class="form-control" id="password">
-          <div *ngIf="password.invalid && (password.dirty || password.touched)"
-            class="text-danger">
-            <div *ngIf="password.errors?.['required']">
-              La contraseña es obligatoria
-            </div>
-          </div>
+    <div class="d-flex justify-content-center">
+      <div class="w-50">
+        <div class="mb-4">
+          <mat-form-field class="w-100">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password" id="password">
+            <mat-error *ngIf="password.invalid && (password.dirty || password.touched)">
+              <span *ngIf="password.errors?.['required']">La contraseña es <strong>obligatoria</strong></span>
+            </mat-error>
+          </mat-form-field>
         </div>
-
-        <button type="submit" (click)="login()" class="btn btn-primary">Iniciar sesión</button>
-      </form>
+      </div>
+    </div>
+    
+  
+    <div class="d-flex justify-content-center">
+      <button type="submit" (click)="login()" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Iniciar sesión</button>
+    </div>
+  
+    <div class="text-center">
+      <p>¿No estás registrado? <a routerLink="/registro">¡Regístrate!</a></p>
+    </div>
+  </form>
 </div>

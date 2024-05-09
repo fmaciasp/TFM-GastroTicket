@@ -1,0 +1,62 @@
+<div class="container">
+    <h2 class="text-center mb-3">Formulario de registro</h2>
+    <form [formGroup]="registroForm">
+      <div class="d-flex justify-content-center">
+        <div class="w-50">
+          <div class="mb-4">
+            <mat-form-field class="w-100">
+                <mat-label>Email</mat-label>
+                <input type="email" matInput formControlName="username" [errorStateMatcher]="matcher"
+                    placeholder="Ex. pat@example.com">
+                <mat-error *ngIf="username.hasError('email') && !username.hasError('required')">
+                    Por favor, introduzca el formato correcto
+                </mat-error>
+                <mat-error *ngIf="username.hasError('required')">
+                    Email is <strong>obligatorio</strong>
+                </mat-error>
+            </mat-form-field>
+            
+          </div>
+        </div>
+      </div>
+  
+      <div class="d-flex justify-content-center">
+        <div class="w-50">
+          <div class="mb-4">
+            <mat-form-field class="w-100">
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="password" type="password" id="password">
+              <mat-error *ngIf="password.invalid && (password.dirty || password.touched)">
+                <span *ngIf="password.errors?.['required']">La contraseña es <strong>obligatoria</strong></span>
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <mat-form-field class="form-outline mb-4 w-100">
+            <mat-label>¿Quién eres?</mat-label>
+            <mat-select formControlName="role" [(value)]="selectedRole" placeholder="Seleccione un rol">
+              <mat-option *ngFor="let role of roles" [value]="role">
+                {{ role }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="role.invalid && (role.dirty || role.touched)">
+                <span *ngIf="role.errors?.['required']">El rol es <strong>obligatorio</strong></span>
+            </mat-error>
+          </mat-form-field>
+        <div>
+            <mat-form-field class="form-outline mb-4 w-100">
+                <input matInput formControlName="nombre" [placeholder]="selectedRole === 'EMPRESA' ? 'Nombre de la empresa' : (selectedRole === 'RESTAURANTE' ? 'Nombre del restaurante' : 'Nombre')">
+                <mat-error *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                    <span *ngIf="nombre.errors?.['required']">El nombre es <strong>obligatorio</strong></span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        </div>
+      </div>
+  
+      <div class="d-flex justify-content-center">
+        <button type="submit" (click)="registro()" mat-flat-button color="primary" class="btn btn-primary btn-block mb-4">Registrarse</button>
+      </div>
+    </form>
+  </div>
+  

@@ -1,8 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/Services/auth/login.service';
 import { LoginRequest } from 'src/app/Services/auth/loginRequest';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-login',
@@ -16,12 +24,11 @@ export class LoginComponent implements OnInit {
     username:['', [Validators.required, Validators.email]],
     password:['', Validators.required]
   })
+  matcher = new MyErrorStateMatcher();
 
   constructor(private formBuilder: FormBuilder, private router: Router, private loginService: LoginService){}
 
-  ngOnInit(): void {
-    //throw new Error('Method not implemented.');
-  }
+  ngOnInit(): void {}
 
   get username(){
     return this.loginForm.controls.username;
