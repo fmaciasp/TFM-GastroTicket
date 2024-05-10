@@ -27,6 +27,7 @@ import { RegistroComponent } from './registro/registro.component';
 import { EmpresaDashboardComponent } from './Components/empresa-dashboard/empresa-dashboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { MatInputModule } from '@angular/material/input';
     MatSelectModule,
     BrowserAnimationsModule,
     MatInputModule,
+    MatAutocompleteModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptorService, multi:true},

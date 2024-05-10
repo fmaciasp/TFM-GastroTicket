@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Validators, FormBuilder, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RegistroService } from '../Services/auth/registro.service';
@@ -25,14 +25,22 @@ export class RegistroComponent {
     username:['', [Validators.required, Validators.email]],
     password:['', Validators.required],
     role: ['', Validators.required], 
-    nombre: ['', Validators.required]
+    nombre: ['', Validators.required],
+    ciudad: [''],
+    direccion: ['']
   })
   mensaje: string = '';
   roles = Object.values(Role);
   selectedRole: Role | undefined; 
   matcher = new MyErrorStateMatcher();
+  @ViewChild('input')
+  input!: ElementRef<HTMLInputElement>;
+  options: string[] = ['Albacete', 'Alicante/Alacant', 'Almería', 'Ávila', 'Badajoz', 'Barcelona', 'Bilbao', 'Burgos', 'Cáceres', 'Cádiz', 'Castellón de la Plana', 'Ceuta', 'Ciudad Real', 'Córdoba', 'Cuenca', 'Gerona', 'Granada', 'Guadalajara', 'Huelva', 'Huesca', 'Jaén', 'La Coruña', 'Las Palmas de Gran Canaria', 'León', 'Lérida', 'Logroño', 'Lugo', 'Madrid', 'Málaga', 'Melilla', 'Mérida', 'Murcia', 'Orense', 'Oviedo', 'Palencia', 'Palma de Mallorca', 'Pamplona', 'Pontevedra', 'Santa Cruz de Tenerife', 'Santander', 'Segovia', 'Sevilla', 'Soria', 'Tarragona', 'Teruel', 'Toledo', 'Valencia', 'Valladolid', 'Vitoria-Gasteiz', 'Zamora', 'Zaragoza'];
+  ciudades: string[];
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private registroService: RegistroService){}
+  constructor(private formBuilder: FormBuilder, private router: Router, private registroService: RegistroService){
+    this.ciudades = this.options.slice();
+  }
 
   ngOnInit(): void {}
 
@@ -82,6 +90,11 @@ export class RegistroComponent {
     else{
       this.registroForm.markAllAsTouched();
     }
+  }
+
+  filter(): void {
+    const filterValue = this.input.nativeElement.value.toLowerCase();
+    this.ciudades = this.options.filter(o => o.toLowerCase().includes(filterValue));
   }
 
 }

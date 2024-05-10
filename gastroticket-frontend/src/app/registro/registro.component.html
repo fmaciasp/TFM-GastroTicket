@@ -43,14 +43,42 @@
                 <span *ngIf="role.errors?.['required']">El rol es <strong>obligatorio</strong></span>
             </mat-error>
           </mat-form-field>
-        <div>
+
+        <div *ngIf="selectedRole">
             <mat-form-field class="form-outline mb-4 w-100">
+                <mat-label>Nombre</mat-label>
                 <input matInput formControlName="nombre" [placeholder]="selectedRole === 'EMPRESA' ? 'Nombre de la empresa' : (selectedRole === 'RESTAURANTE' ? 'Nombre del restaurante' : 'Nombre')">
                 <mat-error *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
                     <span *ngIf="nombre.errors?.['required']">El nombre es <strong>obligatorio</strong></span>
                 </mat-error>
             </mat-form-field>
         </div>
+
+        <div *ngIf="selectedRole === 'RESTAURANTE'">
+          <mat-form-field class="form-outline mb-4 w-100">
+            <mat-label>Ciudad</mat-label>
+            <input #input
+                   type="text"
+                   placeholder="Pick one"
+                   matInput
+                   formControlName="ciudad"
+                   [matAutocomplete]="auto"
+                   (input)="filter()"
+                   (focus)="filter()">
+            <mat-autocomplete requireSelection #auto="matAutocomplete">
+              <mat-option *ngFor="let ciudad of ciudades" [value]="ciudad">
+                {{ciudad}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field class="form-outline mb-4 w-100">
+            <mat-label>Dirección</mat-label>
+            <input matInput formControlName="direccion" placeholder="Dirección del restaurante">
+        </mat-form-field>
+
+        </div>
+        
         </div>
       </div>
   
