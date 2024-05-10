@@ -2,6 +2,7 @@ package uoc.tfm.gastroticket.empresas.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,8 @@ import io.jsonwebtoken.io.IOException;
 import jakarta.transaction.Transactional;
 import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.repository.EmpresasRepository;
+import uoc.tfm.gastroticket.user.User;
+import uoc.tfm.gastroticket.user.UserRepository;
 
 @Service
 @Transactional
@@ -19,6 +22,8 @@ public class EmpresasService {
 
     @Autowired
     EmpresasRepository empresaRepo;
+    @Autowired
+    UserRepository userRepository;
 
     public List<EmpresasDTO> getEmpresas() {
         return empresaRepo.findAll();
@@ -50,6 +55,10 @@ public class EmpresasService {
     }
 
     public void eliminarEmpresa(long id) {
+        EmpresasDTO empresa = empresaRepo.getReferenceById(id);
+        User user = userRepository.findById(empresa.getUserId()).orElse(null);
+        if (user != null)
+            userRepository.delete(user);
         empresaRepo.deleteById(id);
     }
 }

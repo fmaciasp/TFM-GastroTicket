@@ -18,4 +18,5 @@ public class RegisterRequest {
     String apellido1;
     String apellido2;
     Role role;
+    String ciudad;
 }

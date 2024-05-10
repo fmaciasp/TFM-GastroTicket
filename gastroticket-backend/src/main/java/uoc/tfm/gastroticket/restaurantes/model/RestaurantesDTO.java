@@ -17,5 +17,6 @@ public class RestaurantesDTO {
     private Long id;
     private String nombre;
     private String direccion;
+    private String ciudad;
     private Integer userId;
 }

@@ -59,7 +59,9 @@ public class AuthService {
             RestaurantesDTO restaurante = new RestaurantesDTO();
             restaurante.setNombre(request.nombre);
             restaurante.setDireccion(request.direccion);
+            restaurante.setCiudad(request.ciudad);
             restaurante.setUserId(_user.getId());
+            restauranteRepository.save(restaurante);
         }
 
         return AuthResponse.builder().token(jwtService.getToken(user)).role(user.getRole()).build();
