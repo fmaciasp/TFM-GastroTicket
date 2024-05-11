@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import uoc.tfm.gastroticket.cupones.model.CuponesDTO;
 import uoc.tfm.gastroticket.cupones.service.CuponesService;
 import uoc.tfm.gastroticket.restaurantes.model.RestaurantesDTO;
 import uoc.tfm.gastroticket.restaurantes.service.RestaurantesService;
@@ -63,7 +62,7 @@ public class RestaurantesController {
             return new ResponseEntity<>(Collections.singletonMap("mensaje", "No se ha encontrado el restaurante"),
                     HttpStatus.NOT_FOUND);
         } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 

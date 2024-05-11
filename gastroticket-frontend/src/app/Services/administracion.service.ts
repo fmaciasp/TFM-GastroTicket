@@ -76,8 +76,7 @@ export class AdministracionService {
     return this.http.post<any>(API_URL + 'restaurantes/editar', restaurante).pipe(
       map(response => response.mensaje),
       catchError(error => {
-        console.log("kakafuti")
-        return of(error);
+        throw error;
       })
     );
   }
@@ -89,7 +88,7 @@ export class AdministracionService {
     ).pipe(
       map(response => response.mensaje),
       catchError(error => {
-        return of(error);
+        throw error;
       })
     );
   }

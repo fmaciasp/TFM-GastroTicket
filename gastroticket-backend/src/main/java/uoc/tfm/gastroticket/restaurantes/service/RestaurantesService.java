@@ -57,7 +57,7 @@ public class RestaurantesService {
         try {
             RestaurantesDTO _restaurante = restauranteRepo.findById(id).get();
             if (_restaurante.getUserId() != null) {
-                User user = userRepository.findById((int) id).orElse(null);
+                User user = userRepository.findById((int) _restaurante.getUserId()).orElse(null);
                 if (user == null) {
                     throw new RuntimeException("Usuario no encontrado");
                 }

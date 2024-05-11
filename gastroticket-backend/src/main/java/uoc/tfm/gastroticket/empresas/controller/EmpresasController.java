@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
 import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.service.EmpresasService;
 import uoc.tfm.gastroticket.user.User;
@@ -40,8 +41,8 @@ public class EmpresasController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<?> createEmpresa(@RequestBody EmpresasDTO empresa) {
-        empresasService.createEmpresa(empresa.getNombre(), empresa.getEmail());
+    public ResponseEntity<?> createEmpresa(@RequestBody EmpresasDTO empresa, HttpServletRequest request) {
+        empresasService.createEmpresa(empresa.getNombre(), empresa.getEmail(), request);
         return new ResponseEntity<>(Collections.singletonMap("mensaje", "Se ha creado la empresa correctamente"),
                 HttpStatus.CREATED);
     }
@@ -57,7 +58,7 @@ public class EmpresasController {
             return new ResponseEntity<>(Collections.singletonMap("mensaje", "No se ha encontrado la empresa"),
                     HttpStatus.NOT_FOUND);
         } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 

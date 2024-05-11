@@ -1,8 +1,10 @@
 <div class="container">
     <h1>Editar restaurante</h1>
+    <div *ngIf="restauranteError!=''" class="alert alert-danger" role="alert">
+        {{restauranteError}}
+      </div>
     <form [formGroup]="restauranteForm"
     (ngSubmit)="editarRestaurante()">
-        <p class="text-danger">{{restauranteError}}</p>
 
         <div class="mb-3">
 

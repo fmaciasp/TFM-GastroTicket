@@ -1,4 +1,8 @@
 <div class="container">
+  <div class="text-center mb-4">
+    <img src="../../../assets/logo.png"
+      style="width: 185px;" alt="logo">
+  </div>
   <div *ngIf="loginError!=''" class="alert alert-danger" role="alert">
     {{loginError}}
   </div>
@@ -6,7 +10,7 @@
   <form [formGroup]="loginForm">
     <div class="d-flex justify-content-center">
       <div class="w-50">
-        <div class="mb-4">
+        <div class="mb-3">
           <mat-form-field class="w-100">
               <mat-label>Email</mat-label>
               <input type="email" matInput formControlName="username" [errorStateMatcher]="matcher"

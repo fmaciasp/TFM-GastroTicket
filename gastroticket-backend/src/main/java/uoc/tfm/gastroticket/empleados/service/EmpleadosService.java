@@ -5,16 +5,23 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.repository.EmpleadosRepository;
+import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
+import uoc.tfm.gastroticket.jwt.JwtService;
+import uoc.tfm.gastroticket.user.User;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class EmpleadosService {
 
     @Autowired
     EmpleadosRepository empleadoRepo;
+    private final JwtService jwtService;
 
     public List<EmpleadosDTO> getEmpleadosPorEmpresa(long empresaId) {
         return empleadoRepo.findByEmpresaId(empresaId);
@@ -28,13 +35,14 @@ public class EmpleadosService {
         return empleadoRepo.findByEmail(email);
     }
 
-    public void createEmpleado(String nombre, String apellidos, String email, long empresaId) {
+    public EmpleadosDTO createEmpleado(String nombre, String apellidos, String email, long empresaId) {
         EmpleadosDTO _empleado = new EmpleadosDTO();
         _empleado.setNombre(nombre);
         _empleado.setApellidos(apellidos);
         _empleado.setEmail(email);
         _empleado.setEmpresaId(empresaId);
         empleadoRepo.save(_empleado);
+        return _empleado;
     }
 
     public EmpleadosDTO editarEmpleado(long id, String nombre, String apellidos) {
@@ -47,6 +55,37 @@ public class EmpleadosService {
 
     public void eliminarEmpleado(long id) {
         empleadoRepo.deleteById(id);
+    }
+
+    public void enviarCorreo(String email, String activacionLink) {
+        String emailContenido = "Haga clic en el siguiente enlace para activar su cuenta: " + activacionLink;
+        enviarCorreo(email, emailContenido);
+    }
+
+    public String getBaseUrl(HttpServletRequest request) {
+        String scheme = request.getScheme(); // "http" o "https"
+        String serverName = request.getServerName(); // Nombre del servidor
+        int serverPort = request.getServerPort(); // Puerto del servidor
+
+        // Construir la URL base
+        StringBuilder baseUrlBuilder = new StringBuilder();
+        baseUrlBuilder.append(scheme).append("://").append(serverName);
+
+        // Si el puerto no es el predeterminado (80 para HTTP, 443 para HTTPS),añadirlo
+        // a la URL
+        if ((scheme.equals("http") && serverPort != 80) || (scheme.equals("https") &&
+                serverPort != 443)) {
+            baseUrlBuilder.append(":").append(serverPort);
+        }
+
+        // Si está desplegada en una subruta, añadir el contexto de la aplicación
+        String contextPath = request.getContextPath();
+        if (contextPath != null && !contextPath.isEmpty() &&
+                !"/".equals(contextPath)) {
+            baseUrlBuilder.append(contextPath);
+        }
+
+        return baseUrlBuilder.toString();
     }
 
 }

@@ -1,7 +1,5 @@
 package uoc.tfm.gastroticket.auth;
 
-import javax.management.RuntimeErrorException;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -75,5 +73,11 @@ public class AuthService {
 
         return AuthResponse.builder().token(jwtService.getToken(user)).role(user.getRole()).build();
     }
+
+    /*
+     * public AuthResponse activarCuenta(RegisterRequest request) {
+     * 
+     * }
+     */
 
 }

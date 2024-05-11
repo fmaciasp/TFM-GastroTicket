@@ -9,9 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.io.IOException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.repository.EmpresasRepository;
+import uoc.tfm.gastroticket.jwt.JwtService;
 import uoc.tfm.gastroticket.user.Role;
 import uoc.tfm.gastroticket.user.User;
 import uoc.tfm.gastroticket.user.UserRepository;
@@ -24,6 +26,7 @@ public class EmpresasService {
     EmpresasRepository empresaRepo;
     @Autowired
     UserRepository userRepository;
+    // private final JwtService jwtService = new JwtService();
 
     public List<EmpresasDTO> getEmpresas() {
         return empresaRepo.findAll();
@@ -33,7 +36,7 @@ public class EmpresasService {
         return empresaRepo.findById(id).orElse(null);
     }
 
-    public void createEmpresa(String nombre, String email) {
+    public void createEmpresa(String nombre, String email, HttpServletRequest request) {
         User _user = new User();
         _user.setUsername(email);
         _user.setRole(Role.EMPRESA);
@@ -44,7 +47,52 @@ public class EmpresasService {
         _empresa.setEmail(email);
         _empresa.setUserId(_user.getId());
         empresaRepo.save(_empresa);
+
+        // enviarCorreo(_user, _empresa, request);
     }
+
+    /*
+     * private void enviarCorreo(User _user, EmpresasDTO _empresa,
+     * HttpServletRequest request) {
+     * String url = getBaseUrl(request);
+     * String token = jwtService.getTokenRegistro(_user);
+     * String email = "Haga clic en el siguiente enlace para activar su cuenta" +
+     * url + "/activate-account?token="
+     * + token;
+     * 
+     * // enviar email
+     * 
+     * throw new
+     * UnsupportedOperationException("Unimplemented method 'enviarCorreo'");
+     * }
+     * 
+     * private String getBaseUrl(HttpServletRequest request) {
+     * String scheme = request.getScheme(); // "http" o "https"
+     * String serverName = request.getServerName(); // Nombre del servidor
+     * int serverPort = request.getServerPort(); // Puerto del servidor
+     * 
+     * // Construir la URL base
+     * StringBuilder baseUrlBuilder = new StringBuilder();
+     * baseUrlBuilder.append(scheme).append("://").append(serverName);
+     * 
+     * // Si el puerto no es el predeterminado (80 para HTTP, 443 para HTTPS),
+     * añadirlo
+     * // a la URL
+     * if ((scheme.equals("http") && serverPort != 80) || (scheme.equals("https") &&
+     * serverPort != 443)) {
+     * baseUrlBuilder.append(":").append(serverPort);
+     * }
+     * 
+     * // Si está desplegada en una subruta, añadir el contexto de la aplicación
+     * String contextPath = request.getContextPath();
+     * if (contextPath != null && !contextPath.isEmpty() &&
+     * !"/".equals(contextPath)) {
+     * baseUrlBuilder.append(contextPath);
+     * }
+     * 
+     * return baseUrlBuilder.toString();
+     * }
+     */
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public ResponseEntity<?> editarEmpresa(long id, String nombre, String email) {

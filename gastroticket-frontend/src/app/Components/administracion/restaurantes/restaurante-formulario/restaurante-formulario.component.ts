@@ -130,7 +130,7 @@ export class RestauranteFormularioComponent {
       };
       this.administracionService.editarRestaurante(this.editRestaurante).subscribe({
         next: (res) => {
-          console.log(res);
+          console.log("res: "+res);
           const navigationExtras: NavigationExtras = {
             queryParams: { 'mensaje': res }
           };
@@ -138,7 +138,7 @@ export class RestauranteFormularioComponent {
         },
         error: (error) => {
           console.error('editarRestaurante restaurante-formulario.component error', error);
-          this.restauranteError = error;
+          this.restauranteError = error.error;
         }
       });
     }
