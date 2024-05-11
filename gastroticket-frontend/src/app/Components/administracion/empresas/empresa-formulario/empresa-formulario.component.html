@@ -1,9 +1,10 @@
 <div class="container">
     <h1>Editar empresa</h1>
+    <div *ngIf="empresaError!=''" class="alert alert-danger" role="alert">
+      {{empresaError}}
+    </div>
     <form [formGroup]="empresaForm"
     (ngSubmit)="editarEmpresa()">
-        <p class="text-danger">{{empresaError}}</p>
-
         <div class="mb-3">
 
           <mat-form-field class="w-100">
@@ -14,23 +15,18 @@
             </mat-error>
           </mat-form-field>
 
-        <mat-form-field class="w-100">
-          <mat-label>Email</mat-label>
-          <input type="email" matInput formControlName="email" [errorStateMatcher]="matcher"
-              placeholder="Ex. pat@example.com">
-          <mat-error *ngIf="email.hasError('email') && !email.hasError('required')">
-              Por favor, introduzca el formato correcto
-          </mat-error>
-          <mat-error *ngIf="email.hasError('required')">
-              Email is <strong>obligatorio</strong>
-          </mat-error>
-      </mat-form-field>
-
-
-            
+          <mat-form-field class="w-100">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput formControlName="email" [errorStateMatcher]="matcher"
+                placeholder="Ex. pat@example.com">
+            <mat-error *ngIf="email.hasError('email') && !email.hasError('required')">
+                Por favor, introduzca el formato correcto
+            </mat-error>
+            <mat-error *ngIf="email.hasError('required')">
+                Email is <strong>obligatorio</strong>
+            </mat-error>
+          </mat-form-field>
         </div>
-
         <button class="btn btn-primary">Guardar</button>
       </form>
-    
 </div>

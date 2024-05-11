@@ -42,6 +42,9 @@ export class LoginService {
     if(error.status===0){
       console.error('Se ha producido un error ', error.error);
     }
+    else if(error.status===401){
+      return throwError(()=> new Error(error.error));
+    }
     else{
       console.error('Bakend devolvió el código de estado ', error.status, error.error);
     }

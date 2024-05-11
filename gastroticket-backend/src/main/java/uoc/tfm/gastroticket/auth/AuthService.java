@@ -1,6 +1,9 @@
 package uoc.tfm.gastroticket.auth;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,16 +29,21 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse login(LoginRequest request) {
-        authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
-        String token = jwtService.getToken(user);
+        try {
+            authenticationManager
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+            String token = jwtService.getToken(user);
 
-        return AuthResponse.builder()
-                .token(token)
-                .role(user.getRole())
-                .id(user.getId())
-                .build();
+            return AuthResponse.builder()
+                    .token(token)
+                    .role(user.getRole())
+                    .id(user.getId())
+                    .build();
+        } catch (BadCredentialsException e) {
+            throw new RuntimeException("Correo electrónico o contraseña incorrectos");
+        }
     }
 
     public AuthResponse register(RegisterRequest request) {
@@ -58,6 +66,7 @@ public class AuthService {
         } else if (_role.equals("RESTAURANTE")) {
             RestaurantesDTO restaurante = new RestaurantesDTO();
             restaurante.setNombre(request.nombre);
+            restaurante.setCorreo(request.username);
             restaurante.setDireccion(request.direccion);
             restaurante.setCiudad(request.ciudad);
             restaurante.setUserId(_user.getId());

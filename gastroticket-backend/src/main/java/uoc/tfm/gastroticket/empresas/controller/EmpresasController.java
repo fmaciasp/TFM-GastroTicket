@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.service.EmpresasService;
+import uoc.tfm.gastroticket.user.User;
+import uoc.tfm.gastroticket.user.UserRepository;
 
 @RestController
 @RequestMapping("/api/empresas")
@@ -24,6 +26,8 @@ import uoc.tfm.gastroticket.empresas.service.EmpresasService;
 public class EmpresasController {
     @Autowired
     EmpresasService empresasService;
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<List<EmpresasDTO>> getAllEmpresas() {
@@ -44,22 +48,32 @@ public class EmpresasController {
 
     @PostMapping("editar")
     public ResponseEntity<?> editarEmpresa(@RequestBody EmpresasDTO empresa) {
-        EmpresasDTO _empresa = empresasService.getEmpresaById(empresa.getId());
-        if (_empresa != null) {
-            empresasService.editarEmpresa(_empresa.getId(), empresa.getNombre(), empresa.getEmail());
-            return ResponseEntity.ok(Collections.singletonMap("mensaje", "La empresa se ha editado correctamente"));
+        try {
+            EmpresasDTO _empresa = empresasService.getEmpresaById(empresa.getId());
+            if (_empresa != null) {
+                empresasService.editarEmpresa(_empresa.getId(), empresa.getNombre(), empresa.getEmail());
+                return ResponseEntity.ok(Collections.singletonMap("mensaje", "La empresa se ha editado correctamente"));
+            }
+            return new ResponseEntity<>(Collections.singletonMap("mensaje", "No se ha encontrado la empresa"),
+                    HttpStatus.NOT_FOUND);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(ex.getMessage());
         }
-        return new ResponseEntity<>(Collections.singletonMap("mensaje", "No se ha encontrado la empresa"),
-                HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteEmpresa(@RequestParam Long id) {
-        if (empresasService.getEmpresaById(id) != null) {
-            empresasService.eliminarEmpresa(id);
-            return ResponseEntity.ok(Collections.singletonMap("mensaje", "La empresa se ha eliminado correctamente"));
+        try {
+            if (empresasService.getEmpresaById(id) != null) {
+                empresasService.eliminarEmpresa(id);
+                return ResponseEntity
+                        .ok(Collections.singletonMap("mensaje", "La empresa se ha eliminado correctamente"));
+            }
+            return new ResponseEntity<>(
+                    Collections.singletonMap("mensaje", "No se ha encontrado la empresa con id " + id),
+                    HttpStatus.NOT_FOUND);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(ex.getMessage());
         }
-        return new ResponseEntity<>(Collections.singletonMap("mensaje", "No se ha encontrado la empresa con id " + id),
-                HttpStatus.NOT_FOUND);
     }
 }

@@ -65,15 +65,7 @@ export class RegistroComponent {
       this.registroService.registro(this.registroForm.value as RegistroRequest).subscribe({
         next: (userData) => {
           console.log("userdata: ",userData);
-          if(userData.role=='EMPRESA'){
-            this.router.navigateByUrl("/dash-empresa");
-          }
-          else if(userData.role.toString()=='RESTAURANTE'){
-            this.router.navigateByUrl("/dash-restaurante");
-          }
-          else{
-            this.router.navigateByUrl("/dashboard");
-          }
+          this.router.navigateByUrl("/login");
           this.registroForm.reset();
         },
         error: (errorData) => {
@@ -83,9 +75,7 @@ export class RegistroComponent {
         complete: () => {
           console.info("login completo");
         }
-      });
-      //comprobar qué tipo de usuario es y en función de esto redirigimos a un componente u otro
-      
+      });      
     }
     else{
       this.registroForm.markAllAsTouched();

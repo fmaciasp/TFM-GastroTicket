@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { EmpresaDTO } from '../Models/empresa';
 import { environment } from 'src/environments/environment.development';
 import { RestauranteDTO } from '../Models/restaurante';
@@ -28,22 +28,70 @@ export class AdministracionService {
   }
 
   public crearEmpresa(empresa: EmpresaDTO): Observable<any> {
-    return this.http.post<any>(API_URL + 'empresas/create', empresa);
+    return this.http.post<any>(API_URL + 'empresas/create', empresa).pipe(
+      map(response => response.mensaje)
+    );
   }
 
   editarEmpresa(empresa: EmpresaDTO): Observable<any>  {
-    return this.http.post<any>(API_URL + 'empresas/editar', empresa);
+    return this.http.post<any>(API_URL + 'empresas/editar', empresa).pipe(
+      map(response => response.mensaje),
+      catchError(error => {
+        return of(error);
+      })
+    );
   }
 
   public eliminarEmpresa(idEmpresa: number): Observable<any> {
     return this.http.delete<any>(
       API_URL + 'empresas/delete?id='+idEmpresa,
       {}
+    ).pipe(
+      map(response => response.mensaje),
+      catchError(error => {
+        return of(error);
+      })
     );
   }
 
   getRestaurantes(): Observable<RestauranteDTO[]> {
     return this.http.get<RestauranteDTO[]>(API_URL + "restaurantes");
+  }
+
+  public getRestaurante(idRestaurante:number): Observable<RestauranteDTO>{
+    const param = new HttpParams().append('id', idRestaurante.toString());
+    return this.http.get<RestauranteDTO>(API_URL + "restaurantes/restaurante",{params: param})
+        .pipe(
+            tap((restaurante: RestauranteDTO) => console.log('Respuesta del servidor:', restaurante))
+        );
+  }
+
+  public crearRestaurante(restaurante: RestauranteDTO): Observable<any> {
+    return this.http.post<any>(API_URL + 'restaurantes/create', restaurante).pipe(
+      map(response => response.mensaje)
+    );
+  }
+
+  editarRestaurante(restaurante: RestauranteDTO): Observable<any>  {
+    return this.http.post<any>(API_URL + 'restaurantes/editar', restaurante).pipe(
+      map(response => response.mensaje),
+      catchError(error => {
+        console.log("kakafuti")
+        return of(error);
+      })
+    );
+  }
+
+  public eliminarRestaurante(idRestaurante: number): Observable<any> {
+    return this.http.delete<any>(
+      API_URL + 'restaurantes/delete?restauranteId='+idRestaurante,
+      {}
+    ).pipe(
+      map(response => response.mensaje),
+      catchError(error => {
+        return of(error);
+      })
+    );
   }
   
 }

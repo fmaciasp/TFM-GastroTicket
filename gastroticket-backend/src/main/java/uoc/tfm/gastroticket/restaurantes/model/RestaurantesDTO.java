@@ -16,6 +16,7 @@ public class RestaurantesDTO {
     @GeneratedValue
     private Long id;
     private String nombre;
+    private String correo;
     private String direccion;
     private String ciudad;
     private Integer userId;

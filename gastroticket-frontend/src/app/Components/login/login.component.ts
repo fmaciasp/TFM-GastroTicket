@@ -47,10 +47,10 @@ export class LoginComponent implements OnInit {
             this.router.navigateByUrl("/empresas");
           }
           else if(userData.role=='EMPRESA'){
-            this.router.navigateByUrl("/empresas");
+            this.router.navigateByUrl("/dash-empresa");
           }
           else if(userData.role=='RESTAURANTE'){
-            this.router.navigateByUrl("/restaurantes");
+            this.router.navigateByUrl("/dash-restaurante");
           }
           else if(userData.role=='EMPLEADO'){
             this.router.navigateByUrl("/mis-cupones");
@@ -68,7 +68,6 @@ export class LoginComponent implements OnInit {
           console.info("login completo");
         }
       });
-      //comprobar qué tipo de usuario es y en función de esto redirigimos a un componente u otro
       
     }
     else{

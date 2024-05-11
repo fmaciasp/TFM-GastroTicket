@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { EmpresaDTO } from 'src/app/Models/empresa';
 import { AdministracionService } from 'src/app/Services/administracion.service';
 import { LoginService } from 'src/app/Services/auth/login.service';
-import { environment } from 'src/environments/environment.development';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -25,6 +23,7 @@ export class EmpresaFormularioComponent implements OnInit {
   userLoginOn:boolean=false;
   isUpdateMode: boolean;
   empresaError: string = "";
+  empresaExito: string = "";
   empresa!: EmpresaDTO;
   editEmpresa!: EmpresaDTO;
   empresaForm: FormGroup;
@@ -88,6 +87,7 @@ export class EmpresaFormularioComponent implements OnInit {
       },
       error: (error) => {
         console.error('cargarDatosEmpresa empresa-formulario.component error', error);
+        this.empresaError = error;
       }}
     );
   }
@@ -116,10 +116,14 @@ export class EmpresaFormularioComponent implements OnInit {
       this.administracionService.editarEmpresa(this.editEmpresa).subscribe({
         next: (res) => {
           console.log(res);
-          this.router.navigate(['/empresas']);
+          const navigationExtras: NavigationExtras = {
+            queryParams: { 'mensaje': res }
+          };
+          this.router.navigate(['/empresas'], navigationExtras);
         },
         error: (error) => {
           console.error('editarEmpresa empresa-formulario.component error', error);
+          this.empresaError = error;
         }
       });
     }
@@ -132,10 +136,12 @@ export class EmpresaFormularioComponent implements OnInit {
       this.administracionService.crearEmpresa(this.editEmpresa).subscribe({
         next: (res) => {
           console.log(res);
+          this.empresaExito = res;
           this.router.navigate(['/empresas']);
         },
         error: (error) => {
           console.error('No se ha podido crear una nueva empresa', error);
+          this.empresaError = error;
         }
       })
     }

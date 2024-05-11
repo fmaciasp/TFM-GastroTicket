@@ -1,4 +1,8 @@
 <div class="container">
+  <div *ngIf="loginError!=''" class="alert alert-danger" role="alert">
+    {{loginError}}
+  </div>
+  
   <form [formGroup]="loginForm">
     <div class="d-flex justify-content-center">
       <div class="w-50">

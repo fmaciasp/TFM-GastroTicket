@@ -43,6 +43,11 @@ public class CuponesService {
         return cuponRepo.findByRestauranteId(restauranteId);
     }
 
+    public void eliminarCuponesPorRestaurante(long restauranteId) {
+        List<CuponesDTO> list_cupones = cuponRepo.findByRestauranteId(restauranteId);
+        eliminarCupones(list_cupones);
+    }
+
     public void eliminarCupones(List<CuponesDTO> cupones) {
         for (CuponesDTO cupon : cupones) {
             cuponRepo.delete(cupon);
