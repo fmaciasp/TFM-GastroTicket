@@ -28,6 +28,7 @@ import { EmpresaDashboardComponent } from './Components/empresa-dashboard/empres
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     BrowserAnimationsModule,
     MatInputModule,
     MatAutocompleteModule,
+    MatButtonModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptorService, multi:true},

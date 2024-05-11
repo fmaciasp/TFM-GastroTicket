@@ -2,3 +2,8 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.fila-botones {
+  display: flex;
+  gap: 5px;
+}
