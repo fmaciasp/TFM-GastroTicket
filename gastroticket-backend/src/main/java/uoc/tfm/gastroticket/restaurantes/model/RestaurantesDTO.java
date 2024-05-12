@@ -19,5 +19,5 @@ public class RestaurantesDTO {
     private String correo;
     private String direccion;
     private String ciudad;
-    private Integer userId;
+    private Long userId;
 }

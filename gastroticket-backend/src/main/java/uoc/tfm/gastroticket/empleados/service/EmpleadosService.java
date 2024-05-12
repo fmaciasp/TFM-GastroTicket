@@ -10,9 +10,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.repository.EmpleadosRepository;
-import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.jwt.JwtService;
+import uoc.tfm.gastroticket.user.Role;
 import uoc.tfm.gastroticket.user.User;
+import uoc.tfm.gastroticket.user.UserRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,12 @@ public class EmpleadosService {
     @Autowired
     EmpleadosRepository empleadoRepo;
     private final JwtService jwtService;
+    @Autowired
+    UserRepository userRepository;
+
+    public List<EmpleadosDTO> getAllEmpleados() {
+        return empleadoRepo.findAll();
+    }
 
     public List<EmpleadosDTO> getEmpleadosPorEmpresa(long empresaId) {
         return empleadoRepo.findByEmpresaId(empresaId);
@@ -36,11 +43,17 @@ public class EmpleadosService {
     }
 
     public EmpleadosDTO createEmpleado(String nombre, String apellidos, String email, long empresaId) {
+        User _user = new User();
+        _user.setRole(Role.EMPLEADO);
+        _user.setUsername(email);
+        _user = userRepository.save(_user);
+
         EmpleadosDTO _empleado = new EmpleadosDTO();
         _empleado.setNombre(nombre);
         _empleado.setApellidos(apellidos);
         _empleado.setEmail(email);
         _empleado.setEmpresaId(empresaId);
+        _empleado.setUserId(_user.getId());
         empleadoRepo.save(_empleado);
         return _empleado;
     }

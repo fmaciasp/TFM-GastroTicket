@@ -27,6 +27,14 @@ export class AdministracionService {
         );
   }
 
+  public getEmpresaPorUserId(id:number): Observable<EmpresaDTO>{
+    const param = new HttpParams().append('id', id.toString());
+    return this.http.get<EmpresaDTO>(API_URL + "empresas/empresa-por-usuario",{params: param})
+        .pipe(
+            tap((empresa: EmpresaDTO) => console.log('Respuesta del servidor:', empresa))
+        );
+  }
+
   public crearEmpresa(empresa: EmpresaDTO): Observable<any> {
     return this.http.post<any>(API_URL + 'empresas/create', empresa).pipe(
       map(response => response.mensaje)

@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 public class User implements UserDetails {
     @Id
     @GeneratedValue
-    Integer id;
+    Long id;
     @Column(nullable = false)
     String username;
     String password;

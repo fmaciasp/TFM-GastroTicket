@@ -16,18 +16,27 @@ export class LoginService {
 
   currentUserLoginOn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   currentUserData: BehaviorSubject<String> = new BehaviorSubject<String>("");
+  currentUserRole: BehaviorSubject<String> = new BehaviorSubject<String>("");
+  currentUserId: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
   constructor(private http: HttpClient) {
     this.currentUserLoginOn=new BehaviorSubject<boolean>(sessionStorage.getItem("token")!=null);
     this.currentUserData=new BehaviorSubject<String>(sessionStorage.getItem("token") || "");
-   }
+    this.currentUserRole=new BehaviorSubject<String>(sessionStorage.getItem("role") || "");
+    this.currentUserId = new BehaviorSubject<string>(sessionStorage.getItem("userId") || "");
+  }
 
   login(credentials: LoginRequest): Observable<User>{
     return this.http.post<User>(BACK_URL + 'auth/login', credentials).pipe(
       tap((userData: User) => {
         sessionStorage.setItem("token", userData.token);
+        sessionStorage.setItem("role", userData.role);
+        sessionStorage.setItem("userId", userData.id.toString());
         this.currentUserLoginOn.next(true);
         this.currentUserData.next(userData.token);
+        this.currentUserRole.next(userData.role);
+        this.currentUserId.next(userData.id.toString());
+
       }),
       catchError(this.handleError)
     );

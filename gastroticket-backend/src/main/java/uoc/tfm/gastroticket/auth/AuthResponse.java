@@ -13,5 +13,5 @@ import uoc.tfm.gastroticket.user.Role;
 public class AuthResponse {
     String token;
     Role role;
-    int id;
+    Long id;
 }

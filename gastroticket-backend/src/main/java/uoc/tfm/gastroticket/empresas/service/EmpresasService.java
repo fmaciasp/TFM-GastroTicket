@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.repository.EmpresasRepository;
-import uoc.tfm.gastroticket.jwt.JwtService;
 import uoc.tfm.gastroticket.user.Role;
 import uoc.tfm.gastroticket.user.User;
 import uoc.tfm.gastroticket.user.UserRepository;
@@ -34,6 +33,10 @@ public class EmpresasService {
 
     public EmpresasDTO getEmpresaById(long id) {
         return empresaRepo.findById(id).orElse(null);
+    }
+
+    public EmpresasDTO getEmpresaByUserId(long id) {
+        return empresaRepo.findByUserId(id);
     }
 
     public void createEmpresa(String nombre, String email, HttpServletRequest request) {

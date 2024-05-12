@@ -1,5 +1,6 @@
 package uoc.tfm.gastroticket.empleados.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -19,4 +20,6 @@ public class EmpleadosDTO {
     private String apellidos;
     private String email;
     private long empresaId;
+    @Column(unique = true)
+    private long userId;
 }

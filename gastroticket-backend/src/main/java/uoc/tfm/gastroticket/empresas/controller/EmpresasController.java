@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.service.EmpresasService;
-import uoc.tfm.gastroticket.user.User;
 import uoc.tfm.gastroticket.user.UserRepository;
 
 @RestController
@@ -38,6 +37,11 @@ public class EmpresasController {
     @GetMapping("empresa")
     public ResponseEntity<EmpresasDTO> getEmpresa(@RequestParam Long id) {
         return ResponseEntity.ok(empresasService.getEmpresaById(id));
+    }
+
+    @GetMapping("empresa-por-usuario")
+    public ResponseEntity<EmpresasDTO> getEmpresaPorUserId(@RequestParam Long id) {
+        return ResponseEntity.ok(empresasService.getEmpresaByUserId(id));
     }
 
     @PostMapping("create")

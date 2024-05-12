@@ -20,7 +20,6 @@ import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.service.EmpleadosService;
 import uoc.tfm.gastroticket.empresas.service.EmpresasService;
 import uoc.tfm.gastroticket.jwt.JwtService;
-import uoc.tfm.gastroticket.user.User;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,8 +43,13 @@ public class EmpleadosController {
                 HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("all-empleados")
+    public ResponseEntity<?> getAllEmpleados() {
+        return ResponseEntity.ok(empleadosService.getAllEmpleados());
+    }
+
     @GetMapping("empleado")
-    public ResponseEntity<?> getEmpleadoById(@RequestBody long empleadoId) {
+    public ResponseEntity<?> getEmpleadoById(@RequestParam long empleadoId) {
         EmpleadosDTO _empleado = empleadosService.getEmpleadoById(empleadoId);
         if (_empleado != null) {
             return ResponseEntity.ok(_empleado);
@@ -66,7 +70,7 @@ public class EmpleadosController {
             String token = jwtService.getTokenRegistro(_empleado);
             String activacionLink = empleadosService.getBaseUrl(request) + "/activate-account?token=" + token;
 
-            empleadosService.enviarCorreo(_empleado.getEmail(), activacionLink);
+            // empleadosService.enviarCorreo(_empleado.getEmail(), activacionLink);
 
             return new ResponseEntity<>(Collections.singletonMap("mensaje", "Se ha creado el empleado correctamente"),
                     HttpStatus.CREATED);

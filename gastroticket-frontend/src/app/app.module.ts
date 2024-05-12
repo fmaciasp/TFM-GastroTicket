@@ -24,11 +24,11 @@ import { MatTableModule } from '@angular/material/table';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import { RegistroComponent } from './registro/registro.component';
-import { EmpresaDashboardComponent } from './Components/empresa-dashboard/empresa-dashboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
+import { EmpleadoFormComponent } from './Components/dashboard/dash-empresas/empleado-form/empleado-form.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +46,7 @@ import {MatButtonModule} from '@angular/material/button';
     RestauranteListadoComponent,
     RestauranteFormularioComponent,
     RegistroComponent,
-    EmpresaDashboardComponent,
+    EmpleadoFormComponent,
   ],
   imports: [
     BrowserModule,

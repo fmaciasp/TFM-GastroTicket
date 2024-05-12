@@ -9,9 +9,8 @@ import { EmpresaListadoComponent } from './Components/administracion/empresas/em
 import { EmpleadoComponent } from './Components/empleado/empleado.component';
 import { RestauranteListadoComponent } from './Components/administracion/restaurantes/restaurante-listado/restaurante-listado.component';
 import { RestauranteFormularioComponent } from './Components/administracion/restaurantes/restaurante-formulario/restaurante-formulario.component';
-import { EmpresaDashboardComponent } from './Components/empresa-dashboard/empresa-dashboard.component';
-import { RestauranteDashboardComponent } from './Components/restaurante-dashboard/restaurante-dashboard.component';
 import { RegistroComponent } from './registro/registro.component';
+import { EmpleadoFormComponent } from './Components/dashboard/dash-empresas/empleado-form/empleado-form.component';
 
 const routes: Routes = [
   {
@@ -72,11 +71,19 @@ const routes: Routes = [
   },
   {
     path: 'dash-empresa',
-    component: EmpresaDashboardComponent
+    component: DashEmpresasComponent
   },
   {
     path: 'dash-restaurante',
-    component: RestauranteDashboardComponent
+    component: DashRestaurantesComponent
+  },
+  {
+    path: 'empleado/nuevo',
+    component: EmpleadoFormComponent
+  },
+  {
+    path: 'empleado/editar/:idEmpleado',
+    component: EmpleadoFormComponent
   },
   {
     path: 'mis-cupones',
