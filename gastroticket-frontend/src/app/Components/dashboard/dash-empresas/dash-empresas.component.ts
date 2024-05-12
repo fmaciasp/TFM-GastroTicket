@@ -48,6 +48,7 @@ export class DashEmpresasComponent implements OnInit {
         },
         error: (error) => {
           console.error("Error:", error)
+          this.userLoginOn = false;
           this.router.navigateByUrl("/login");
         }
       });

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { catchError } from 'rxjs';
 import { LoginService } from 'src/app/Services/auth/login.service';
 
 @Component({
@@ -13,9 +14,18 @@ export class HeaderComponent implements OnInit {
   constructor(private loginService: LoginService, private router:Router){}
 
   ngOnInit(): void {
-      this.loginService.currentUserLoginOn.subscribe({
+      this.loginService.currentUserLoginOn
+      .pipe(
+        catchError(error => {
+          throw error;
+        })
+      )
+      .subscribe({
         next:(userLoginOn)=>{
           this.userLoginOn=userLoginOn;
+        },
+        error: (error) => {
+          this.userLoginOn = false;
         }
       })
   }

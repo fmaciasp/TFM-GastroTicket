@@ -16,7 +16,11 @@ export class AdministracionService {
   constructor(private http: HttpClient, private router: Router) { }
 
   getEmpresas(): Observable<EmpresaDTO[]> {
-    return this.http.get<EmpresaDTO[]>(API_URL + "empresas");
+    return this.http.get<EmpresaDTO[]>(API_URL + "empresas").pipe(
+      catchError(error => {
+        throw error;
+      })
+    );
   }
 
   public getEmpresa(id:number): Observable<EmpresaDTO>{

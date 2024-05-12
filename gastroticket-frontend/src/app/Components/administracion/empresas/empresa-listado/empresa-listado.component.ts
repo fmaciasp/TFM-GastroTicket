@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 import { EmpresaDTO } from 'src/app/Models/empresa';
 import { AdministracionService } from 'src/app/Services/administracion.service';
 import { LoginService } from 'src/app/Services/auth/login.service';
@@ -37,17 +38,32 @@ export class EmpresaListadoComponent implements OnInit {
             if(mensaje!=undefined)
               this.empresaExito = mensaje;
           })
-          this.administracionService.getEmpresas().subscribe({
+          this.administracionService.getEmpresas()
+          .pipe(
+            catchError(error => {
+              if (error.status === 500) {
+                this.logout();
+              }
+              throw error;
+            })
+          )
+          .subscribe({
             next: (empresas) => {
               this.empresas = empresas;
               console.log("empresas: ", this.empresas)
             },
             error: (error) => {
               console.error('ngOnInit empresa-listado.component error', error);
-              this.empresaError = error;
+              this.userLoginOn = false;
+              if(error.status != 500)
+                this.empresaError = error;
             }
           });
         }
+      },
+      error: (error) => {
+        this.userLoginOn = false;
+        this.empresaError = error;
       }
     })
   }
@@ -81,5 +97,12 @@ export class EmpresaListadoComponent implements OnInit {
     }
   }
   
+  logout(){
+    this.loginService.logout();
+    const navigationExtras: NavigationExtras = {
+      queryParams: { 'mensaje': "Ocurrió un error interno en el servidor. Por favor, inténtalo de nuevo más tarde." }
+    };
+    this.router.navigate(['/login'], navigationExtras);
+  }
 
 }
