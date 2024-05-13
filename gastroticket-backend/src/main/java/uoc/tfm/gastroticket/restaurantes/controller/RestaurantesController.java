@@ -54,8 +54,8 @@ public class RestaurantesController {
         try {
             RestaurantesDTO _restaurante = restaurantesService.getRestauranteById(restaurante.getId());
             if (_restaurante != null) {
-                restaurantesService.editarRestaurante(_restaurante.getId(), _restaurante.getNombre(),
-                        _restaurante.getCorreo(), restaurante.getCiudad(), _restaurante.getDireccion());
+                restaurantesService.editarRestaurante(_restaurante.getId(), restaurante.getNombre(),
+                        restaurante.getCorreo(), restaurante.getCiudad(), restaurante.getDireccion());
                 return ResponseEntity
                         .ok(Collections.singletonMap("mensaje", "El restaurante se ha editado correctamente"));
             }

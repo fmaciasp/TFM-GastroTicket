@@ -128,6 +128,7 @@ export class RestauranteFormularioComponent {
     const userId = this.restauranteForm.get('userId')?.value;
 
     if(this.restauranteId){
+      console.log("nombre: " + nombre)
       this.editRestaurante = {
           id: this.restauranteId,
           nombre: nombre,

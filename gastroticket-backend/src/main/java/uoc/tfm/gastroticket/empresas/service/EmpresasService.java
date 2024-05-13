@@ -108,11 +108,13 @@ public class EmpresasService {
                 }
                 user.setUsername(email);
                 userRepository.save(user);
-            }
 
-            _empresa.setNombre(nombre);
-            _empresa.setEmail(email);
-            empresaRepo.save(_empresa);
+                _empresa.setNombre(nombre);
+                _empresa.setEmail(email);
+                empresaRepo.save(_empresa);
+            } else
+                return new ResponseEntity("No se ha encontrado el usuario", HttpStatus.NOT_FOUND);
+
         } catch (IOException e) {
             return new ResponseEntity("Error al editar la empresa", HttpStatus.BAD_REQUEST);
         }

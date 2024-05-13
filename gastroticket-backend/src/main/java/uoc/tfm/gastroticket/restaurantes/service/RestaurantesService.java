@@ -63,12 +63,14 @@ public class RestaurantesService {
                 }
                 user.setUsername(email);
                 userRepository.save(user);
-            }
 
-            _restaurante.setNombre(nombre);
-            _restaurante.setCiudad(ciudad);
-            _restaurante.setDireccion(direccion);
-            restauranteRepo.save(_restaurante);
+                _restaurante.setNombre(nombre);
+                _restaurante.setCiudad(ciudad);
+                _restaurante.setDireccion(direccion);
+                restauranteRepo.save(_restaurante);
+            } else {
+                return new ResponseEntity("No existe el usuario", HttpStatus.NOT_FOUND);
+            }
         } catch (IOException e) {
             return new ResponseEntity("Error al editar el restaurante", HttpStatus.BAD_REQUEST);
         }
