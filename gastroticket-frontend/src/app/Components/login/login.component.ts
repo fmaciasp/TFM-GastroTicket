@@ -4,6 +4,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from 'src/app/Services/auth/login.service';
 import { LoginRequest } from 'src/app/Services/auth/loginRequest';
+import { MensajesService } from 'src/app/Services/mensajes.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -26,15 +27,18 @@ export class LoginComponent implements OnInit {
   })
   matcher = new MyErrorStateMatcher();
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private loginService: LoginService, private route: ActivatedRoute){}
+  constructor(
+    private formBuilder: FormBuilder, 
+    private router: Router, 
+    private loginService: LoginService, 
+    private route: ActivatedRoute,
+    private mensajesService: MensajesService
+  ){}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      const mensaje = params['mensaje'];
-      console.log("mensaje: " + mensaje)
-      if(mensaje!=undefined)
-        this.loginError = mensaje;
-    })
+    this.mensajesService.getErrorMessage().subscribe(mensaje => {
+      this.loginError = mensaje;
+    });
   }
 
   get username(){

@@ -5,6 +5,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { EmpresaDTO } from 'src/app/Models/empresa';
 import { AdministracionService } from 'src/app/Services/administracion.service';
 import { LoginService } from 'src/app/Services/auth/login.service';
+import { MensajesService } from 'src/app/Services/mensajes.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -35,7 +36,14 @@ export class EmpresaFormularioComponent implements OnInit {
   datosEmpresa: any;
   matcher = new MyErrorStateMatcher();
 
-  constructor(private loginService: LoginService, private formBuilder: FormBuilder, private router: Router, private route:ActivatedRoute, private administracionService: AdministracionService){ 
+  constructor(
+    private loginService: LoginService, 
+    private formBuilder: FormBuilder, 
+    private router: Router, 
+    private route:ActivatedRoute, 
+    private administracionService: AdministracionService,
+    private mensajesService: MensajesService
+  ){ 
     this.isUpdateMode = false;
     this.empresaId = parseInt(this.route.snapshot.paramMap.get('id') ?? "", 10); 
 
@@ -116,10 +124,8 @@ export class EmpresaFormularioComponent implements OnInit {
       this.administracionService.editarEmpresa(this.editEmpresa).subscribe({
         next: (res) => {
           console.log(res);
-          const navigationExtras: NavigationExtras = {
-            queryParams: { 'mensaje': res }
-          };
-          this.router.navigate(['/empresas'], navigationExtras);
+          this.mensajesService.sendSuccessMessage(res)
+          this.router.navigate(['/empresas'])
         },
         error: (error) => {
           console.error('editarEmpresa empresa-formulario.component error', error);

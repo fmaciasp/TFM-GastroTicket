@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RestauranteDTO } from 'src/app/Models/restaurante';
 import { AdministracionService } from 'src/app/Services/administracion.service';
 import { LoginService } from 'src/app/Services/auth/login.service';
+import { MensajesService } from 'src/app/Services/mensajes.service';
 
 @Component({
   selector: 'app-restaurante-listado',
@@ -23,7 +24,8 @@ export class RestauranteListadoComponent implements OnInit{
     private administracionService: AdministracionService,
     private router: Router,
     private route: ActivatedRoute,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private mensajesService: MensajesService
   ){}
 
   ngOnInit(): void {
@@ -31,12 +33,9 @@ export class RestauranteListadoComponent implements OnInit{
       next:(userLoginOn)=>{
         this.userLoginOn=userLoginOn;
         if(this.userLoginOn){
-          this.route.queryParams.subscribe(params => {
-            const mensaje = params['mensaje'];
-            console.log("mensaje: " + mensaje)
-            if(mensaje!=undefined)
-              this.restauranteExito = mensaje;
-          })
+          this.mensajesService.getSuccessMessage().subscribe(mensaje => {
+            this.restauranteExito = mensaje;
+          });
           this.administracionService.getRestaurantes().subscribe({
             next: (restaurantes) => {
               this.restaurantes = restaurantes;

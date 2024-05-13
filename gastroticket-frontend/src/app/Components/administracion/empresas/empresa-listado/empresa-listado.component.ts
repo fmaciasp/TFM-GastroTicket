@@ -5,6 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { EmpresaDTO } from 'src/app/Models/empresa';
 import { AdministracionService } from 'src/app/Services/administracion.service';
 import { LoginService } from 'src/app/Services/auth/login.service';
+import { MensajesService } from 'src/app/Services/mensajes.service';
 
 @Component({
   selector: 'app-empresa-listado',
@@ -25,6 +26,7 @@ export class EmpresaListadoComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private loginService: LoginService,
+    private mensajesService: MensajesService
   ){}
 
   ngOnInit(): void {
@@ -33,11 +35,9 @@ export class EmpresaListadoComponent implements OnInit {
         this.userLoginOn=userLoginOn;
 
         if(this.userLoginOn){
-          this.route.queryParams.subscribe(params => {
-            const mensaje = params['mensaje'];
-            if(mensaje!=undefined)
+            this.mensajesService.getSuccessMessage().subscribe(mensaje => {
               this.empresaExito = mensaje;
-          })
+            });
           this.administracionService.getEmpresas()
           .pipe(
             catchError(error => {
@@ -99,10 +99,8 @@ export class EmpresaListadoComponent implements OnInit {
   
   logout(){
     this.loginService.logout();
-    const navigationExtras: NavigationExtras = {
-      queryParams: { 'mensaje': "Ocurrió un error interno en el servidor. Por favor, inténtalo de nuevo más tarde." }
-    };
-    this.router.navigate(['/login'], navigationExtras);
+    this.mensajesService.sendErrorMessage("Ocurrió un error interno en el servidor. Por favor, inténtalo de nuevo más tarde.")
+    this.router.navigate(['/login'])
   }
 
 }

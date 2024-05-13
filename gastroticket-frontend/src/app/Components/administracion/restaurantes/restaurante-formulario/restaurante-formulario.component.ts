@@ -5,6 +5,7 @@ import { RestauranteDTO } from 'src/app/Models/restaurante';
 import { AdministracionService } from 'src/app/Services/administracion.service';
 import { LoginService } from 'src/app/Services/auth/login.service';
 import { MyErrorStateMatcher } from '../../empresas/empresa-formulario/empresa-formulario.component';
+import { MensajesService } from 'src/app/Services/mensajes.service';
 
 @Component({
   selector: 'app-restaurante-formulario',
@@ -33,7 +34,14 @@ export class RestauranteFormularioComponent {
   options: string[] = ['Albacete', 'Alicante/Alacant', 'Almería', 'Ávila', 'Badajoz', 'Barcelona', 'Bilbao', 'Burgos', 'Cáceres', 'Cádiz', 'Castellón de la Plana', 'Ceuta', 'Ciudad Real', 'Córdoba', 'Cuenca', 'Gerona', 'Granada', 'Guadalajara', 'Huelva', 'Huesca', 'Jaén', 'La Coruña', 'Las Palmas de Gran Canaria', 'León', 'Lérida', 'Logroño', 'Lugo', 'Madrid', 'Málaga', 'Melilla', 'Mérida', 'Murcia', 'Orense', 'Oviedo', 'Palencia', 'Palma de Mallorca', 'Pamplona', 'Pontevedra', 'Santa Cruz de Tenerife', 'Santander', 'Segovia', 'Sevilla', 'Soria', 'Tarragona', 'Teruel', 'Toledo', 'Valencia', 'Valladolid', 'Vitoria-Gasteiz', 'Zamora', 'Zaragoza'];
   ciudades: string[];
 
-  constructor(private loginService: LoginService, private formBuilder: FormBuilder, private router: Router, private route:ActivatedRoute, private administracionService: AdministracionService){ 
+  constructor(
+    private loginService: LoginService, 
+    private formBuilder: FormBuilder, 
+    private router: Router, 
+    private route:ActivatedRoute, 
+    private administracionService: AdministracionService,
+    private mensajesService: MensajesService
+  ){ 
     this.isUpdateMode = false;
     this.ciudades = this.options.slice();
     this.restauranteId = parseInt(this.route.snapshot.paramMap.get('id') ?? "", 10); 
@@ -131,10 +139,8 @@ export class RestauranteFormularioComponent {
       this.administracionService.editarRestaurante(this.editRestaurante).subscribe({
         next: (res) => {
           console.log("res: "+res);
-          const navigationExtras: NavigationExtras = {
-            queryParams: { 'mensaje': res }
-          };
-          this.router.navigate(['/restaurantes'], navigationExtras);
+          this.mensajesService.sendSuccessMessage(res)
+          this.router.navigate(['/restaurantes'])
         },
         error: (error) => {
           console.error('editarRestaurante restaurante-formulario.component error', error);
