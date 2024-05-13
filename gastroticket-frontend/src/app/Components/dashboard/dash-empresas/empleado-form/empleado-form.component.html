@@ -1,1 +1,49 @@
-<p>empleado-form works!</p>
+<div class="container">
+    <h1>Editar empleado</h1>
+    <div *ngIf="empleadoError!=''" class="alert alert-danger" role="alert">
+      {{empleadoError}}
+    </div>
+    <form [formGroup]="empleadoForm"
+    (ngSubmit)="editarEmpleado()">
+        <div class="mb-3">
+
+          <mat-form-field class="w-100">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" type="text" id="nombre">
+            <mat-error *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+              <span *ngIf="nombre.errors?.['required']">El nombre es <strong>obligatorio</strong></span>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="w-100">
+            <mat-label>Apellidos</mat-label>
+            <input matInput formControlName="apellidos" type="text" id="apellidos">
+            <mat-error *ngIf="apellidos.invalid && (apellidos.dirty || apellidos.touched)">
+              <span *ngIf="apellidos.errors?.['required']">El campo apellidos es <strong>obligatorio</strong></span>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="w-100">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput formControlName="email" [errorStateMatcher]="matcher"
+                placeholder="Ex. pat@example.com">
+            <mat-error *ngIf="email.hasError('email') && !email.hasError('required')">
+                Por favor, introduzca el formato correcto
+            </mat-error>
+            <mat-error *ngIf="email.hasError('required')">
+                Email is <strong>obligatorio</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="w-100">
+            <mat-label>Teléfono</mat-label>
+            <input matInput formControlName="telefono" type="tel" id="telefono" placeholder="Ej. 612345678">
+            <mat-error *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)">
+              <span *ngIf="telefono.errors?.['pattern']">Por favor, introduce un teléfono válido</span>
+            </mat-error>
+          </mat-form-field>          
+          
+        </div>
+        <button class="btn btn-primary">Guardar</button>
+      </form>
+</div>

@@ -8,18 +8,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.service.EmpleadosService;
 import uoc.tfm.gastroticket.empresas.service.EmpresasService;
 import uoc.tfm.gastroticket.jwt.JwtService;
+import uoc.tfm.gastroticket.restaurantes.model.RestaurantesDTO;
+import uoc.tfm.gastroticket.user.User;
 
 @RestController
 @RequiredArgsConstructor
@@ -79,6 +83,23 @@ public class EmpleadosController {
                     Collections.singletonMap("mensaje",
                             "No se ha podido crear el empleado porque ya existe ese correo"),
                     HttpStatus.CONFLICT);
+        }
+    }
+
+    @PostMapping("editar")
+    public ResponseEntity<?> editarEmpleado(@RequestBody EmpleadosDTO empleado) {
+        try {
+            EmpleadosDTO _empleado = empleadosService.getEmpleadoById(empleado.getId());
+            if (_empleado != null) {
+                empleadosService.editarEmpleado(_empleado.getId(), empleado.getNombre(), empleado.getApellidos(),
+                        empleado.getEmail(), empleado.getTelefono());
+                return ResponseEntity
+                        .ok(Collections.singletonMap("mensaje", "El restaurante se ha editado correctamente"));
+            }
+            return new ResponseEntity<>(Collections.singletonMap("mensaje", "No se ha encontrado el restaurante"),
+                    HttpStatus.NOT_FOUND);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 

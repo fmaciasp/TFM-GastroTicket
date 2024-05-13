@@ -1,10 +1,14 @@
 package uoc.tfm.gastroticket.empleados.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -58,12 +62,33 @@ public class EmpleadosService {
         return _empleado;
     }
 
-    public EmpleadosDTO editarEmpleado(long id, String nombre, String apellidos) {
-        EmpleadosDTO _empleado = empleadoRepo.findById(id).get();
-        _empleado.setNombre(nombre);
-        _empleado.setApellidos(apellidos);
-        empleadoRepo.save(_empleado);
-        return _empleado;
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public ResponseEntity<?> editarEmpleado(long id, String nombre, String apellidos, String email, String telefono) {
+        try {
+            EmpleadosDTO _empleado = empleadoRepo.findById(id).get();
+            if (_empleado.getUserId() != null) {
+                User user = userRepository.findById(_empleado.getUserId()).orElse(null);
+                if (user == null) {
+                    throw new RuntimeException("Usuario no encontrado");
+                }
+                user.setUsername(email);
+                userRepository.save(user);
+
+                _empleado.setNombre(nombre);
+                _empleado.setApellidos(apellidos);
+                _empleado.setEmail(email);
+                _empleado.setTelefono(telefono);
+                empleadoRepo.save(_empleado);
+            } else {
+                return new ResponseEntity("No se ha encontrado el usuario", HttpStatus.NOT_FOUND);
+            }
+        } catch (IOException e) {
+            return new ResponseEntity("Error al editar al empleado", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity(Collections.singletonMap("mensaje", "El empleado se ha actualizado correctamente"),
+                HttpStatus.OK);
+
     }
 
     public void eliminarEmpleado(long id) {
