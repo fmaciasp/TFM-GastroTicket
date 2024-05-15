@@ -15,6 +15,7 @@ import { ActivarCuentaComponent } from './Components/activar-cuenta/activar-cuen
 import { RestauranteGuard } from './guards/restaurante.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { EmpresaGuard } from './guards/empresa.guard';
+import { InicioComponent } from './Components/inicio/inicio.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
   },
   {
     path: 'inicio',
+    component: InicioComponent
+  },
+  {
+    path: 'administracion',
     component: AdministracionComponent,
     canActivate: [AdminGuard],
   },

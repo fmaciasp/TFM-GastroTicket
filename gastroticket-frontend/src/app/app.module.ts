@@ -30,6 +30,10 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import { EmpleadoFormComponent } from './Components/dashboard/dash-empresas/empleado-form/empleado-form.component';
 import { ActivarCuentaComponent } from './Components/activar-cuenta/activar-cuenta.component';
+import { InicioComponent } from './Components/inicio/inicio.component';
+import {MatCardModule} from '@angular/material/card';
+import { CardComponent } from './Components/card/card.component';
+import { FiltroPorCiudadPipe } from './pipes/filtro-por-ciudad.pipe';
 
 @NgModule({
   declarations: [
@@ -49,6 +53,9 @@ import { ActivarCuentaComponent } from './Components/activar-cuenta/activar-cuen
     RegistroComponent,
     EmpleadoFormComponent,
     ActivarCuentaComponent,
+    InicioComponent,
+    CardComponent,
+    FiltroPorCiudadPipe
   ],
   imports: [
     BrowserModule,
@@ -62,7 +69,8 @@ import { ActivarCuentaComponent } from './Components/activar-cuenta/activar-cuen
     BrowserAnimationsModule,
     MatInputModule,
     MatAutocompleteModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCardModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptorService, multi:true},

@@ -11,3 +11,7 @@ body {
   display: flex;
   justify-content: flex-end;
 }
+
+:root {
+  --primary-color: #cae2fa;
+}

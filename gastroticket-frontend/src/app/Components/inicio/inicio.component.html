@@ -1,0 +1,25 @@
+<div *ngIf="restaurantes.length==0">
+    No Hay restaurantes adheridos
+</div>
+
+<div>
+    <h3 class="titulo-inicio">Restaurantes adheridos</h3>
+
+    <div>
+        <mat-form-field appearance="fill">
+          <mat-label>Selecciona una ciudad</mat-label>
+          <mat-select [(value)]="ciudad">
+            <mat-option value="">Todas las ciudades</mat-option>
+            <mat-option *ngFor="let ciudad of ciudadesDisponibles" [value]="ciudad">{{ ciudad }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      
+
+
+    <div *ngIf="restaurantes.length>0" class="list_card">
+        <div class="card" *ngFor="let restaurante of restaurantes | filtroPorCiudad: ciudad">
+            <app-card [item]="restaurante"></app-card>
+        </div>
+    </div>    
+</div>
