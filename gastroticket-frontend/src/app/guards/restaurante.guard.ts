@@ -16,8 +16,9 @@ export class RestauranteGuard implements CanActivate {
           return this.loginService.currentUserRole.pipe(
               map((userLoginRole) => {
                   if (userLoginRole !== 'RESTAURANTE') {
-                      this.router.navigate(['/login']);
-                      return false;    
+                    this.loginService.logout();
+                    this.router.navigate(['/login']);
+                    return false;    
                   }
                   return true;
               })

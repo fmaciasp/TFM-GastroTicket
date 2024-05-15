@@ -16,8 +16,9 @@ export class EmpresaGuard implements CanActivate {
           return this.loginService.currentUserRole.pipe(
               map((userLoginRole) => {
                   if (userLoginRole !== 'EMPRESA') {
-                      this.router.navigate(['/login']);
-                      return false;    
+                    this.loginService.logout();
+                    this.router.navigate(['/login']);
+                    return false;    
                   }
                   return true;
               })
