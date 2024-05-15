@@ -12,4 +12,5 @@ public interface EmpleadosRepository extends JpaRepository<EmpleadosDTO, Long> {
 
     EmpleadosDTO findByEmail(String email);
 
+    EmpleadosDTO findByUserId(Long userId);
 }

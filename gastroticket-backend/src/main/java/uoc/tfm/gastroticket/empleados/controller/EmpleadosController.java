@@ -15,15 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.service.EmpleadosService;
 import uoc.tfm.gastroticket.empresas.service.EmpresasService;
 import uoc.tfm.gastroticket.jwt.JwtService;
-import uoc.tfm.gastroticket.restaurantes.model.RestaurantesDTO;
-import uoc.tfm.gastroticket.user.User;
 
 @RestController
 @RequiredArgsConstructor
@@ -67,15 +64,9 @@ public class EmpleadosController {
     @PutMapping("create")
     public ResponseEntity<?> createEmpleado(@RequestBody EmpleadosDTO empleado, HttpServletRequest request) {
         if (empleadosService.getEmpleadoByEmail(empleado.getEmail()) == null) {
-            EmpleadosDTO _empleado = empleadosService.createEmpleado(empleado.getNombre(), empleado.getApellidos(),
+            empleadosService.createEmpleado(empleado.getNombre(), empleado.getApellidos(),
                     empleado.getEmail(),
                     empleado.getEmpresaId());
-
-            String token = jwtService.getTokenRegistro(_empleado);
-            String activacionLink = empleadosService.getBaseUrl(request) + "/activate-account?token=" + token;
-
-            // empleadosService.enviarCorreo(_empleado.getEmail(), activacionLink);
-
             return new ResponseEntity<>(Collections.singletonMap("mensaje", "Se ha creado el empleado correctamente"),
                     HttpStatus.CREATED);
         } else {

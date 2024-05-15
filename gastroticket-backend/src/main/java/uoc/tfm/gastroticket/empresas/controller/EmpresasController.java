@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.service.EmpresasService;
@@ -46,9 +47,13 @@ public class EmpresasController {
 
     @PostMapping("create")
     public ResponseEntity<?> createEmpresa(@RequestBody EmpresasDTO empresa, HttpServletRequest request) {
-        empresasService.createEmpresa(empresa.getNombre(), empresa.getEmail(), request);
-        return new ResponseEntity<>(Collections.singletonMap("mensaje", "Se ha creado la empresa correctamente"),
-                HttpStatus.CREATED);
+        try {
+            empresasService.createEmpresa(empresa.getNombre(), empresa.getEmail(), request);
+            return new ResponseEntity<>(Collections.singletonMap("mensaje", "Se ha creado la empresa correctamente"),
+                    HttpStatus.CREATED);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
     @PostMapping("editar")

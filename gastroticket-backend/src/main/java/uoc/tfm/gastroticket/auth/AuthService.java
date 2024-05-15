@@ -1,17 +1,27 @@
 package uoc.tfm.gastroticket.auth;
 
+import java.util.Collections;
+import java.util.function.Function;
+
+import javax.management.RuntimeErrorException;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import uoc.tfm.gastroticket.empleados.repository.EmpleadosRepository;
 import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.repository.EmpresasRepository;
 import uoc.tfm.gastroticket.jwt.JwtService;
 import uoc.tfm.gastroticket.restaurantes.model.RestaurantesDTO;
 import uoc.tfm.gastroticket.restaurantes.repository.RestaurantesRepository;
+import uoc.tfm.gastroticket.user.Role;
 import uoc.tfm.gastroticket.user.User;
 import uoc.tfm.gastroticket.user.UserRepository;
 
@@ -22,6 +32,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final EmpresasRepository empresaRepository;
     private final RestaurantesRepository restauranteRepository;
+    private final EmpleadosRepository empleadoRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -74,10 +85,26 @@ public class AuthService {
         return AuthResponse.builder().token(jwtService.getToken(user)).role(user.getRole()).build();
     }
 
-    /*
-     * public AuthResponse activarCuenta(RegisterRequest request) {
-     * 
-     * }
-     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public ResponseEntity<?> establecerContrasena(ActivateRequest request) {
+
+        String token = request.getToken();
+        User user = userRepository.findByActivationToken(token);
+        if (user == null) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+        if (user.getPassword() != null) {
+            throw new RuntimeException("La cuenta de usuario ya está activdada");
+        }
+        if (jwtService.isTokenRegistroValid(token, user)) {
+            user.setPassword(passwordEncoder.encode(request.password));
+            userRepository.save(user);
+
+            return new ResponseEntity(Collections.singletonMap("mensaje", "Cuenta activada exitósamente"),
+                    HttpStatus.OK);
+        } else {
+            throw new RuntimeException("El token ha caducado");
+        }
+    }
 
 }

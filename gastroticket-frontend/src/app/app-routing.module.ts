@@ -11,6 +11,7 @@ import { RestauranteListadoComponent } from './Components/administracion/restaur
 import { RestauranteFormularioComponent } from './Components/administracion/restaurantes/restaurante-formulario/restaurante-formulario.component';
 import { RegistroComponent } from './registro/registro.component';
 import { EmpleadoFormComponent } from './Components/dashboard/dash-empresas/empleado-form/empleado-form.component';
+import { ActivarCuentaComponent } from './Components/activar-cuenta/activar-cuenta.component';
 
 const routes: Routes = [
   {
@@ -40,6 +41,10 @@ const routes: Routes = [
   {
     path: 'registro',
     component: RegistroComponent
+  },
+  {
+    path: 'activate',
+    component: ActivarCuentaComponent
   },
   {
     path: 'dashboard/empresas',

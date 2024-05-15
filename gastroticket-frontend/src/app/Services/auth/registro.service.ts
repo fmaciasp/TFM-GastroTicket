@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, tap, catchError, throwError, map } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { Registro } from './registro';
+import { ActivateRequest } from './ActivateRequest';
 
 const BACK_URL = environment.APIHost;
 
@@ -28,9 +29,20 @@ export class RegistroService {
     );
   }
 
+  activate(activateRequest: ActivateRequest): Observable<any>{
+    return this.http.post<any>(BACK_URL + 'auth/activate', activateRequest).pipe(
+      catchError(this.handleError)
+    );
+    
+  }
+
   private handleError(error:HttpErrorResponse){
     if(error.status===0){
       console.error('Se ha producido un error ', error.error);
+    }
+    else if(error.status===404){
+      console.error('Se ha producido un error ', error.error);
+      return throwError(()=> new Error(error.error));
     }
     else{
       console.error('Bakend devolvió el código de estado ', error.status, error.error);

@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }) })
+@Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = { "username", "activationToken" }) })
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -35,6 +35,7 @@ public class User implements UserDetails {
     String password;
     @Enumerated(EnumType.STRING)
     Role role;
+    String activationToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

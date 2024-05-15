@@ -29,6 +29,7 @@ import { MatInputModule } from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import { EmpleadoFormComponent } from './Components/dashboard/dash-empresas/empleado-form/empleado-form.component';
+import { ActivarCuentaComponent } from './Components/activar-cuenta/activar-cuenta.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { EmpleadoFormComponent } from './Components/dashboard/dash-empresas/empl
     RestauranteFormularioComponent,
     RegistroComponent,
     EmpleadoFormComponent,
+    ActivarCuentaComponent,
   ],
   imports: [
     BrowserModule,

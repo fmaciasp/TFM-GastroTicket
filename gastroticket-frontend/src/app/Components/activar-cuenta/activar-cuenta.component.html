@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="text-center mb-4">
+      <img src="../../../assets/logo.png"
+        style="width: 185px;" alt="logo">
+    </div>
+    <div *ngIf="activarError!=''" class="alert alert-danger" role="alert">
+      {{activarError}}
+    </div>
+    
+    <form [formGroup]="activarForm">
+        <div class="d-flex justify-content-center">
+            <div class="w-50">
+              <div class="mb-4">
+                <mat-form-field class="w-100">
+                  <mat-label>Contraseña</mat-label>
+                  <input matInput formControlName="password" type="password" id="password">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+  
+      <div class="d-flex justify-content-center">
+        <div class="w-50">
+          <div class="mb-4">
+            <mat-form-field class="w-100">
+              <mat-label>Confirmar contraseña</mat-label>
+              <input matInput formControlName="confirmPassword" type="password" id="confirmPassword">
+              <mat-error *ngIf="password !== confirmPassword">Las contraseñas no coinciden</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      
+    
+      <div class="d-flex justify-content-center">
+        <button type="submit" (click)="activarCuenta()" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Establecer contraseña</button>
+      </div>
+    
+    </form>
+  </div>

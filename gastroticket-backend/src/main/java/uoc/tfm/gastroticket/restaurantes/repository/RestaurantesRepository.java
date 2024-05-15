@@ -8,4 +8,6 @@ import uoc.tfm.gastroticket.restaurantes.model.RestaurantesDTO;
 @Repository
 public interface RestaurantesRepository extends JpaRepository<RestaurantesDTO, Long> {
 
+    RestaurantesDTO findByUserId(Long userId);
+
 }

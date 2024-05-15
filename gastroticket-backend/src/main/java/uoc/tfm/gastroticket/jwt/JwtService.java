@@ -14,7 +14,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.user.User;
 
 @Service
@@ -26,21 +25,16 @@ public class JwtService {
         return getToken(new HashMap<>(), user);
     }
 
-    public String getTokenRegistro(User user) {
+    public String getTokenRegistro(User user, String role) {
         return getTokenRegistro(new HashMap<>(), user);
     }
 
-    public String getTokenRegistro(EmpleadosDTO empleado) {
-        return getTokenRegistroEmpleado(new HashMap<>(), empleado);
-    }
-
-    private String getTokenRegistroEmpleado(Map<String, Object> extraClaims, EmpleadosDTO empleado) {
+    private String getTokenRegistro(Map<String, Object> extraClaims, User user) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(empleado.getEmail())
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hora
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -52,17 +46,6 @@ public class JwtService {
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // 24 horas
-                .signWith(getKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    private String getTokenRegistro(Map<String, Object> extraClaims, User user) {
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
-                .setSubject(user.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hora
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -79,6 +62,11 @@ public class JwtService {
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = getUserNameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public boolean isTokenRegistroValid(String token, UserDetails userDetails) {
+        final String username = getUserNameFromToken(token);
+        return (username.equals(userDetails.getUsername()));
     }
 
     private Claims getAllClaims(String token) {

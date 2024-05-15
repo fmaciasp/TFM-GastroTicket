@@ -3,8 +3,6 @@ package uoc.tfm.gastroticket.restaurantes.service;
 import java.util.Collections;
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 import io.jsonwebtoken.io.IOException;
 import jakarta.transaction.Transactional;
 import uoc.tfm.gastroticket.cupones.service.CuponesService;
+import uoc.tfm.gastroticket.email.EmailService;
 import uoc.tfm.gastroticket.restaurantes.model.RestaurantesDTO;
 import uoc.tfm.gastroticket.restaurantes.repository.RestaurantesRepository;
 import uoc.tfm.gastroticket.user.Role;
@@ -28,6 +27,8 @@ public class RestaurantesService {
     UserRepository userRepository;
     @Autowired
     CuponesService cuponesService;
+    @Autowired
+    private EmailService emailService;
 
     public List<RestaurantesDTO> getRestaurantes() {
         return restauranteRepo.findAll();
@@ -37,19 +38,31 @@ public class RestaurantesService {
         return restauranteRepo.findById(id).orElse(null);
     }
 
-    public void createRestaurante(String nombre, String email, String ciudad, String direccion) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public ResponseEntity<?> createRestaurante(String nombre, String email, String ciudad, String direccion) {
         User _user = new User();
-        _user.setUsername(email);
-        _user.setRole(Role.RESTAURANTE);
-        _user = userRepository.save(_user);
-
         RestaurantesDTO _restaurante = new RestaurantesDTO();
-        _restaurante.setNombre(nombre);
-        _restaurante.setCorreo(email);
-        _restaurante.setCiudad(ciudad);
-        _restaurante.setDireccion(direccion);
-        _restaurante.setUserId(_user.getId());
-        restauranteRepo.save(_restaurante);
+        try {
+            _user.setUsername(email);
+            _user.setRole(Role.RESTAURANTE);
+            _user = userRepository.save(_user);
+
+            _restaurante.setNombre(nombre);
+            _restaurante.setCorreo(email);
+            _restaurante.setCiudad(ciudad);
+            _restaurante.setDireccion(direccion);
+            _restaurante.setUserId(_user.getId());
+            restauranteRepo.save(_restaurante);
+        } catch (IOException e) {
+            return new ResponseEntity("Error al crear el restaurante", HttpStatus.BAD_REQUEST);
+        }
+
+        if (_user != null && _restaurante != null) {
+            emailService.enviarEmail(_user, _restaurante.getNombre(), Role.RESTAURANTE.toString());
+        }
+
+        return new ResponseEntity(Collections.singletonMap("mensaje", "La empresa se ha creado correctamente"),
+                HttpStatus.OK);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
