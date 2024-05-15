@@ -12,6 +12,9 @@ import { RestauranteFormularioComponent } from './Components/administracion/rest
 import { RegistroComponent } from './registro/registro.component';
 import { EmpleadoFormComponent } from './Components/dashboard/dash-empresas/empleado-form/empleado-form.component';
 import { ActivarCuentaComponent } from './Components/activar-cuenta/activar-cuenta.component';
+import { RestauranteGuard } from './guards/restaurante.guard';
+import { AdminGuard } from './guards/admin.guard';
+import { EmpresaGuard } from './guards/empresa.guard';
 
 const routes: Routes = [
   {
@@ -28,11 +31,13 @@ const routes: Routes = [
   },
   {
     path: 'inicio',
-    component: DashRestaurantesComponent
+    component: AdministracionComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'administracion',
-    component: AdministracionComponent
+    component: AdministracionComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'login',
@@ -48,47 +53,58 @@ const routes: Routes = [
   },
   {
     path: 'empresas',
-    component: EmpresaListadoComponent
+    component: EmpresaListadoComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'empresa/nueva',
-    component: EmpresaFormularioComponent
+    component: EmpresaFormularioComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'empresa/editar/:idEmpresa',
-    component: EmpresaFormularioComponent
+    component: EmpresaFormularioComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'restaurantes',
-    component: RestauranteListadoComponent
+    component: RestauranteListadoComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'restaurante/nuevo',
-    component: RestauranteFormularioComponent
+    component: RestauranteFormularioComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'restaurante/editar/:idRestaurante',
-    component: RestauranteFormularioComponent
+    component: RestauranteFormularioComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'dash-empresa',
-    component: DashEmpresasComponent
+    component: DashEmpresasComponent,
+    canActivate: [EmpresaGuard],
   },
   {
     path: 'dash-restaurante',
-    component: DashRestaurantesComponent
+    component: DashRestaurantesComponent,
+    canActivate: [RestauranteGuard],
   },
   {
     path: 'empleado/nuevo',
-    component: EmpleadoFormComponent
+    component: EmpleadoFormComponent,
+    canActivate: [EmpresaGuard],
   },
   {
     path: 'empleado/editar/:idEmpleado',
-    component: EmpleadoFormComponent
+    component: EmpleadoFormComponent,
+    canActivate: [EmpresaGuard],
   },
   {
     path: 'mis-cupones',
-    component: EmpleadoComponent
+    component: EmpleadoComponent,
+    canActivate: [EmpresaGuard],
   },
 ];
 
