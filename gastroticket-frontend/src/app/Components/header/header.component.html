@@ -5,26 +5,51 @@
         <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
       </a>
 
-      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+      <ul *ngIf="userRole==''" class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a routerLink="/" class="nav-link px-2 link-secondary">Inicio</a></li>
+        <li><a routerLink="/" class="nav-link px-2 link-secondary">Restaurantes adheridos</a></li>
+      </ul>
+
+      <ul *ngIf="userRole=='ADMIN'" class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li><a routerLink="/" class="nav-link px-2 link-secondary">Inicio</a></li>
         <li><a routerLink="/empresas" class="nav-link px-2 link-body-emphasis">Empresas</a></li>
         <li><a routerLink="/restaurantes" class="nav-link px-2 link-body-emphasis">Restaurantes</a></li>
       </ul>
 
+      <ul *ngIf="userRole=='EMPRESA'" class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a routerLink="/" class="nav-link px-2 link-secondary">Inicio</a></li>
+        <li><a routerLink="/dash-empresa" class="nav-link px-2 link-body-emphasis">Empleados</a></li>
+      </ul>
+
+      <ul *ngIf="userRole=='RESTAURANTE'" class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a routerLink="/" class="nav-link px-2 link-secondary">Inicio</a></li>
+        <li><a routerLink="/dash-restaurante" class="nav-link px-2 link-body-emphasis">Dashboard restaurante</a></li>
+      </ul>
+
+      <ul *ngIf="userRole=='EMPLEADO'" class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a routerLink="/" class="nav-link px-2 link-secondary">Inicio</a></li>
+        <li><a routerLink="/mis-cupones" class="nav-link px-2 link-body-emphasis">Mis cupones</a></li>
+      </ul>
+      
       <ul *ngIf="!userLoginOn" class="nav">
         <li class="nav-item"><a routerLink="/login" class="nav-link link-body-emphasis px-2">Login</a></li>
         <li class="nav-item"><a routerLink="/registro" class="nav-link link-body-emphasis px-2">Registrarse</a></li>
       </ul> 
-      <div *ngIf="userLoginOn" class="dropdown text-end">
-        <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="../../../assets/perfil.png" alt="mdo" width="32" height="32" class="rounded-circle">
-        </a>
-        <ul class="dropdown-menu text-small" style="">
-          <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" (click)="logout()" routerLink="/inicio">Cerrar Sesión</a></li>
-        </ul>
+
+      <div *ngIf="userLoginOn">
+        <div class="dropdown text-end">
+          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="../../../assets/perfil.png" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu text-small" style="">
+            <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" (click)="logout()" routerLink="/inicio">Cerrar Sesión</a></li>
+          </ul>
+        </div>
       </div>
+      
+      
     </div>
   </div>
 </header>

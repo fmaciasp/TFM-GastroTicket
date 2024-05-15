@@ -47,10 +47,6 @@ const routes: Routes = [
     component: ActivarCuentaComponent
   },
   {
-    path: 'dashboard/empresas',
-    component: DashEmpresasComponent
-  },
-  {
     path: 'empresas',
     component: EmpresaListadoComponent
   },

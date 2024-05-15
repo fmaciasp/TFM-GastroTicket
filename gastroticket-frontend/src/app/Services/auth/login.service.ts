@@ -44,7 +44,10 @@ export class LoginService {
 
   logout():void{
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("role");
+    sessionStorage.removeItem("userId");
     this.currentUserLoginOn.next(false);
+    this.currentUserRole.next("");
   }
 
   private handleError(error:HttpErrorResponse){
@@ -62,6 +65,10 @@ export class LoginService {
 
   get userLoginOn(): Observable<boolean>{
     return this.currentUserLoginOn.asObservable();
+  }
+
+  get userRole(): Observable<String>{
+    return this.currentUserRole.asObservable();
   }
 
   get userData(): Observable<String>{

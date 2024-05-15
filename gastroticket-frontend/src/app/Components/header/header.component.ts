@@ -11,24 +11,42 @@ import { LoginService } from 'src/app/Services/auth/login.service';
 export class HeaderComponent implements OnInit {
 
   userLoginOn: boolean = false;
-  constructor(private loginService: LoginService, private router:Router){}
+  userRole: String = "";
+  constructor(public loginService: LoginService, private router:Router){}
 
   ngOnInit(): void {
       this.loginService.currentUserLoginOn
-      .pipe(
-        catchError(error => {
-          throw error;
-        })
-      )
-      .subscribe({
-        next:(userLoginOn)=>{
-          this.userLoginOn=userLoginOn;
-        },
-        error: (error) => {
-          this.userLoginOn = false;
-        }
+        .pipe(
+          catchError(error => {
+            throw error;
+          })
+        )
+        .subscribe({
+          next:(userLoginOn)=>{
+            this.userLoginOn=userLoginOn;
+          },
+          error: () => {
+            this.userLoginOn = false;
+          }
       })
+
+      this.loginService.currentUserRole
+        .pipe(
+          catchError(error => {
+            throw error;
+          })
+        )
+        .subscribe({
+          next:(userRole)=>{
+            this.userRole=userRole;
+            console.log("rol: " + this.userRole);
+          },
+          error: () => {
+            this.userRole = "";
+          }
+      });
   }
+
 
   logout(){
     this.loginService.logout();
