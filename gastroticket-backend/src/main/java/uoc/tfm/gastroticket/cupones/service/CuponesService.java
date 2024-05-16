@@ -4,13 +4,14 @@ import java.security.SecureRandom;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import uoc.tfm.gastroticket.cupones.model.CuponCanjeadoDTO;
 import uoc.tfm.gastroticket.cupones.model.CuponesDTO;
+import uoc.tfm.gastroticket.cupones.repository.CuponCanjeadoRepository;
 import uoc.tfm.gastroticket.cupones.repository.CuponesRepository;
 import uoc.tfm.gastroticket.empleados.repository.EmpleadosRepository;
 import uoc.tfm.gastroticket.empresas.repository.EmpresasRepository;
@@ -27,6 +28,8 @@ public class CuponesService {
 
     @Autowired
     EmpleadosRepository empleadoRepo;
+    @Autowired
+    CuponCanjeadoRepository cuponCanjeadoRepo;
 
     private static final String ALFANUMERICO = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -39,35 +42,68 @@ public class CuponesService {
         return cuponRepo.findById(id).orElse(null);
     }
 
-    public List<CuponesDTO> getByRestauranteId(long restauranteId) {
-        return cuponRepo.findByRestauranteId(restauranteId);
+    public List<CuponCanjeadoDTO> getByRestauranteId(long restauranteId) {
+        return cuponCanjeadoRepo.findByRestauranteId(restauranteId);
     }
 
     public void eliminarCuponesPorRestaurante(long restauranteId) {
-        List<CuponesDTO> list_cupones = cuponRepo.findByRestauranteId(restauranteId);
+        List<CuponCanjeadoDTO> list_cupones = cuponCanjeadoRepo.findByRestauranteId(restauranteId);
         eliminarCupones(list_cupones);
     }
 
-    public void eliminarCupones(List<CuponesDTO> cupones) {
-        for (CuponesDTO cupon : cupones) {
-            cuponRepo.delete(cupon);
+    public void eliminarCupones(List<CuponCanjeadoDTO> cupones) {
+        for (CuponCanjeadoDTO cupon : cupones) {
+            cuponCanjeadoRepo.delete(cupon);
         }
     }
 
-    public void createCupon(long empleadoId, long empresaId) {
+    public void createCupon(long empleadoId) {
+
+        if (!empleadoRepo.existsById(empleadoId)) {
+            throw new RuntimeException("El empleado no existe");
+        }
 
         String codigo = generarCodigo().toString();
-        Date hoy = new Date();
-        Calendar _calendar = Calendar.getInstance();
-        _calendar.setTime(hoy);
-        _calendar.add(Calendar.DAY_OF_MONTH, 7);
 
         CuponesDTO _cupon = new CuponesDTO();
         _cupon.setEmpleadoId(empleadoId);
-        _cupon.setEmpresaId(empresaId);
+        _cupon.setImporte(0L);
+        _cupon.setFechaUltimoUso(null);
         _cupon.setCodigo(codigo);
-        _cupon.setFechaFin(_calendar.getTime());
         cuponRepo.save(_cupon);
+    }
+
+    public void canjearCupon(long cuponId, long importeGastado, long empleadoId, long restauranteId, long empresaId) {
+
+        Calendar _calendar = Calendar.getInstance();
+        _calendar.clear(Calendar.HOUR_OF_DAY);
+        _calendar.clear(Calendar.MINUTE);
+        _calendar.clear(Calendar.SECOND);
+        _calendar.clear(Calendar.MILLISECOND);
+        Date hoy = _calendar.getTime();
+
+        CuponesDTO cupon = cuponRepo.findById(cuponId).orElse(null);
+        if (cupon == null) {
+            throw new RuntimeException("El cupón no es válido");
+        }
+        if (cupon.getFechaUltimoUso() != null && cupon.getFechaUltimoUso() == hoy) {
+            throw new RuntimeException("El cupón ya ha sido utilizado hoy");
+        }
+
+        try {
+            cupon.setFechaUltimoUso(hoy);
+            cuponRepo.save(cupon);
+
+            CuponCanjeadoDTO cuponCanjeado = new CuponCanjeadoDTO();
+            cuponCanjeado.setImporteGastado(importeGastado);
+            cuponCanjeado.setEmpleadoId(empleadoId);
+            cuponCanjeado.setRestauranteId(restauranteId);
+            cuponCanjeado.setEmpresaId(empresaId);
+            cuponCanjeado.setFechaUso(_calendar.getTime());
+            cuponCanjeadoRepo.save(cuponCanjeado);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
     }
 
     private String generarCodigo() {
@@ -94,18 +130,6 @@ public class CuponesService {
             }
         }
         return codigo.toString();
-    }
-
-    public void canjear(Long id, Long restauranteId) {
-
-        @SuppressWarnings("null")
-        Optional<CuponesDTO> cuponDto = cuponRepo.findById(id);
-        if (cuponDto.isPresent()) {
-            CuponesDTO _cuponDto = cuponDto.get();
-            _cuponDto.setCanjeado(true);
-            _cuponDto.setRestauranteId(restauranteId);
-            cuponRepo.save(_cuponDto);
-        }
     }
 
 }

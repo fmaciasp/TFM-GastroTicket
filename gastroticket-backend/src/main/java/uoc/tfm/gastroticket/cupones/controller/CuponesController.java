@@ -13,12 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import uoc.tfm.gastroticket.cupones.model.CanjearCuponDTO;
+import uoc.tfm.gastroticket.cupones.model.CuponCanjeadoDTO;
 import uoc.tfm.gastroticket.cupones.model.CuponesDTO;
 import uoc.tfm.gastroticket.cupones.service.CuponesService;
-import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.service.EmpleadosService;
-import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.service.EmpresasService;
 
 @RestController
@@ -41,39 +39,23 @@ public class CuponesController {
 
     @PostMapping("create")
     public ResponseEntity<?> createCupon(@RequestBody CuponesDTO cupon) {
-        EmpleadosDTO empleado = empleadosService.getEmpleadoById(cupon.getEmpleadoId());
-        EmpresasDTO empresa = empresasService.getEmpresaById(cupon.getEmpresaId());
-
-        if (empleado == null) {
-            return new ResponseEntity<>(
-                    Collections.singletonMap("mensaje", "El empleado con id " + cupon.getEmpleadoId() + " no existe"),
-                    HttpStatus.NOT_FOUND);
+        try {
+            cuponService.createCupon(cupon.getEmpleadoId());
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
-        if (empresa == null) {
-            return new ResponseEntity<>(
-                    Collections.singletonMap("mensaje", "La empresa con id " + cupon.getEmpresaId() + " no existe"),
-                    HttpStatus.NOT_FOUND);
-        }
-        if (empleado.getEmpresaId() != empresa.getId()) {
-            return new ResponseEntity<>(
-                    Collections.singletonMap("mensaje",
-                            "El empleado con id " + cupon.getEmpleadoId() + " no pertenece a la empresa con id "
-                                    + cupon.getEmpresaId()),
-                    HttpStatus.NOT_FOUND);
-        }
-        cuponService.createCupon(cupon.getEmpleadoId(), cupon.getEmpresaId());
         return new ResponseEntity<>(Collections.singletonMap("mensaje", "Se ha creado el cupón correctamente"),
                 HttpStatus.CREATED);
     }
 
     @PostMapping("canjear")
-    public ResponseEntity<?> canjearCupon(@RequestBody CanjearCuponDTO cuponRequestDTO) {
-        CuponesDTO cupon = cuponService.getById(cuponRequestDTO.getId());
-        if (cupon == null) {
-            return new ResponseEntity<>(Collections.singletonMap("mensaje", "El cupón no existe"),
-                    HttpStatus.NOT_FOUND);
-        }
-        cuponService.canjear(cuponRequestDTO.getId(), cuponRequestDTO.getRestauranteId());
+    public ResponseEntity<?> canjearCupon(@RequestBody CuponCanjeadoDTO cuponCanjeadoRequestDTO) {
+        cuponService.canjearCupon(
+                cuponCanjeadoRequestDTO.getCuponId(),
+                cuponCanjeadoRequestDTO.getImporteGastado(),
+                cuponCanjeadoRequestDTO.getEmpleadoId(),
+                cuponCanjeadoRequestDTO.getRestauranteId(),
+                cuponCanjeadoRequestDTO.getEmpresaId());
         return new ResponseEntity<>(Collections.singletonMap("mensaje", "Cupón validado correctamente"), HttpStatus.OK);
     }
 
