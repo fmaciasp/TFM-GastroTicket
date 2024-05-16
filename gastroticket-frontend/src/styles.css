@@ -15,3 +15,8 @@ body {
 :root {
   --primary-color: #cae2fa;
 }
+
+.fila-botones {
+  display: flex;
+  gap: 5px;
+}

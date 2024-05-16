@@ -34,6 +34,8 @@ import { InicioComponent } from './Components/inicio/inicio.component';
 import {MatCardModule} from '@angular/material/card';
 import { CardComponent } from './Components/card/card.component';
 import { FiltroPorCiudadPipe } from './pipes/filtro-por-ciudad.pipe';
+import { DialogComponent } from './Components/dialog/dialog.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,8 @@ import { FiltroPorCiudadPipe } from './pipes/filtro-por-ciudad.pipe';
     ActivarCuentaComponent,
     InicioComponent,
     CardComponent,
-    FiltroPorCiudadPipe
+    FiltroPorCiudadPipe,
+    DialogComponent
   ],
   imports: [
     BrowserModule,
@@ -71,6 +74,7 @@ import { FiltroPorCiudadPipe } from './pipes/filtro-por-ciudad.pipe';
     MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
+    FormsModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptorService, multi:true},
