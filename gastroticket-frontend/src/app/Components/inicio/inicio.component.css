@@ -1,3 +1,7 @@
+.filtro-restaurantes {
+  width: 25%;
+}
+
 .list_card {
   display: flex;
   flex-wrap: wrap;
@@ -22,12 +26,12 @@
 
 @media (max-width: 768px) {
   .card {
-    flex-basis: calc(50% - 30px); /* Dos elementos por fila */
+    flex-basis: calc(50% - 30px);
   }
 }
 
 @media (max-width: 576px) {
   .card {
-    flex-basis: calc(100% - 30px); /* Un elemento por fila */
+    flex-basis: calc(100% - 30px);
   }
 }

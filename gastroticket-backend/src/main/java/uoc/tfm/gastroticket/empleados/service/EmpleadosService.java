@@ -50,7 +50,8 @@ public class EmpleadosService {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public ResponseEntity<?> createEmpleado(String nombre, String apellidos, String email, long empresaId) {
+    public ResponseEntity<?> createEmpleado(String nombre, String apellidos, String email, String telefono,
+            long empresaId) {
         User _user = new User();
         EmpleadosDTO _empleado = new EmpleadosDTO();
 
@@ -63,6 +64,7 @@ public class EmpleadosService {
             _empleado.setApellidos(apellidos);
             _empleado.setEmail(email);
             _empleado.setEmpresaId(empresaId);
+            _empleado.setTelefono(telefono);
             _empleado.setUserId(_user.getId());
             empleadoRepo.save(_empleado);
         } catch (IOException e) {
@@ -70,7 +72,8 @@ public class EmpleadosService {
         }
 
         if (_user != null && _empleado != null) {
-            emailService.enviarEmail(_user, _empleado.getNombre(), Role.EMPLEADO.toString());
+            // emailService.enviarEmail(_user, _empleado.getNombre(),
+            // Role.EMPLEADO.toString());
         }
 
         return new ResponseEntity(Collections.singletonMap("mensaje", "El empleado se ha creado correctamente"),

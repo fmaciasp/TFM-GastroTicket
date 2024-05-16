@@ -61,11 +61,11 @@ public class EmpleadosController {
 
     }
 
-    @PutMapping("create")
+    @PostMapping("create")
     public ResponseEntity<?> createEmpleado(@RequestBody EmpleadosDTO empleado, HttpServletRequest request) {
         if (empleadosService.getEmpleadoByEmail(empleado.getEmail()) == null) {
             empleadosService.createEmpleado(empleado.getNombre(), empleado.getApellidos(),
-                    empleado.getEmail(),
+                    empleado.getEmail(), empleado.getTelefono(),
                     empleado.getEmpresaId());
             return new ResponseEntity<>(Collections.singletonMap("mensaje", "Se ha creado el empleado correctamente"),
                     HttpStatus.CREATED);

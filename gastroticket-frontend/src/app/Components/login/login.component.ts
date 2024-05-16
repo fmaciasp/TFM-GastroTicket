@@ -21,6 +21,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class LoginComponent implements OnInit {
 
   loginError: string = "";
+  loginExito: string = "";
   loginForm = this.formBuilder.group({
     username:['', [Validators.required, Validators.email]],
     password:['', Validators.required]
@@ -38,6 +39,10 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.mensajesService.getErrorMessage().subscribe(mensaje => {
       this.loginError = mensaje;
+    });
+
+    this.mensajesService.getSuccessMessage().subscribe(mensaje => {
+      this.loginExito = mensaje;
     });
   }
 

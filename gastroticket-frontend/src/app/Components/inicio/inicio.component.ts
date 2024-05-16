@@ -14,9 +14,15 @@ export class InicioComponent implements OnInit {
   ciudadesDisponibles: string[] = [];
   restaurantes: CardDTO[] = [];
 
-  constructor(private administracionService: AdministracionService){}
+  constructor(private administracionService: AdministracionService){
+    this.cargarRestaurantes();
+  }
 
   ngOnInit(): void {
+    this.cargarRestaurantes();
+  }
+
+  cargarRestaurantes(): void{
     this.administracionService.getRestaurantes().subscribe({
       next: (restaurantes) => {
         this.restaurantes = restaurantes;

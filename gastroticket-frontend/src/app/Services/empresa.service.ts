@@ -31,7 +31,8 @@ export class EmpresaService {
   }
 
   public eliminarEmpleado(idEmpleado: number): Observable<any> {
-    return this.http.post<any>(
+    console.log("kakafuti: " + idEmpleado)
+    return this.http.delete<any>(
       API_URL + 'empleados/delete?id='+idEmpleado,
       {}
     );
