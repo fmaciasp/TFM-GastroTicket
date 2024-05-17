@@ -12,7 +12,7 @@ const BACK_URL = environment.APIHost;
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
+export class LoginService {  
 
   currentUserLoginOn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   currentUserData: BehaviorSubject<String> = new BehaviorSubject<String>("");
@@ -20,10 +20,14 @@ export class LoginService {
   currentUserId: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
   constructor(private http: HttpClient) {
-    this.currentUserLoginOn=new BehaviorSubject<boolean>(sessionStorage.getItem("token")!=null);
-    this.currentUserData=new BehaviorSubject<String>(sessionStorage.getItem("token") || "");
-    this.currentUserRole=new BehaviorSubject<String>(sessionStorage.getItem("role") || "");
-    this.currentUserId = new BehaviorSubject<string>(sessionStorage.getItem("userId") || "");
+    this.currentUserLoginOn.next(sessionStorage.getItem("token") !== null);
+    this.currentUserData.next(sessionStorage.getItem("token") || "");
+    this.currentUserRole.next(sessionStorage.getItem("role") || "");
+    this.currentUserId.next(sessionStorage.getItem("userId") || "");
+  }
+
+  updateUserLoginOn(value: boolean): void {
+    this.currentUserLoginOn.next(value);
   }
 
   login(credentials: LoginRequest): Observable<User>{
@@ -61,10 +65,6 @@ export class LoginService {
       console.error('Bakend devolvió el código de estado ', error.status, error.error);
     }
     return throwError(()=> new Error('Algo falló. Por favor vuélvalo a intentar más tarde'));
-  }
-
-  get userLoginOn(): Observable<boolean>{
-    return this.currentUserLoginOn.asObservable();
   }
 
   get userRole(): Observable<String>{

@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import uoc.tfm.gastroticket.cupones.model.CargaCuponDTO;
 import uoc.tfm.gastroticket.cupones.model.CuponCanjeadoDTO;
 import uoc.tfm.gastroticket.cupones.model.CuponesDTO;
 import uoc.tfm.gastroticket.cupones.service.CuponesService;
 import uoc.tfm.gastroticket.empleados.service.EmpleadosService;
 import uoc.tfm.gastroticket.empresas.service.EmpresasService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/cupones")
@@ -48,11 +50,29 @@ public class CuponesController {
                 HttpStatus.CREATED);
     }
 
+    @PostMapping("cargar-cupon")
+    public ResponseEntity<?> cargarCupon(@RequestBody CargaCuponDTO cupon) {
+        try {
+            cuponService.cargarCupon(cupon.getEmpleadoId(), cupon.getImporte());
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
+
+        return new ResponseEntity<>(Collections.singletonMap("mensaje", "El cupón ha sido cargado correctamente"),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("get-cupon")
+    public ResponseEntity<?> getCupon(@RequestParam Long empleadoId) {
+        return new ResponseEntity<CuponesDTO>(cuponService.getByEmpleadoId(empleadoId), HttpStatus.OK);
+    }
+
     @PostMapping("canjear")
     public ResponseEntity<?> canjearCupon(@RequestBody CuponCanjeadoDTO cuponCanjeadoRequestDTO) {
         cuponService.canjearCupon(
                 cuponCanjeadoRequestDTO.getCuponId(),
                 cuponCanjeadoRequestDTO.getImporteGastado(),
+                cuponCanjeadoRequestDTO.getUserId(),
                 cuponCanjeadoRequestDTO.getEmpleadoId(),
                 cuponCanjeadoRequestDTO.getRestauranteId(),
                 cuponCanjeadoRequestDTO.getEmpresaId());

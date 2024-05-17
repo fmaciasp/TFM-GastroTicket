@@ -31,13 +31,13 @@
     <th mat-header-cell *matHeaderCellDef> Acciones </th>
     <td mat-cell *matCellDef="let empleado">
       <div class="fila-botones">
-        <button mat-mini-fab color="primary" (click)="openDialog()">
+        <button [matTooltip]="'Tiene un cupón de '+empleado.importeCupon+'€'" mat-mini-fab color="primary" (click)="openDialog(empleado.id, empleado.importeCupon)">
           <mat-icon aria-hidden="false" aria-label="Generar ticket" fontIcon="confirmation_number"></mat-icon>
         </button>
-        <button mat-mini-fab color="primary" [routerLink]="['/empleado/editar', empleado.id]">
+        <button [matTooltip]="'Editar empleado'" mat-mini-fab color="primary" [routerLink]="['/empleado/editar', empleado.id]">
           <mat-icon aria-hidden="false" aria-label="Editar" fontIcon="edit"></mat-icon>
         </button>
-        <button mat-mini-fab color="warn" (click)="eliminarEmpleado(empleado.id)">
+        <button [matTooltip]="'Eliminar empleado'" mat-mini-fab color="warn" (click)="eliminarEmpleado(empleado.id)">
           <mat-icon aria-hidden="false" aria-label="Eliminar" fontIcon="delete"></mat-icon>
         </button>
       </div>

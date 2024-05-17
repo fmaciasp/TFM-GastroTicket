@@ -1,5 +1,6 @@
 package uoc.tfm.gastroticket.empleados.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,10 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.io.IOException;
-import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import uoc.tfm.gastroticket.cupones.model.CuponesDTO;
+import uoc.tfm.gastroticket.cupones.service.CuponesService;
 import uoc.tfm.gastroticket.email.EmailService;
+import uoc.tfm.gastroticket.empleados.model.EmpleadosCuponesDTO;
 import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.repository.EmpleadosRepository;
 import uoc.tfm.gastroticket.jwt.JwtService;
@@ -32,13 +35,34 @@ public class EmpleadosService {
     UserRepository userRepository;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private CuponesService cuponesService;
 
     public List<EmpleadosDTO> getAllEmpleados() {
         return empleadoRepo.findAll();
     }
 
-    public List<EmpleadosDTO> getEmpleadosPorEmpresa(long empresaId) {
-        return empleadoRepo.findByEmpresaId(empresaId);
+    public List<EmpleadosCuponesDTO> getEmpleadosPorEmpresa(long empresaId) {
+        List<EmpleadosDTO> listaEmpleados = empleadoRepo.findByEmpresaId(empresaId);
+        List<EmpleadosCuponesDTO> listEmpleadosCupones = new ArrayList<EmpleadosCuponesDTO>();
+        CuponesDTO cupon = null;
+        for (EmpleadosDTO _empleado : listaEmpleados) {
+            cupon = cuponesService.getByEmpleadoId(_empleado.getId());
+            listEmpleadosCupones.add(new EmpleadosCuponesDTO(
+                    _empleado.getId(),
+                    _empleado.getNombre(),
+                    _empleado.getApellidos(),
+                    _empleado.getEmail(),
+                    _empleado.getTelefono(),
+                    empresaId,
+                    _empleado.getUserId(),
+                    cupon.getId(),
+                    cupon.getImporte(),
+                    cupon.getFechaUltimoUso(),
+                    cupon.getCodigo()));
+        }
+
+        return listEmpleadosCupones;
     }
 
     public EmpleadosDTO getEmpleadoById(long id) {
@@ -66,7 +90,10 @@ public class EmpleadosService {
             _empleado.setEmpresaId(empresaId);
             _empleado.setTelefono(telefono);
             _empleado.setUserId(_user.getId());
-            empleadoRepo.save(_empleado);
+            _empleado = empleadoRepo.save(_empleado);
+
+            cuponesService.createCupon(_empleado.getId());
+
         } catch (IOException e) {
             return new ResponseEntity("Error al crear al empleado", HttpStatus.BAD_REQUEST);
         }

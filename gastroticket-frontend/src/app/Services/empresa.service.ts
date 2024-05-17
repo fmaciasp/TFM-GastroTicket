@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment.development';
 import { EmpleadoDTO } from '../Models/empleado';
 import { HttpClient } from '@angular/common/http';
 import { identifierName } from '@angular/compiler';
+import { EmpleadoCuponDTO } from '../Models/empleadoCupon';
 
 const API_URL = environment.APIEndpoint;
 
@@ -14,8 +15,8 @@ export class EmpresaService {
 
   constructor(private http: HttpClient) { }
 
-  getEmpleadosPorEmpresa(idEmpresa: number): Observable<EmpleadoDTO[]> {
-    return this.http.get<EmpleadoDTO[]>(API_URL + "empleados/por-empresa?empresaId="+idEmpresa);
+  getEmpleadosPorEmpresa(idEmpresa: number): Observable<EmpleadoCuponDTO[]> {
+    return this.http.get<EmpleadoCuponDTO[]>(API_URL + "empleados/por-empresa?empresaId="+idEmpresa);
   }
 
   getEmpleado(idEmpleado: number): Observable<EmpleadoDTO>{

@@ -3,12 +3,14 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
-import { EmpleadoDTO } from 'src/app/Models/empleado';
 import { EmpresaDTO } from 'src/app/Models/empresa';
 import { AdministracionService } from 'src/app/Services/administracion.service';
 import { LoginService } from 'src/app/Services/auth/login.service';
 import { EmpresaService } from 'src/app/Services/empresa.service';
 import { DialogComponent } from '../../dialog/dialog.component';
+import { EmpleadoCuponDTO } from 'src/app/Models/empleadoCupon';
+import { CuponCargaDTO } from 'src/app/Models/cuponCarga';
+import { EmpleadoService } from 'src/app/Services/empleado.service';
 
 @Component({
   selector: 'app-dash-empresas',
@@ -23,33 +25,43 @@ export class DashEmpresasComponent implements OnInit {
   empleadoExito: string = "";
   empleadoError: string = "";
   empleado!: EmpresaDTO;
-  empleados!: EmpleadoDTO[];
+  empleados!: EmpleadoCuponDTO[];
   importe!: number;
-  cantidad: number= 0;
+  cantidadCarga: number= 0;
   displayedColumns: string[] = ['nombre', 'apellidos', 'email', 'acciones'];
+  cuponCarga!: CuponCargaDTO;
 
   constructor(private formBuilder: FormBuilder,
     private administracionService: AdministracionService,
     private empresasService: EmpresaService,
+    private empleadoService: EmpleadoService,
     private router: Router,
     private route: ActivatedRoute,
     private loginService: LoginService,
     public dialog: MatDialog
   ) { }
 
-  openDialog(): void {
+  openDialog(empleadoId: number, importeCupon: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
-      data: {cantidad: this.cantidad, importe: this.importe},
+      data: {empleadoId: empleadoId, cantidadCarga: this.cantidadCarga, importeCupon: importeCupon},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.cantidad += result;
-      console.log("cantidad final: " + this.cantidad);
-    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === "cargado") {
+        this.empleadoExito = "El cupón se ha cargado correctamente";
+        this.cargarEmpleados();
+      } else if (result === "error") {
+        this.empleadoError = "El cupón no se ha podido cargar. Inténtelo de nuevo más tarde"
+      }
+    });    
   }
 
 
   ngOnInit(): void {
+    this.cargarEmpleados();
+  }
+
+  cargarEmpleados(){
     this.loginService.currentUserId.pipe(
       filter(userId => !!userId), // Filtra solo si el ID del usuario está definido
       tap((userId) => {

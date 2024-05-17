@@ -13,8 +13,10 @@ import uoc.tfm.gastroticket.cupones.model.CuponCanjeadoDTO;
 import uoc.tfm.gastroticket.cupones.model.CuponesDTO;
 import uoc.tfm.gastroticket.cupones.repository.CuponCanjeadoRepository;
 import uoc.tfm.gastroticket.cupones.repository.CuponesRepository;
+import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.repository.EmpleadosRepository;
 import uoc.tfm.gastroticket.empresas.repository.EmpresasRepository;
+import uoc.tfm.gastroticket.user.UserRepository;
 
 @Service
 @Transactional
@@ -30,6 +32,8 @@ public class CuponesService {
     EmpleadosRepository empleadoRepo;
     @Autowired
     CuponCanjeadoRepository cuponCanjeadoRepo;
+    @Autowired
+    UserRepository userRepository;
 
     private static final String ALFANUMERICO = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -40,6 +44,10 @@ public class CuponesService {
 
     public CuponesDTO getById(long id) {
         return cuponRepo.findById(id).orElse(null);
+    }
+
+    public CuponesDTO getByEmpleadoId(long empleadoId) {
+        return cuponRepo.findByEmpleadoId(empleadoId);
     }
 
     public List<CuponCanjeadoDTO> getByRestauranteId(long restauranteId) {
@@ -73,7 +81,25 @@ public class CuponesService {
         cuponRepo.save(_cupon);
     }
 
-    public void canjearCupon(long cuponId, long importeGastado, long empleadoId, long restauranteId, long empresaId) {
+    public void cargarCupon(Long empleadoId, long importe) {
+        if (empleadoId == null)
+            throw new RuntimeException("El empleado no existe");
+
+        EmpleadosDTO empleado = empleadoRepo.findById(empleadoId).orElse(null);
+
+        if (empleado == null) {
+            throw new RuntimeException("El empleado no existe");
+        }
+
+        CuponesDTO cupon = cuponRepo.findByEmpleadoId(empleado.getId());
+        long importeCupon = cupon.getImporte();
+        long total = importeCupon + importe;
+        cupon.setImporte(total);
+        cuponRepo.save(cupon);
+    }
+
+    public void canjearCupon(long cuponId, long userId, long importeGastado, long empleadoId, long restauranteId,
+            long empresaId) {
 
         Calendar _calendar = Calendar.getInstance();
         _calendar.clear(Calendar.HOUR_OF_DAY);
@@ -96,6 +122,7 @@ public class CuponesService {
 
             CuponCanjeadoDTO cuponCanjeado = new CuponCanjeadoDTO();
             cuponCanjeado.setImporteGastado(importeGastado);
+            cuponCanjeado.setUserId(userId);
             cuponCanjeado.setEmpleadoId(empleadoId);
             cuponCanjeado.setRestauranteId(restauranteId);
             cuponCanjeado.setEmpresaId(empresaId);

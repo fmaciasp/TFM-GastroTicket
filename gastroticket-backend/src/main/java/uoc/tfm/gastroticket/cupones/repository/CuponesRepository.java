@@ -10,4 +10,6 @@ public interface CuponesRepository extends JpaRepository<CuponesDTO, Long> {
 
     CuponesDTO findByCodigo(String codigo);
 
+    CuponesDTO findByEmpleadoId(Long empleadoId);
+
 }

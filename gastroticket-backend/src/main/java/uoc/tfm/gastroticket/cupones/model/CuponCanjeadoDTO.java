@@ -19,6 +19,7 @@ public class CuponCanjeadoDTO {
     private Long id;
     private Long cuponId;
     private Long importeGastado;
+    private Long userId;
     private Long empleadoId;
     private Long restauranteId;
     private Long empresaId;

@@ -1,5 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
+import { CuponCargaDTO } from 'src/app/Models/cuponCarga';
+import { EmpleadoService } from 'src/app/Services/empleado.service';
 
 
 @Component({
@@ -9,22 +11,43 @@ import {MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angula
 })
 export class DialogComponent {
 
-  cantidad!: number;
-  importe!: number;
+  cantidadCarga!: number;
+  importeCupon!: number;
+  empleadoId!: number;
+  errorEnSubmit: boolean = false;
+  cuponCarga!: CuponCargaDTO;
+
 
   constructor(
+    private empleadoService: EmpleadoService,
     public dialogRef: MatDialogRef<DialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { 
-    this.cantidad = data.cantidad;
+    this.cantidadCarga = data.cantidadCarga;
+    this.importeCupon = data.importeCupon;
+    this.empleadoId = data.empleadoId;
   }
 
   onSubmit(): void {
-    this.dialogRef.close({cantidad: this.cantidad, importe: this.importe});
+    this.cuponCarga = {
+      empleadoId: this.empleadoId,
+      importe: this.cantidadCarga
+    }
+
+    this.empleadoService.cargarCupon(this.cuponCarga).subscribe({
+      next: () => {
+        this.dialogRef.close("cargado");
+      },
+      error: () => {
+        this.errorEnSubmit = true;
+        this.dialogRef.close("error");
+      }
+    })
+    
   }
 
   onCancel(): void {
-    this.dialogRef.close();
+    this.dialogRef.close("cancelar");
   }
 
 }

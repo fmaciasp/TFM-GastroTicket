@@ -1,12 +1,13 @@
 <h1 mat-dialog-title>Introduce el importe</h1>
 <div mat-dialog-content>
-    <p>Cantidad actual: {{cantidad}}</p>
+    <p>Cantidad actual: {{importeCupon}} €</p>
   <mat-form-field>
-    <mat-label>Importe</mat-label>
-    <input type="number" matInput [(ngModel)]="importe">
+    <mat-label>Importe a cargar</mat-label>
+    <input type="number" matInput [(ngModel)]="cantidadCarga">
+    <span matSuffix>€&nbsp;&nbsp;</span>
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onCancel()">Cancelar</button>
-  <button mat-button [mat-dialog-close]="importe" cdkFocusInitial>Introducir</button>
+  <button mat-button (click)="onSubmit()" cdkFocusInitial>Introducir</button>
 </div>

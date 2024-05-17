@@ -36,6 +36,7 @@ import { CardComponent } from './Components/card/card.component';
 import { FiltroPorCiudadPipe } from './pipes/filtro-por-ciudad.pipe';
 import { DialogComponent } from './Components/dialog/dialog.component';
 import { FormsModule } from '@angular/forms';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { FormsModule } from '@angular/forms';
     MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
-    FormsModule
+    FormsModule,
+    MatTooltipModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptorService, multi:true},
