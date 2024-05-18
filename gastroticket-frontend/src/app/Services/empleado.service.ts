@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
 import { CuponDTO } from '../Models/cupon';
 import { EmpleadoDTO } from '../Models/empleado';
+import { CuponCanjeadoDTO } from '../Models/cuponCanjeado';
 
 const API_URL = environment.APIEndpoint;
 
@@ -33,6 +34,10 @@ export class EmpleadoService {
 
   public getCupon(empleadoId: number){
     return this.http.get<CuponDTO>(API_URL + 'cupones/get-cupon?empleadoId='+empleadoId);
+  }
+
+  public getCuponesCanjeados(empleadoId: number){
+    return this.http.get<CuponCanjeadoDTO[]>(API_URL + 'cupones/get-cupones-canjeados-empleado?empleadoId='+empleadoId);
   }
   
 }

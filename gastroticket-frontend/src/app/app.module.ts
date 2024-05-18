@@ -39,6 +39,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { QRCodeModule } from 'angularx-qrcode';
 import { DashEmpleadoComponent } from './Components/dashboard/dash-empleado/dash-empleado.component';
 import { DialogCuponComponent } from './Components/dialog-cupon/dialog-cupon.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -80,7 +82,9 @@ import { DialogCuponComponent } from './Components/dialog-cupon/dialog-cupon.com
     MatCardModule,
     FormsModule,
     MatTooltipModule,
-    QRCodeModule
+    QRCodeModule,
+    MatTabsModule,
+    MatPaginatorModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptorService, multi:true},

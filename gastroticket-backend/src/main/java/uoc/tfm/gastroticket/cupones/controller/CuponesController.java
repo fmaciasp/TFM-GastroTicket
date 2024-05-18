@@ -67,11 +67,18 @@ public class CuponesController {
         return new ResponseEntity<CuponesDTO>(cuponService.getByEmpleadoId(empleadoId), HttpStatus.OK);
     }
 
+    @GetMapping("get-cupones-canjeados-empleado")
+    public ResponseEntity<?> getCuponesCanjeadosPorEmpleado(@RequestParam Long empleadoId) {
+        return new ResponseEntity<List<CuponCanjeadoDTO>>(cuponService.getCanjeadosPorEmpleado(empleadoId),
+                HttpStatus.OK);
+    }
+
     @PostMapping("canjear")
     public ResponseEntity<?> canjearCupon(@RequestBody CuponCanjeadoDTO cuponCanjeadoRequestDTO) {
         cuponService.canjearCupon(
                 cuponCanjeadoRequestDTO.getCuponId(),
-                cuponCanjeadoRequestDTO.getImporteGastado(),
+                cuponCanjeadoRequestDTO.getImporteDescontado(),
+                cuponCanjeadoRequestDTO.getImporteFactura(),
                 cuponCanjeadoRequestDTO.getUserId(),
                 cuponCanjeadoRequestDTO.getEmpleadoId(),
                 cuponCanjeadoRequestDTO.getRestauranteId(),

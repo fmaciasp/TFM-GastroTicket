@@ -16,6 +16,7 @@ import uoc.tfm.gastroticket.cupones.repository.CuponesRepository;
 import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.repository.EmpleadosRepository;
 import uoc.tfm.gastroticket.empresas.repository.EmpresasRepository;
+import uoc.tfm.gastroticket.restaurantes.repository.RestaurantesRepository;
 import uoc.tfm.gastroticket.user.UserRepository;
 
 @Service
@@ -34,6 +35,8 @@ public class CuponesService {
     CuponCanjeadoRepository cuponCanjeadoRepo;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    RestaurantesRepository restauranteRepository;
 
     private static final String ALFANUMERICO = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -48,6 +51,11 @@ public class CuponesService {
 
     public CuponesDTO getByEmpleadoId(long empleadoId) {
         return cuponRepo.findByEmpleadoId(empleadoId);
+    }
+
+    public List<CuponCanjeadoDTO> getCanjeadosPorEmpleado(long empleadoId) {
+        EmpleadosDTO empleado = empleadoRepo.findById(empleadoId).get();
+        return cuponCanjeadoRepo.findByUserId(empleado.getUserId());
     }
 
     public List<CuponCanjeadoDTO> getByRestauranteId(long restauranteId) {
@@ -98,7 +106,8 @@ public class CuponesService {
         cuponRepo.save(cupon);
     }
 
-    public void canjearCupon(long cuponId, long userId, long importeGastado, long empleadoId, long restauranteId,
+    public void canjearCupon(long cuponId, long userId, long importeDescontado, long importeFactura, long empleadoId,
+            long restauranteId,
             long empresaId) {
 
         Calendar _calendar = Calendar.getInstance();
@@ -121,10 +130,12 @@ public class CuponesService {
             cuponRepo.save(cupon);
 
             CuponCanjeadoDTO cuponCanjeado = new CuponCanjeadoDTO();
-            cuponCanjeado.setImporteGastado(importeGastado);
+            cuponCanjeado.setImporteDescontado(importeDescontado);
+            cuponCanjeado.setImporteFactura(importeFactura);
             cuponCanjeado.setUserId(userId);
             cuponCanjeado.setEmpleadoId(empleadoId);
             cuponCanjeado.setRestauranteId(restauranteId);
+            cuponCanjeado.setNombreRestaurante(restauranteRepository.findById(restauranteId).get().getNombre());
             cuponCanjeado.setEmpresaId(empresaId);
             cuponCanjeado.setFechaUso(_calendar.getTime());
             cuponCanjeadoRepo.save(cuponCanjeado);
