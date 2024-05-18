@@ -56,7 +56,19 @@ public class EmpleadosController {
             return ResponseEntity.ok(_empleado);
         }
         return new ResponseEntity<>(
-                Collections.singletonMap("mensaje", "No existe ningún empleado con el id " + empleadoId),
+                Collections.singletonMap("mensaje", "No existe ningún empleado con el empleadoId " + empleadoId),
+                HttpStatus.NOT_FOUND);
+
+    }
+
+    @GetMapping("empleado-por-userId")
+    public ResponseEntity<?> getEmpleadoByUserId(@RequestParam long userId) {
+        EmpleadosDTO _empleado = empleadosService.getEmpleadoPorUserId(userId);
+        if (_empleado != null) {
+            return ResponseEntity.ok(_empleado);
+        }
+        return new ResponseEntity<>(
+                Collections.singletonMap("mensaje", "No existe ningún empleado con el userId " + userId),
                 HttpStatus.NOT_FOUND);
 
     }

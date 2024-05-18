@@ -73,6 +73,10 @@ public class EmpleadosService {
         return empleadoRepo.findByEmail(email);
     }
 
+    public EmpleadosDTO getEmpleadoPorUserId(long userId) {
+        return empleadoRepo.findByUserId(userId);
+    }
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public ResponseEntity<?> createEmpleado(String nombre, String apellidos, String email, String telefono,
             long empresaId) {
@@ -99,8 +103,8 @@ public class EmpleadosService {
         }
 
         if (_user != null && _empleado != null) {
-            // emailService.enviarEmail(_user, _empleado.getNombre(),
-            // Role.EMPLEADO.toString());
+            emailService.enviarEmail(_user, _empleado.getNombre(),
+                    Role.EMPLEADO.toString());
         }
 
         return new ResponseEntity(Collections.singletonMap("mensaje", "El empleado se ha creado correctamente"),
