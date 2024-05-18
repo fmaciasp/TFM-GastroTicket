@@ -6,7 +6,6 @@ import { DashRestaurantesComponent } from './Components/dashboard/dash-restauran
 import { DashEmpresasComponent } from './Components/dashboard/dash-empresas/dash-empresas.component';
 import { AdministracionComponent } from './Components/administracion/administracion.component';
 import { EmpresaListadoComponent } from './Components/administracion/empresas/empresa-listado/empresa-listado.component';
-import { EmpleadoComponent } from './Components/empleado/empleado.component';
 import { RestauranteListadoComponent } from './Components/administracion/restaurantes/restaurante-listado/restaurante-listado.component';
 import { RestauranteFormularioComponent } from './Components/administracion/restaurantes/restaurante-formulario/restaurante-formulario.component';
 import { RegistroComponent } from './registro/registro.component';
@@ -16,6 +15,8 @@ import { RestauranteGuard } from './guards/restaurante.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { EmpresaGuard } from './guards/empresa.guard';
 import { InicioComponent } from './Components/inicio/inicio.component';
+import { DashEmpleadoComponent } from './Components/dashboard/dash-empleado/dash-empleado.component';
+import { EmpleadoGuard } from './guards/empleado.guard';
 
 const routes: Routes = [
   {
@@ -107,9 +108,9 @@ const routes: Routes = [
     canActivate: [EmpresaGuard],
   },
   {
-    path: 'mis-cupones',
-    component: EmpleadoComponent,
-    canActivate: [EmpresaGuard],
+    path: 'dash-empleado',
+    component: DashEmpleadoComponent,
+    canActivate: [EmpleadoGuard],
   },
 ];
 

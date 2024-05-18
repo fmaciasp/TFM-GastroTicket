@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
             this.router.navigateByUrl("/dash-restaurante");
           }
           else if(userData.role=='EMPLEADO'){
-            this.router.navigateByUrl("/mis-cupones");
+            this.router.navigateByUrl("/dash-empleado");
           }
           else{
             this.router.navigateByUrl("/dashboard");

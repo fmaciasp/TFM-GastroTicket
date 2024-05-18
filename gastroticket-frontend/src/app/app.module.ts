@@ -11,7 +11,6 @@ import { LoginComponent } from './Components/login/login.component';
 import { FooterComponent } from './Components/footer/footer.component';
 import { HeaderComponent } from './Components/header/header.component';
 import { AdministracionComponent } from './Components/administracion/administracion.component';
-import { EmpleadoComponent } from './Components/empleado/empleado.component';
 import { DashEmpresasComponent } from './Components/dashboard/dash-empresas/dash-empresas.component';
 import { DashRestaurantesComponent } from './Components/dashboard/dash-restaurantes/dash-restaurantes.component';
 import { PersonalDetailsComponent } from './Components/personal-details/personal-details.component';
@@ -37,6 +36,9 @@ import { FiltroPorCiudadPipe } from './pipes/filtro-por-ciudad.pipe';
 import { DialogComponent } from './Components/dialog/dialog.component';
 import { FormsModule } from '@angular/forms';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { QRCodeModule } from 'angularx-qrcode';
+import { DashEmpleadoComponent } from './Components/dashboard/dash-empleado/dash-empleado.component';
+import { DialogCuponComponent } from './Components/dialog-cupon/dialog-cupon.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,6 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     FooterComponent,
     HeaderComponent,
     AdministracionComponent,
-    EmpleadoComponent,
     DashEmpresasComponent,
     DashRestaurantesComponent,
     PersonalDetailsComponent,
@@ -59,7 +60,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     InicioComponent,
     CardComponent,
     FiltroPorCiudadPipe,
-    DialogComponent
+    DialogComponent,
+    DashEmpleadoComponent,
+    DialogCuponComponent
   ],
   imports: [
     BrowserModule,
@@ -76,7 +79,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatButtonModule,
     MatCardModule,
     FormsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    QRCodeModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptorService, multi:true},

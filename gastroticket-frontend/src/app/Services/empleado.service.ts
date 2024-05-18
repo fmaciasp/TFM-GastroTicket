@@ -4,6 +4,7 @@ import { CuponCargaDTO } from '../Models/cuponCarga';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
 import { CuponDTO } from '../Models/cupon';
+import { EmpleadoDTO } from '../Models/empleado';
 
 const API_URL = environment.APIEndpoint;
 
@@ -23,6 +24,14 @@ export class EmpleadoService {
   }
 
   public getImporteCupon(empleadoId: number){
+    return this.http.get<CuponDTO>(API_URL + 'cupones/get-cupon?empleadoId='+empleadoId);
+  }
+
+  public getEmpleadoPorUserId(userId: number){
+    return this.http.get<EmpleadoDTO>(API_URL + 'empleados/empleado-por-userId?userId='+userId);
+  }
+
+  public getCupon(empleadoId: number){
     return this.http.get<CuponDTO>(API_URL + 'cupones/get-cupon?empleadoId='+empleadoId);
   }
   
