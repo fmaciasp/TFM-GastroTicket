@@ -70,6 +70,10 @@ export class AdministracionService {
     return this.http.get<RestauranteDTO[]>(API_URL + "restaurantes");
   }
 
+  getRestaurantesActivos(): Observable<RestauranteDTO[]> {
+    return this.http.get<RestauranteDTO[]>(API_URL + "restaurantes/restaurantes-activos");
+  }
+
   public getRestaurante(idRestaurante:number): Observable<RestauranteDTO>{
     const param = new HttpParams().append('id', idRestaurante.toString());
     return this.http.get<RestauranteDTO>(API_URL + "restaurantes/restaurante",{params: param})

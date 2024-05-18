@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, tap, catchError, throwError, map } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { Registro } from './registro';
-import { ActivateRequest } from './ActivateRequest';
+import { ActivateRequest } from './activateRequest';
 
 const BACK_URL = environment.APIHost;
 

@@ -18,7 +18,6 @@ import uoc.tfm.gastroticket.email.EmailService;
 import uoc.tfm.gastroticket.empleados.model.EmpleadosCuponesDTO;
 import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.repository.EmpleadosRepository;
-import uoc.tfm.gastroticket.jwt.JwtService;
 import uoc.tfm.gastroticket.user.Role;
 import uoc.tfm.gastroticket.user.User;
 import uoc.tfm.gastroticket.user.UserRepository;
@@ -30,7 +29,6 @@ public class EmpleadosService {
 
     @Autowired
     EmpleadosRepository empleadoRepo;
-    private final JwtService jwtService;
     @Autowired
     UserRepository userRepository;
     @Autowired

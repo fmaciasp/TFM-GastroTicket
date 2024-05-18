@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.service.EmpresasService;

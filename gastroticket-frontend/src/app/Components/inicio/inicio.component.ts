@@ -15,7 +15,6 @@ export class InicioComponent implements OnInit {
   restaurantes: CardDTO[] = [];
 
   constructor(private administracionService: AdministracionService){
-    this.cargarRestaurantes();
   }
 
   ngOnInit(): void {
@@ -23,18 +22,9 @@ export class InicioComponent implements OnInit {
   }
 
   cargarRestaurantes(): void{
-    this.administracionService.getRestaurantes().subscribe({
+    this.administracionService.getRestaurantesActivos().subscribe({
       next: (restaurantes) => {
         this.restaurantes = restaurantes;
-        console.log("restaurantes: ", this.restaurantes)
-        this.restaurantes.forEach((restaurante) => {
-          this.restaurantes.push({
-            id: restaurante.id,
-            nombre: restaurante.nombre,
-            ciudad: restaurante.ciudad,
-            direccion: restaurante.direccion
-          })
-        })
         this.ciudadesDisponibles = this.obtenerCiudadesUnicas(restaurantes);
       },
       error: (error) => {

@@ -6,6 +6,9 @@
   <div *ngIf="loginError!=''" class="alert alert-danger" role="alert">
     {{loginError}}
   </div>
+  <div *ngIf="loginExito!=''" class="alert alert-success" role="alert">
+    {{loginExito}}
+  </div>
   
   <form [formGroup]="loginForm">
     <div class="d-flex justify-content-center">

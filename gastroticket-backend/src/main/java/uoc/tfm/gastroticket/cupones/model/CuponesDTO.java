@@ -18,6 +18,7 @@ public class CuponesDTO {
     @Id
     @GeneratedValue
     private Long id;
+    @Column(unique = true)
     private String codigo;
     private Long importe;
     @Column(unique = true)

@@ -20,71 +20,71 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class RegistroComponent {
 
-  registroError: string = "";
-  registroForm = this.formBuilder.group({
-    username:['', [Validators.required, Validators.email]],
-    password:['', Validators.required],
-    role: ['', Validators.required], 
-    nombre: ['', Validators.required],
-    ciudad: [''],
-    direccion: ['']
-  })
-  mensaje: string = '';
-  roles = Object.values(Role);
-  selectedRole: Role | undefined; 
-  matcher = new MyErrorStateMatcher();
-  @ViewChild('input')
-  input!: ElementRef<HTMLInputElement>;
-  options: string[] = ['Albacete', 'Alicante/Alacant', 'Almería', 'Ávila', 'Badajoz', 'Barcelona', 'Bilbao', 'Burgos', 'Cáceres', 'Cádiz', 'Castellón de la Plana', 'Ceuta', 'Ciudad Real', 'Córdoba', 'Cuenca', 'Gerona', 'Granada', 'Guadalajara', 'Huelva', 'Huesca', 'Jaén', 'La Coruña', 'Las Palmas de Gran Canaria', 'León', 'Lérida', 'Logroño', 'Lugo', 'Madrid', 'Málaga', 'Melilla', 'Mérida', 'Murcia', 'Orense', 'Oviedo', 'Palencia', 'Palma de Mallorca', 'Pamplona', 'Pontevedra', 'Santa Cruz de Tenerife', 'Santander', 'Segovia', 'Sevilla', 'Soria', 'Tarragona', 'Teruel', 'Toledo', 'Valencia', 'Valladolid', 'Vitoria-Gasteiz', 'Zamora', 'Zaragoza'];
-  ciudades: string[];
+    registroError: string = "";
+    registroForm = this.formBuilder.group({
+      username:['', [Validators.required, Validators.email]],
+      password:['', Validators.required],
+      role: ['', Validators.required], 
+      nombre: ['', Validators.required],
+      ciudad: [''],
+      direccion: ['']
+    })
+    mensaje: string = '';
+    roles = Object.values(Role);
+    selectedRole: Role | undefined; 
+    matcher = new MyErrorStateMatcher();
+    @ViewChild('input')
+    input!: ElementRef<HTMLInputElement>;
+    options: string[] = ['Albacete', 'Alicante/Alacant', 'Almería', 'Ávila', 'Badajoz', 'Barcelona', 'Bilbao', 'Burgos', 'Cáceres', 'Cádiz', 'Castellón de la Plana', 'Ceuta', 'Ciudad Real', 'Córdoba', 'Cuenca', 'Gerona', 'Granada', 'Guadalajara', 'Huelva', 'Huesca', 'Jaén', 'La Coruña', 'Las Palmas de Gran Canaria', 'León', 'Lérida', 'Logroño', 'Lugo', 'Madrid', 'Málaga', 'Melilla', 'Mérida', 'Murcia', 'Orense', 'Oviedo', 'Palencia', 'Palma de Mallorca', 'Pamplona', 'Pontevedra', 'Santa Cruz de Tenerife', 'Santander', 'Segovia', 'Sevilla', 'Soria', 'Tarragona', 'Teruel', 'Toledo', 'Valencia', 'Valladolid', 'Vitoria-Gasteiz', 'Zamora', 'Zaragoza'];
+    ciudades: string[];
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private registroService: RegistroService){
-    this.ciudades = this.options.slice();
-  }
-
-  ngOnInit(): void {}
-
-  get username(){
-    return this.registroForm.controls.username;
-  }
-
-  get password(){
-    return this.registroForm.controls.password;
-  }
-
-  get role(){
-    return this.registroForm.controls.role;
-  }
-
-  get nombre(){
-    return this.registroForm.controls.nombre;
-  }
-
-  public registro(){
-    if(this.registroForm.valid){
-      this.registroService.registro(this.registroForm.value as RegistroRequest).subscribe({
-        next: (userData) => {
-          console.log("userdata: ",userData);
-          this.router.navigateByUrl("/login");
-          this.registroForm.reset();
-        },
-        error: (errorData) => {
-          console.error(errorData);
-          this.registroError = errorData;
-        },
-        complete: () => {
-          console.info("login completo");
-        }
-      });      
+    constructor(private formBuilder: FormBuilder, private router: Router, private registroService: RegistroService){
+      this.ciudades = this.options.slice();
     }
-    else{
-      this.registroForm.markAllAsTouched();
-    }
-  }
 
-  filter(): void {
-    const filterValue = this.input.nativeElement.value.toLowerCase();
-    this.ciudades = this.options.filter(o => o.toLowerCase().includes(filterValue));
-  }
+    ngOnInit(): void {}
+
+    get username(){
+      return this.registroForm.controls.username;
+    }
+
+    get password(){
+      return this.registroForm.controls.password;
+    }
+
+    get role(){
+      return this.registroForm.controls.role;
+    }
+
+    get nombre(){
+      return this.registroForm.controls.nombre;
+    }
+
+    public registro(){
+      if(this.registroForm.valid){
+        this.registroService.registro(this.registroForm.value as RegistroRequest).subscribe({
+          next: (userData) => {
+            console.log("userdata: ",userData);
+            this.router.navigateByUrl("/login");
+            this.registroForm.reset();
+          },
+          error: (errorData) => {
+            console.error(errorData);
+            this.registroError = errorData;
+          },
+          complete: () => {
+            console.info("login completo");
+          }
+        });      
+      }
+      else{
+        this.registroForm.markAllAsTouched();
+      }
+    }
+
+    filter(): void {
+      const filterValue = this.input.nativeElement.value.toLowerCase();
+      this.ciudades = this.options.filter(o => o.toLowerCase().includes(filterValue));
+    }
 
 }

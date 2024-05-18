@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ActivateRequest } from 'src/app/Services/auth/ActivateRequest';
+import { ActivateRequest } from 'src/app/Services/auth/activateRequest';
 import { RegistroService } from 'src/app/Services/auth/registro.service';
 import { MensajesService } from 'src/app/Services/mensajes.service';
 
@@ -71,7 +71,7 @@ export class ActivarCuentaComponent {
         next: () => {
           console.log("Cuenta activada correctamente");
           this.mensajesService.sendSuccessMessage("Cuenta activada correctamente. Por favor inicie sesión.")
-          this.router.navigate(['/login'])
+          this.router.navigateByUrl('/login')
         },
         error: (error) => {
           console.error("Error al activar la cuenta", error);

@@ -161,10 +161,12 @@ export class RestauranteFormularioComponent {
       this.administracionService.crearRestaurante(this.editRestaurante).subscribe({
         next: (res) => {
           console.log(res);
+          this.mensajesService.sendSuccessMessage(res)
           this.router.navigate(['/restaurantes']);
         },
         error: (error) => {
           console.error('No se ha podido crear una nueva restaurante', error);
+          this.restauranteError = error.error;
         }
       })
     }

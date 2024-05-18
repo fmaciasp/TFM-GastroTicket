@@ -142,7 +142,7 @@ export class EmpresaFormularioComponent implements OnInit {
       this.administracionService.crearEmpresa(this.editEmpresa).subscribe({
         next: (res) => {
           console.log(res);
-          this.empresaExito = res;
+          this.mensajesService.sendSuccessMessage(res)
           this.router.navigate(['/empresas']);
         },
         error: (error) => {

@@ -1,10 +1,8 @@
 package uoc.tfm.gastroticket.auth;
 
 import java.util.Collections;
-import java.util.function.Function;
 
-import javax.management.RuntimeErrorException;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,9 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import uoc.tfm.gastroticket.empleados.repository.EmpleadosRepository;
+import uoc.tfm.gastroticket.email.EmailService;
 import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.repository.EmpresasRepository;
 import uoc.tfm.gastroticket.jwt.JwtService;
@@ -32,10 +29,11 @@ public class AuthService {
     private final UserRepository userRepository;
     private final EmpresasRepository empresaRepository;
     private final RestaurantesRepository restauranteRepository;
-    private final EmpleadosRepository empleadoRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    @Autowired
+    private EmailService emailService;
 
     public AuthResponse login(LoginRequest request) {
         try {
@@ -78,11 +76,27 @@ public class AuthService {
             restaurante.setCorreo(request.username);
             restaurante.setDireccion(request.direccion);
             restaurante.setCiudad(request.ciudad);
+            restaurante.setActivo(true);
             restaurante.setUserId(_user.getId());
             restauranteRepository.save(restaurante);
         }
 
         return AuthResponse.builder().token(jwtService.getToken(user)).role(user.getRole()).build();
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public ResponseEntity<?> registerAdmin(RegisterRequest request) {
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setRole(Role.ADMIN);
+        user = userRepository.save(user);
+
+        if (user != null) {
+            emailService.enviarEmail(user, "Administador", Role.ADMIN.toString());
+        }
+
+        return new ResponseEntity(Collections.singletonMap("mensaje", "El administrador se ha creado correctamente"),
+                HttpStatus.OK);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -99,6 +113,12 @@ public class AuthService {
         if (jwtService.isTokenRegistroValid(token, user)) {
             user.setPassword(passwordEncoder.encode(request.password));
             userRepository.save(user);
+
+            if (user.getRole() == Role.RESTAURANTE) {
+                RestaurantesDTO restaurante = restauranteRepository.findByUserId(user.getId());
+                restaurante.setActivo(true);
+                restauranteRepository.save(restaurante);
+            }
 
             return new ResponseEntity(Collections.singletonMap("mensaje", "Cuenta activada exitósamente"),
                     HttpStatus.OK);

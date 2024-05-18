@@ -6,12 +6,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import uoc.tfm.gastroticket.user.User;
-import uoc.tfm.gastroticket.user.UserRepository;
 
 @RestController
 @RequestMapping("/auth")
@@ -20,7 +17,6 @@ import uoc.tfm.gastroticket.user.UserRepository;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserRepository userRepository;
 
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
@@ -35,6 +31,11 @@ public class AuthController {
     @PostMapping("register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
+    }
+
+    @PostMapping("register-admin")
+    public ResponseEntity<?> registerAdmin(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(authService.registerAdmin(request));
     }
 
     @PostMapping("/activate")

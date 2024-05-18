@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.service.EmpleadosService;
 import uoc.tfm.gastroticket.empresas.service.EmpresasService;
-import uoc.tfm.gastroticket.jwt.JwtService;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +26,6 @@ import uoc.tfm.gastroticket.jwt.JwtService;
 @CrossOrigin
 public class EmpleadosController {
 
-    private final JwtService jwtService;
     @Autowired
     EmpleadosService empleadosService;
     @Autowired

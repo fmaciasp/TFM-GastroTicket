@@ -34,6 +34,10 @@ public class RestaurantesService {
         return restauranteRepo.findAll();
     }
 
+    public List<RestaurantesDTO> getRestaurantesActivos() {
+        return restauranteRepo.findByActivo(true);
+    }
+
     public RestaurantesDTO getRestauranteById(long id) {
         return restauranteRepo.findById(id).orElse(null);
     }

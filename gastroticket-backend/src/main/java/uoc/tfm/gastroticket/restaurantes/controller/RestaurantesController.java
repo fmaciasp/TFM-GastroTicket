@@ -36,6 +36,11 @@ public class RestaurantesController {
         return ResponseEntity.ok(restaurantesService.getRestaurantes());
     }
 
+    @GetMapping("restaurantes-activos")
+    public ResponseEntity<List<RestaurantesDTO>> getRestaurantesActivos() {
+        return ResponseEntity.ok(restaurantesService.getRestaurantesActivos());
+    }
+
     @GetMapping("restaurante")
     public ResponseEntity<RestaurantesDTO> getRestaurante(@RequestParam Long id) {
         return ResponseEntity.ok(restaurantesService.getRestauranteById(id));
