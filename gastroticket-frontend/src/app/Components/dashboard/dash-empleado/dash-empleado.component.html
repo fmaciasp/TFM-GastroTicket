@@ -20,7 +20,7 @@
           
             <ng-container matColumnDef="fecha">
               <th mat-header-cell *matHeaderCellDef> Fecha del último uso </th>
-              <td mat-cell *matCellDef="let element"> {{element.fechaUltimoUso}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.fechaUltimoUso | date:'dd/MM/yyyy'}} </td>
             </ng-container>
 
             <ng-container matColumnDef="cupon">
@@ -62,12 +62,12 @@
             
                 <ng-container matColumnDef="pagado">
                     <th mat-header-cell *matHeaderCellDef> Pagado </th>
-                    <td mat-cell *matCellDef="let element"> {{element.importeFactura - element.importeGastado}}€ </td>
+                    <td mat-cell *matCellDef="let element"> {{calculatePagado(element)}}€ </td>
                 </ng-container>
 
                 <ng-container matColumnDef="fecha">
                     <th mat-header-cell *matHeaderCellDef> Fecha </th>
-                    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.fechaUso | date:'dd/MM/yyyy'}} </td>
                 </ng-container>
             
                 <tr mat-header-row *matHeaderRowDef="displayedColumnsCuponesCanjeados"></tr>

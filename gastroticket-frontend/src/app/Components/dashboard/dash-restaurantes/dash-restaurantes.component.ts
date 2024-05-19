@@ -126,7 +126,7 @@ export class DashRestaurantesComponent {
     const importeGastado = element.importeGastado || 0;
     const pagado = importeFactura - importeGastado;
     return pagado.toFixed(2);
-}
+  }
   
   resetForm(): void {
     this.canjearCuponForm.reset({

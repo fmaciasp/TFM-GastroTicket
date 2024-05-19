@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.io.IOException;
 import jakarta.transaction.Transactional;
+import uoc.tfm.gastroticket.cupones.model.CuponCanjeadoDTO;
 import uoc.tfm.gastroticket.cupones.service.CuponesService;
 import uoc.tfm.gastroticket.email.EmailService;
 import uoc.tfm.gastroticket.restaurantes.model.RestaurantesDTO;
@@ -40,6 +41,10 @@ public class RestaurantesService {
 
     public RestaurantesDTO getRestauranteById(long id) {
         return restauranteRepo.findById(id).orElse(null);
+    }
+
+    public RestaurantesDTO getRestauranteByUserId(long id) {
+        return restauranteRepo.findByUserId(id);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

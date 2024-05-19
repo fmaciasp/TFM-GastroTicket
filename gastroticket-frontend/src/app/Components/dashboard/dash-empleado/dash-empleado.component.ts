@@ -8,11 +8,13 @@ import { CuponDTO } from 'src/app/Models/cupon';
 import { CuponCanjeadoDTO } from 'src/app/Models/cuponCanjeado';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-dash-empleado',
   templateUrl: './dash-empleado.component.html',
-  styleUrls: ['./dash-empleado.component.css']
+  styleUrls: ['./dash-empleado.component.css'],
+  providers: [DatePipe]
 })
 export class DashEmpleadoComponent implements OnInit, AfterViewInit {
   
@@ -21,7 +23,7 @@ export class DashEmpleadoComponent implements OnInit, AfterViewInit {
   codigo: string ="";
   empleadoError: string = "";
   cupon!: CuponDTO;
-  displayedColumnsCuponesCanjeados: string[] = ['restaurante', 'importeFactura', 'descuentoAplicao', 'pagado', 'fecha'];
+  displayedColumnsCuponesCanjeados: string[] = ['restaurante', 'importeFactura', 'descuentoAplicado', 'pagado', 'fecha'];
   displayedColumnsMiCupon: string[] = ['codigo', 'importe', 'fecha', 'cupon'];
   cuponesCanjeados = new MatTableDataSource<CuponCanjeadoDTO>();
   miCupon = new MatTableDataSource<CuponDTO>();
@@ -49,7 +51,7 @@ export class DashEmpleadoComponent implements OnInit, AfterViewInit {
       concatMap((empleado) => {
       return forkJoin({
         cupon: this.empleadoService.getCupon(empleado.id),
-        cuponesCanjeados: this.empleadoService.getCuponesCanjeados(empleado.id)
+        cuponesCanjeados: this.empleadoService.getCuponesCanjeados(empleado.id),
       });
     })
     ).subscribe({
@@ -65,12 +67,20 @@ export class DashEmpleadoComponent implements OnInit, AfterViewInit {
           }
         ]);
         this.cuponesCanjeados = new MatTableDataSource<CuponCanjeadoDTO>(result.cuponesCanjeados);
+        console.log("cuponesCanjeados: " + this.cuponesCanjeados)
       },
       error: (error) => {
         console.log("error: " + error.mensaje);
         this.empleadoError = error;
       }
     })
+  }
+
+  calculatePagado(element: any): string {
+    const importeFactura = element.importeFactura || 0;
+    const importeGastado = element.importeGastado || 0;
+    const pagado = importeFactura - importeGastado;
+    return pagado.toFixed(2);
   }
 
   openDialog() {

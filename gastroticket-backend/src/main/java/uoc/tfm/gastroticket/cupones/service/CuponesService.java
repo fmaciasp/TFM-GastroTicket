@@ -15,6 +15,7 @@ import uoc.tfm.gastroticket.cupones.repository.CuponCanjeadoRepository;
 import uoc.tfm.gastroticket.cupones.repository.CuponesRepository;
 import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.repository.EmpleadosRepository;
+import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.repository.EmpresasRepository;
 import uoc.tfm.gastroticket.restaurantes.repository.RestaurantesRepository;
 import uoc.tfm.gastroticket.user.UserRepository;
@@ -53,9 +54,13 @@ public class CuponesService {
         return cuponRepo.findByEmpleadoId(empleadoId);
     }
 
+    public CuponesDTO getByCodigo(String codigo) {
+        return cuponRepo.findByCodigo(codigo);
+    }
+
     public List<CuponCanjeadoDTO> getCanjeadosPorEmpleado(long empleadoId) {
         EmpleadosDTO empleado = empleadoRepo.findById(empleadoId).get();
-        return cuponCanjeadoRepo.findByUserId(empleado.getUserId());
+        return cuponCanjeadoRepo.findByEmpleadoId(empleado.getId());
     }
 
     public List<CuponCanjeadoDTO> getByRestauranteId(long restauranteId) {
@@ -107,8 +112,7 @@ public class CuponesService {
     }
 
     public void canjearCupon(long cuponId, long userId, long importeDescontado, long importeFactura, long empleadoId,
-            long restauranteId,
-            long empresaId) {
+            long restauranteId) {
 
         Calendar _calendar = Calendar.getInstance();
         _calendar.clear(Calendar.HOUR_OF_DAY);
@@ -121,24 +125,44 @@ public class CuponesService {
         if (cupon == null) {
             throw new RuntimeException("El cupón no es válido");
         }
-        if (cupon.getFechaUltimoUso() != null && cupon.getFechaUltimoUso() == hoy) {
-            throw new RuntimeException("El cupón ya ha sido utilizado hoy");
+        if (cupon.getFechaUltimoUso() != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(cupon.getFechaUltimoUso());
+            cal.clear(Calendar.HOUR_OF_DAY);
+            cal.clear(Calendar.MINUTE);
+            cal.clear(Calendar.SECOND);
+            cal.clear(Calendar.MILLISECOND);
+            Date _fechaUltimoUso = cal.getTime();
+            if (_fechaUltimoUso.equals(hoy)) {
+                throw new RuntimeException("El cupón ya ha sido utilizado hoy");
+            }
         }
 
         try {
+            importeDescontado = 11;
+            if (importeDescontado > importeFactura) {
+                importeDescontado = importeFactura;
+            }
+
+            EmpleadosDTO empleado = empleadoRepo.findById(empleadoId).get();
+            EmpresasDTO empresa = empresaRepo.findById(empleado.getEmpresaId()).get();
+
+            cupon.setImporte(cupon.getImporte() - importeDescontado);
             cupon.setFechaUltimoUso(hoy);
             cuponRepo.save(cupon);
 
             CuponCanjeadoDTO cuponCanjeado = new CuponCanjeadoDTO();
+            cuponCanjeado.setCuponId(cupon.getId());
             cuponCanjeado.setImporteDescontado(importeDescontado);
             cuponCanjeado.setImporteFactura(importeFactura);
             cuponCanjeado.setUserId(userId);
             cuponCanjeado.setEmpleadoId(empleadoId);
             cuponCanjeado.setRestauranteId(restauranteId);
             cuponCanjeado.setNombreRestaurante(restauranteRepository.findById(restauranteId).get().getNombre());
-            cuponCanjeado.setEmpresaId(empresaId);
+            cuponCanjeado.setEmpresaId(empresa.getId());
             cuponCanjeado.setFechaUso(_calendar.getTime());
             cuponCanjeadoRepo.save(cuponCanjeado);
+
         } catch (RuntimeException e) {
             e.printStackTrace();
         }

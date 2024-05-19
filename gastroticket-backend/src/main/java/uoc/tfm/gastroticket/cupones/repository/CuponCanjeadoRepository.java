@@ -10,4 +10,6 @@ public interface CuponCanjeadoRepository extends JpaRepository<CuponCanjeadoDTO,
 
     List<CuponCanjeadoDTO> findByUserId(Long userId);
 
+    List<CuponCanjeadoDTO> findByEmpleadoId(Long empleadoId);
+
 }

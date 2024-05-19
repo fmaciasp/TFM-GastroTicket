@@ -46,6 +46,11 @@ public class RestaurantesController {
         return ResponseEntity.ok(restaurantesService.getRestauranteById(id));
     }
 
+    @GetMapping("restaurante-por-usuario")
+    public ResponseEntity<RestaurantesDTO> getRestaurantePorUsuario(@RequestParam Long id) {
+        return ResponseEntity.ok(restaurantesService.getRestauranteByUserId(id));
+    }
+
     @PostMapping("create")
     public ResponseEntity<?> createRestaurante(@RequestBody RestaurantesDTO restaurante) {
         restaurantesService.createRestaurante(restaurante.getNombre(), restaurante.getCorreo(), restaurante.getCiudad(),

@@ -67,9 +67,20 @@ public class CuponesController {
         return new ResponseEntity<CuponesDTO>(cuponService.getByEmpleadoId(empleadoId), HttpStatus.OK);
     }
 
+    @GetMapping("get-cupon-codigo")
+    public ResponseEntity<?> getCuponPorCodigo(@RequestParam String codigo) {
+        return new ResponseEntity<CuponesDTO>(cuponService.getByCodigo(codigo), HttpStatus.OK);
+    }
+
     @GetMapping("get-cupones-canjeados-empleado")
     public ResponseEntity<?> getCuponesCanjeadosPorEmpleado(@RequestParam Long empleadoId) {
         return new ResponseEntity<List<CuponCanjeadoDTO>>(cuponService.getCanjeadosPorEmpleado(empleadoId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("get-cupones-canjeados-restaurante")
+    public ResponseEntity<?> getCuponesCanjeadosPorRestaurante(@RequestParam Long restauranteId) {
+        return new ResponseEntity<List<CuponCanjeadoDTO>>(cuponService.getByRestauranteId(restauranteId),
                 HttpStatus.OK);
     }
 
@@ -77,12 +88,11 @@ public class CuponesController {
     public ResponseEntity<?> canjearCupon(@RequestBody CuponCanjeadoDTO cuponCanjeadoRequestDTO) {
         cuponService.canjearCupon(
                 cuponCanjeadoRequestDTO.getCuponId(),
+                cuponCanjeadoRequestDTO.getUserId(),
                 cuponCanjeadoRequestDTO.getImporteDescontado(),
                 cuponCanjeadoRequestDTO.getImporteFactura(),
-                cuponCanjeadoRequestDTO.getUserId(),
                 cuponCanjeadoRequestDTO.getEmpleadoId(),
-                cuponCanjeadoRequestDTO.getRestauranteId(),
-                cuponCanjeadoRequestDTO.getEmpresaId());
+                cuponCanjeadoRequestDTO.getRestauranteId());
         return new ResponseEntity<>(Collections.singletonMap("mensaje", "Cupón validado correctamente"), HttpStatus.OK);
     }
 
