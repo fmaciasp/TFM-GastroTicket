@@ -1,11 +1,13 @@
 <mat-card>
     <mat-card-header>
         <mat-card-title-group>
-        <mat-card-title><mat-icon aria-hidden="false" aria-label="Restaurant" fontIcon="restaurant"></mat-icon> {{ item.nombre }}</mat-card-title>
-        <mat-card-subtitle><mat-icon aria-hidden="false" aria-label="Location" fontIcon="location_on"></mat-icon> Nos encontramos en {{ item.ciudad }}</mat-card-subtitle>
+            <mat-card-title><mat-icon aria-hidden="false" aria-label="Restaurant" fontIcon="restaurant"></mat-icon> {{ item.nombre }}</mat-card-title>
+            <mat-card-subtitle>
+                <mat-icon aria-hidden="false" aria-label="Location" fontIcon="location_on"></mat-icon> Nos encontramos en {{ item.ciudad }}
+            </mat-card-subtitle>
         </mat-card-title-group>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content *ngIf="item.direccion !== undefined && item.direccion !== null && item.direccion!==''">
         <mat-icon aria-hidden="false" aria-label="Map" fontIcon="map"></mat-icon> Nuestra dirección es {{ item.direccion }}
     </mat-card-content>
 </mat-card>

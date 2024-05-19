@@ -31,12 +31,10 @@ export class DashEmpresasComponent implements OnInit {
   displayedColumns: string[] = ['nombre', 'apellidos', 'email', 'acciones'];
   cuponCarga!: CuponCargaDTO;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
     private administracionService: AdministracionService,
     private empresasService: EmpresaService,
-    private empleadoService: EmpleadoService,
     private router: Router,
-    private route: ActivatedRoute,
     private loginService: LoginService,
     public dialog: MatDialog
   ) { }

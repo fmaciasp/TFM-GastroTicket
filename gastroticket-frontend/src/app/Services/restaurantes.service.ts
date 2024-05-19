@@ -3,6 +3,8 @@ import { RestauranteDTO } from '../Models/restaurante';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
+import { CuponCanjeadoDTO } from '../Models/cuponCanjeado';
+import { CanjearCuponDTO } from '../Models/canjearCupon';
 
 const API_URL = environment.APIEndpoint;
 
@@ -15,6 +17,18 @@ export class RestaurantesService {
 
   getRestaurantes(idRestaurante: number): Observable<RestauranteDTO[]> {
     return this.http.get<RestauranteDTO[]>(API_URL + "restaurantes");
+  }
+
+  getRestaurantePorUsuario(userId: number): Observable<RestauranteDTO> {
+    return this.http.get<RestauranteDTO>(API_URL + "restaurantes/restaurante-por-usuario?id="+userId);
+  }
+
+  getCuponesRestaurante(restauranteId: number): Observable<CuponCanjeadoDTO[]> {
+    return this.http.get<CuponCanjeadoDTO[]>(API_URL + "cupones/get-cupones-canjeados-restaurante?restauranteId="+restauranteId);
+  }
+
+  canjearCupon(cupon: CanjearCuponDTO): Observable<any[]> {
+    return this.http.post<CanjearCuponDTO[]>(API_URL + "cupones/canjear", cupon);
   }
 
   public crearRestaurante(restaurante: RestauranteDTO): Observable<any> {

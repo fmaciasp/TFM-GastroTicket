@@ -41,6 +41,7 @@ import { DashEmpleadoComponent } from './Components/dashboard/dash-empleado/dash
 import { DialogCuponComponent } from './Components/dialog-cupon/dialog-cupon.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { DialogCanjearComponent } from './Components/dialog-canjear/dialog-canjear.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     FiltroPorCiudadPipe,
     DialogComponent,
     DashEmpleadoComponent,
-    DialogCuponComponent
+    DialogCuponComponent,
+    DialogCanjearComponent
   ],
   imports: [
     BrowserModule,

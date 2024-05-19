@@ -36,6 +36,10 @@ export class EmpleadoService {
     return this.http.get<CuponDTO>(API_URL + 'cupones/get-cupon?empleadoId='+empleadoId);
   }
 
+  public getCuponPorCodigo(codigo: string){
+    return this.http.get<CuponDTO>(API_URL + 'cupones/get-cupon-codigo?codigo='+codigo);
+  }
+
   public getCuponesCanjeados(empleadoId: number){
     return this.http.get<CuponCanjeadoDTO[]>(API_URL + 'cupones/get-cupones-canjeados-empleado?empleadoId='+empleadoId);
   }
