@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { filter } from 'rxjs';
 import { LoginService } from 'src/app/Services/auth/login.service';
 import { LoginRequest } from 'src/app/Services/auth/loginRequest';
 import { MensajesService } from 'src/app/Services/mensajes.service';
@@ -20,8 +21,8 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class LoginComponent implements OnInit {
 
-  loginError: string = "";
-  loginExito: string = "";
+  loginError: any = null;
+  loginExito: any = null;
   loginForm = this.formBuilder.group({
     username:['', [Validators.required, Validators.email]],
     password:['', Validators.required]
@@ -32,18 +33,23 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder, 
     private router: Router, 
     private loginService: LoginService, 
-    private route: ActivatedRoute,
     private mensajesService: MensajesService
   ){}
 
   ngOnInit(): void {
-    this.mensajesService.getErrorMessage().subscribe(mensaje => {
-      this.loginError = mensaje;
-    });
+    this.mensajesService.getErrorMessage()
+      .pipe(filter(mensaje => mensaje !== null))
+      .subscribe(mensaje => {
+        this.loginError = mensaje;
+        setTimeout(() => this.mensajesService.clearErrorMessage(), 200);
+      });
 
-    this.mensajesService.getSuccessMessage().subscribe(mensaje => {
-      this.loginExito = mensaje;
-    });
+    this.mensajesService.getSuccessMessage()
+      .pipe(filter(mensaje => mensaje !== null))
+      .subscribe(mensaje => {
+        this.loginExito = mensaje;
+        setTimeout(() => this.mensajesService.clearSuccessMessage(), 200);
+      });
   }
 
   get username(){

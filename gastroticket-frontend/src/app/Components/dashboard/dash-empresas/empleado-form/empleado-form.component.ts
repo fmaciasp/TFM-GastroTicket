@@ -4,6 +4,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
 import { EmpleadoDTO } from 'src/app/Models/empleado';
+import { EmpleadoRequest } from 'src/app/Models/empleadoRequest';
 import { AdministracionService } from 'src/app/Services/administracion.service';
 import { LoginService } from 'src/app/Services/auth/login.service';
 import { EmpresaService } from 'src/app/Services/empresa.service';
@@ -26,14 +27,17 @@ export class EmpleadoFormComponent implements OnInit {
   userLoginOn:boolean=false;
   currentUserId: string = "";
   isUpdateMode: boolean;
-  empleadoError: string = "";
-  empleadoExito: string = "";
+  empleadoError: any = null;
+  empleadoExito: any = null;
   empleado!: EmpleadoDTO;
   editEmpleado!: EmpleadoDTO;
   empleadoForm: FormGroup;
   modoEditar = false;
   empleadoId: number | null;
   empresaId!: number;
+  userId:number = -1;
+  guardando = false;
+
   //empleado
   nombre!: FormControl;
   apellidos!: FormControl;
@@ -71,39 +75,29 @@ export class EmpleadoFormComponent implements OnInit {
 
     this.loginService.currentUserId.subscribe({
       next:(userLoginId)=>{
-        console.log("userLoginId: " + userLoginId);
         this.administracionService.getEmpresaPorUserId(parseInt(userLoginId)).subscribe({
           next: (empresa) => {
             this.empresaId = empresa.id;
-            console.log("empresaId: " + this.empresaId);
-        }
-        }
-        )}
-    })
-    this.loginService.currentUserLoginOn.subscribe({
-      next:(userLoginOn)=>{
-        this.userLoginOn=userLoginOn;
+            this.userId = parseInt(userLoginId || "-1");
 
-        if(this.userLoginOn){
-          this.route.params.subscribe(params => {
-            this.empleadoId = params['idEmpleado'];
-            this.modoEditar = !!this.empleadoId;
-          })
-      
-          this.inicializarFormulario();
-        }
-        else{
-          console.log("no login empleado-formulario")
-        }
+              this.route.params.subscribe(params => {
+                this.empleadoId = params['idEmpleado'];
+                this.modoEditar = !!this.empleadoId;
+              })
+              this.inicializarFormulario();
+          }
+        })
       }
     })
   }
 
   cargarDatosEmpleado() {
     if(this.empleadoId == null){
+      console.log("cargadDatosEmpleado: -1")
       this.empleadoId = -1;
     }
-    this.empresaService.getEmpleado(this.empleadoId).subscribe({
+    const request = new EmpleadoRequest(this.empleadoId, this.userId, 0);
+    this.empresaService.getEmpleado(request).subscribe({
       next: (empleado) => {
         console.log("empleado: " + empleado.nombre);
         this.empleado = {
@@ -123,8 +117,13 @@ export class EmpleadoFormComponent implements OnInit {
         });
       },
       error: (error) => {
+        if(error.status === 403){
+          console.log("El empleado no pertenece a la empresa")
+          this.empleadoError = "El empleado no pertenece a la empresa";
+          this.router.navigateByUrl("/permiso-denegado")
+        }
         console.error('cargarDatosEmpleado empleado-formulario.component error', error);
-        this.empleadoError = error;
+        this.empleadoError = error.mensaje;
       }}
     );
   }
@@ -143,6 +142,12 @@ export class EmpleadoFormComponent implements OnInit {
   }
 
   editarEmpleado(): void{
+    if (this.empleadoForm.invalid) {
+      this.empleadoForm.markAllAsTouched();
+      return;
+    }
+  
+    this.guardando = true;
     const nombre = this.empleadoForm.get('nombre')?.value;
     const apellidos = this.empleadoForm.get('apellidos')?.value;
     const email = this.empleadoForm.get('email')?.value;
@@ -161,13 +166,16 @@ export class EmpleadoFormComponent implements OnInit {
       };
       this.empresaService.editarEmpleado(this.editEmpleado).subscribe({
         next: (res) => {
-          console.log(res);
-          this.mensajesService.sendSuccessMessage(res)
+          console.log("res: " + res.mensaje);
+          this.mensajesService.sendSuccessMessage(res.mensaje)
           this.router.navigate(['/dash-empresa'])
         },
         error: (error) => {
           console.error('editarEmpresa empleado-formulario.component error', error);
           this.empleadoError = error;
+        },
+        complete: () => {
+          this.guardando = false;
         }
       });
     }
@@ -190,6 +198,9 @@ export class EmpleadoFormComponent implements OnInit {
         error: (error) => {
           console.error('No se ha podido crear un nuevo empleado', error);
           this.empleadoError = error;
+        },
+        complete: () => {
+          this.guardando = false;
         }
       })
     }

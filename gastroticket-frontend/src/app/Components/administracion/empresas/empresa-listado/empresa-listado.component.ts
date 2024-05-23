@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
+import { catchError, filter, throwError } from 'rxjs';
 import { EmpresaDTO } from 'src/app/Models/empresa';
 import { AdministracionService } from 'src/app/Services/administracion.service';
 import { LoginService } from 'src/app/Services/auth/login.service';
@@ -17,8 +17,8 @@ export class EmpresaListadoComponent implements OnInit {
   userLoginOn:boolean=false;
   empresas!: EmpresaDTO[];
   displayedColumns: string[] = ['nombre', 'email', 'acciones'];
-  empresaExito: string = "";
-  empresaError: string = "";
+  empresaExito: any = null;
+  empresaError: any = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,8 +35,10 @@ export class EmpresaListadoComponent implements OnInit {
         this.userLoginOn=userLoginOn;
 
         if(this.userLoginOn){
-            this.mensajesService.getSuccessMessage().subscribe(mensaje => {
+            this.mensajesService.getSuccessMessage().pipe(filter(mensaje => mensaje !== null))
+            .subscribe(mensaje => {
               this.empresaExito = mensaje;
+              setTimeout(() => this.mensajesService.clearSuccessMessage(), 200);
             });
           this.administracionService.getEmpresas()
           .pipe(

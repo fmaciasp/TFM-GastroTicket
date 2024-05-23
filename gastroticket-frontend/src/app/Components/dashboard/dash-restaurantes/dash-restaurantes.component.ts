@@ -5,7 +5,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
 import { CuponCanjeadoDTO } from 'src/app/Models/cuponCanjeado';
-import { AdministracionService } from 'src/app/Services/administracion.service';
 import { LoginService } from 'src/app/Services/auth/login.service';
 import { RestaurantesService } from 'src/app/Services/restaurantes.service';
 import { DialogCanjearComponent } from '../../dialog-canjear/dialog-canjear.component';
@@ -25,8 +24,8 @@ export class DashRestaurantesComponent {
   userId:number = -1;
   restauranteId!: number;
   cupones = new MatTableDataSource<CuponCanjeadoDTO>();
-  restauranteError: string ="";
-  restauranteExito: string ="";
+  restauranteError: any = null;
+  restauranteExito: any = null;
   displayedColumnsVentas: string[] = ['fecha', 'importeFactura', 'descuentoAplicado', 'pagado'];
   sumaTotal: number = 0;
   sumaDescontado: number = 0;

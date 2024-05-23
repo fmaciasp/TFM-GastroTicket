@@ -11,6 +11,8 @@ import { DialogComponent } from '../../dialog/dialog.component';
 import { EmpleadoCuponDTO } from 'src/app/Models/empleadoCupon';
 import { CuponCargaDTO } from 'src/app/Models/cuponCarga';
 import { EmpleadoService } from 'src/app/Services/empleado.service';
+import { EmpleadoRequest } from 'src/app/Models/empleadoRequest';
+import { MensajesService } from 'src/app/Services/mensajes.service';
 
 @Component({
   selector: 'app-dash-empresas',
@@ -22,8 +24,8 @@ export class DashEmpresasComponent implements OnInit {
   userLoginOn:boolean=false;
   userRole: String = "";
   userId:number = -1;
-  empleadoExito: string = "";
-  empleadoError: string = "";
+  empleadoExito: any = null;
+  empleadoError: any = null;
   empleado!: EmpresaDTO;
   empleados!: EmpleadoCuponDTO[];
   importe!: number;
@@ -36,8 +38,9 @@ export class DashEmpresasComponent implements OnInit {
     private empresasService: EmpresaService,
     private router: Router,
     private loginService: LoginService,
-    public dialog: MatDialog
-  ) { }
+    public dialog: MatDialog,
+    private mensajesService: MensajesService
+  ) {}
 
   openDialog(empleadoId: number, importeCupon: number): void {
     const dialogRef = this.dialog.open(DialogComponent, {
@@ -56,7 +59,21 @@ export class DashEmpresasComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.getMensajes()
     this.cargarEmpleados();
+  }
+
+  getMensajes(){
+    this.mensajesService.getSuccessMessage().pipe(filter(mensaje => mensaje !== null))
+    .subscribe(mensaje => {
+      this.empleadoExito = mensaje;
+      setTimeout(() => this.mensajesService.clearSuccessMessage(), 200); 
+    });
+    this.mensajesService.getErrorMessage().pipe(filter(mensaje => mensaje !== null))
+    .subscribe(mensaje => {
+      this.empleadoError = mensaje;
+      setTimeout(() => this.mensajesService.clearErrorMessage(), 200); 
+    });
   }
 
   cargarEmpleados(){
@@ -67,7 +84,10 @@ export class DashEmpresasComponent implements OnInit {
         this.userLoginOn = true; // Establece userLoginOn a true cuando se cumplan las condiciones
       }),
       switchMap(() => this.administracionService.getEmpresaPorUserId(this.userId)), // Obtiene la empresa del usuario
-      switchMap((empresa) => this.empresasService.getEmpleadosPorEmpresa(empresa.id)) // Obtiene los empleados de la empresa
+      switchMap((empresa) => {
+        const request = new EmpleadoRequest(0, this.userId, empresa.id); // Crear la solicitud
+        return this.empresasService.getEmpleadosPorEmpresa(request); // Obtiene los empleados de la empresa
+      })
     ).subscribe({
       next: (empleados) => {
         this.empleados = empleados;
@@ -75,20 +95,20 @@ export class DashEmpresasComponent implements OnInit {
       },
       error: (error) => {
         console.error("Error:", error)
+        if(error.status == 403){
+          console.log("no tienes permiso para editar al empleado");
+        }
         this.userLoginOn = false;
         this.router.navigateByUrl("/login");
       }
     });
   }
-
-  generarTicket(idEmpleado: number) {
-    throw new Error('Method not implemented.');
-  }
   
 
   eliminarEmpleado(idEmpleado: number): void{
     if(idEmpleado > -1){
-      this.empresasService.getEmpleado(idEmpleado).subscribe({
+      const request = new EmpleadoRequest(idEmpleado, this.userId, 0);
+      this.empresasService.getEmpleado(request).subscribe({
         next: (empleado) => {
           let result = confirm(
             "Vas a eliminar al empleado "+empleado.nombre.toUpperCase()+" "+empleado.apellidos.toUpperCase()+",  ¿deseas confirmar?"

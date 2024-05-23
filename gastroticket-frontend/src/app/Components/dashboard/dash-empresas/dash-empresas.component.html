@@ -4,10 +4,10 @@
   <button class="mb-2" routerLink="/empleado/nuevo" mat-flat-button color="primary">NUEVO EMPLEADO</button>
 </div>
 
-<div *ngIf="empleadoError!=''" class="alert alert-danger" role="alert">
+<div *ngIf="empleadoError!=null" class="alert alert-danger" role="alert">
   {{empleadoError}}
 </div>
-<div *ngIf="empleadoExito!=''" class="alert alert-success" role="alert">
+<div *ngIf="empleadoExito!=null" class="alert alert-success" role="alert">
   {{empleadoExito}}
 </div>
 

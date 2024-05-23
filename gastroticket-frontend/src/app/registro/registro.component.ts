@@ -20,7 +20,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class RegistroComponent {
 
-    registroError: string = "";
+    registroError: any = null;
     registroForm = this.formBuilder.group({
       username:['', [Validators.required, Validators.email]],
       password:['', Validators.required],

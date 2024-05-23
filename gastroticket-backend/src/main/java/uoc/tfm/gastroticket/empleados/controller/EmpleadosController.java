@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import uoc.tfm.gastroticket.empleados.model.EmpleadoRequest;
 import uoc.tfm.gastroticket.empleados.model.EmpleadosDTO;
 import uoc.tfm.gastroticket.empleados.service.EmpleadosService;
+import uoc.tfm.gastroticket.empresas.model.EmpresasDTO;
 import uoc.tfm.gastroticket.empresas.service.EmpresasService;
 
 @RestController
@@ -31,14 +33,21 @@ public class EmpleadosController {
     @Autowired
     EmpresasService empresasService;
 
-    @GetMapping("por-empresa")
-    public ResponseEntity<?> getEmpleadosByEmpresaId(@RequestParam long empresaId) {
-        if (empresasService.getEmpresaById(empresaId) != null) {
-            return ResponseEntity.ok(empleadosService.getEmpleadosPorEmpresa(empresaId));
+    @PostMapping("por-empresa")
+    public ResponseEntity<?> getEmpleadosByEmpresaId(@RequestBody EmpleadoRequest request) {
+        EmpresasDTO empresa = empresasService.getEmpresaByUserId(request.getIdUsuario());
+        if (empresa == null) {
+            return new ResponseEntity<>(
+                    Collections.singletonMap("mensaje",
+                            "No existe ninguna empresa para el usuario con id " + request.getIdUsuario()),
+                    HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(
-                Collections.singletonMap("mensaje", "No existe ninguna empresa con el id " + empresaId),
-                HttpStatus.NOT_FOUND);
+        if (empresa.getId() != request.getIdEmpresa()) {
+            return new ResponseEntity<>(
+                    Collections.singletonMap("mensaje", "El empleado no pertenece a la empresa"),
+                    HttpStatus.FORBIDDEN);
+        }
+        return ResponseEntity.ok(empleadosService.getEmpleadosPorEmpresa(empresa.getId()));
     }
 
     @GetMapping("all-empleados")
@@ -46,15 +55,37 @@ public class EmpleadosController {
         return ResponseEntity.ok(empleadosService.getAllEmpleados());
     }
 
-    @GetMapping("empleado")
-    public ResponseEntity<?> getEmpleadoById(@RequestParam long empleadoId) {
-        EmpleadosDTO _empleado = empleadosService.getEmpleadoById(empleadoId);
-        if (_empleado != null) {
-            return ResponseEntity.ok(_empleado);
+    @PostMapping("empleado")
+    public ResponseEntity<?> getEmpleadoById(@RequestBody EmpleadoRequest request) {
+        EmpresasDTO empresa = empresasService.getEmpresaByUserId(request.getIdUsuario());
+        EmpleadosDTO empleado = empleadosService.getEmpleadoById(request.getIdEmpleado());
+        EmpresasDTO empresaDelEmpleado = empresasService.getEmpresaById(empleado.getEmpresaId());
+        if (empresa == null) {
+            return new ResponseEntity<>(
+                    Collections.singletonMap("mensaje",
+                            "No existe ninguna empresa para el usuario " + request.getIdUsuario()),
+                    HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(
-                Collections.singletonMap("mensaje", "No existe ningún empleado con el empleadoId " + empleadoId),
-                HttpStatus.NOT_FOUND);
+        if (empresaDelEmpleado == null) {
+            return new ResponseEntity<>(
+                    Collections.singletonMap("mensaje",
+                            "No existe ninguna empresa para el empleado " + request.getIdEmpleado()),
+                    HttpStatus.NOT_FOUND);
+        }
+        if (empresa != empresaDelEmpleado) {
+            return new ResponseEntity<>(
+                    Collections.singletonMap("mensaje", "El empleado no pertenece a la empresa"),
+                    HttpStatus.FORBIDDEN);
+        }
+
+        EmpleadosDTO _empleado = empleadosService.getEmpleadoById(request.getIdEmpleado());
+        if (_empleado == null) {
+            return new ResponseEntity<>(
+                    Collections.singletonMap("mensaje",
+                            "No existe ningún empleado con el empleadoId " + request.getIdEmpleado()),
+                    HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(_empleado);
 
     }
 
@@ -94,9 +125,9 @@ public class EmpleadosController {
                 empleadosService.editarEmpleado(_empleado.getId(), empleado.getNombre(), empleado.getApellidos(),
                         empleado.getEmail(), empleado.getTelefono());
                 return ResponseEntity
-                        .ok(Collections.singletonMap("mensaje", "El restaurante se ha editado correctamente"));
+                        .ok(Collections.singletonMap("mensaje", "El empleado se ha editado correctamente"));
             }
-            return new ResponseEntity<>(Collections.singletonMap("mensaje", "No se ha encontrado el restaurante"),
+            return new ResponseEntity<>(Collections.singletonMap("mensaje", "No se ha encontrado el empleado"),
                     HttpStatus.NOT_FOUND);
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());

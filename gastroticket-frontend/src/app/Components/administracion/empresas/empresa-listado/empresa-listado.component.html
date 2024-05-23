@@ -3,10 +3,10 @@
   <button class="mb-2" routerLink="/empresa/nueva" mat-flat-button color="primary">NUEVA EMPRESA</button>
 </div>
 
-<div *ngIf="empresaError!=''" class="alert alert-danger" role="alert">
+<div *ngIf="empresaError!=null" class="alert alert-danger" role="alert">
   {{empresaError}}
 </div>
-<div *ngIf="empresaExito!=''" class="alert alert-success" role="alert">
+<div *ngIf="empresaExito!=null" class="alert alert-success" role="alert">
   {{empresaExito}}
 </div>
 

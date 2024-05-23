@@ -20,7 +20,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class ActivarCuentaComponent {
 
-  activarError: string = "";
+  activarError: any = null;
   password!: string;
   confirmPassword!: string;
   activarForm = this.formBuilder.group({

@@ -15,12 +15,14 @@ export class AdminGuard implements CanActivate {
       ): Observable<boolean> {
           return this.loginService.currentUserRole.pipe(
               map((userLoginRole) => {
-                  if (userLoginRole !== 'ADMIN') {
-                    this.loginService.logout();
-                    this.router.navigate(['/login']);
+                if(userLoginRole == ''){
+                    this.router.navigateByUrl('/login');
+                }
+                if (userLoginRole !== 'ADMIN') {
+                    this.router.navigateByUrl("/permiso-denegado")
                     return false;    
-                  }
-                  return true;
+                }
+                return true;
               })
           );
       }

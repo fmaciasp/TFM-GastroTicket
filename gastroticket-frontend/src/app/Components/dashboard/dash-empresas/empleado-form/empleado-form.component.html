@@ -1,6 +1,7 @@
 <div class="container">
-    <h1>Editar empleado</h1>
-    <div *ngIf="empleadoError!=''" class="alert alert-danger" role="alert">
+    <h1 *ngIf="modoEditar">Editar empleado</h1>
+    <h1 *ngIf="!modoEditar">Nuevo empleado</h1>
+    <div *ngIf="empleadoError!=null" class="alert alert-danger" role="alert">
       {{empleadoError}}
     </div>
     <form [formGroup]="empleadoForm"
@@ -44,6 +45,11 @@
           </mat-form-field>          
           
         </div>
-        <button class="btn btn-primary">Guardar</button>
+        <div class="button-container">
+          <button *ngIf="!guardando" class="btn btn-primary">Guardar</button>
+          <div *ngIf="guardando" class="spinner-container">
+            <mat-spinner diameter="30"></mat-spinner>
+          </div>
+        </div>
       </form>
 </div>

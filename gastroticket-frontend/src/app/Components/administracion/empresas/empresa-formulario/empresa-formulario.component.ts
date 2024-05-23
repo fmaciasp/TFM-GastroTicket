@@ -23,8 +23,8 @@ export class EmpresaFormularioComponent implements OnInit {
 
   userLoginOn:boolean=false;
   isUpdateMode: boolean;
-  empresaError: string = "";
-  empresaExito: string = "";
+  empresaError: any = null;
+  empresaExito: any = null;
   empresa!: EmpresaDTO;
   editEmpresa!: EmpresaDTO;
   empresaForm: FormGroup;

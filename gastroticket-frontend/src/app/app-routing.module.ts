@@ -17,6 +17,7 @@ import { EmpresaGuard } from './guards/empresa.guard';
 import { InicioComponent } from './Components/inicio/inicio.component';
 import { DashEmpleadoComponent } from './Components/dashboard/dash-empleado/dash-empleado.component';
 import { EmpleadoGuard } from './guards/empleado.guard';
+import { PermisoDenegadoComponent } from './Components/permiso-denegado/permiso-denegado.component';
 
 const routes: Routes = [
   {
@@ -112,6 +113,10 @@ const routes: Routes = [
     component: DashEmpleadoComponent,
     canActivate: [EmpleadoGuard],
   },
+  {
+    path: 'permiso-denegado',
+    component: PermisoDenegadoComponent
+  }
 ];
 
 @NgModule({

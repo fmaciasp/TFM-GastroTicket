@@ -6,7 +6,7 @@ import { Observable, map } from "rxjs";
 @Injectable({
     providedIn: 'root',
 })
-export class RestauranteGuard implements CanActivate {
+export class EmpleadoFormGuard implements CanActivate {
     constructor(private loginService: LoginService, private router: Router) {}
   
     canActivate(
@@ -18,11 +18,11 @@ export class RestauranteGuard implements CanActivate {
                 if(userLoginRole == ''){
                     this.router.navigateByUrl('/login');
                 }
-                if (userLoginRole !== 'RESTAURANTE') {
+                if (userLoginRole !== 'EMPLEADO') {
                     this.router.navigateByUrl("/permiso-denegado")
                     return false;    
                 }
-                  return true;
+                return true;
               })
           );
       }

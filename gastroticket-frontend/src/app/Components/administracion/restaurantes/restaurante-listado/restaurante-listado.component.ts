@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { filter } from 'rxjs';
 import { RestauranteDTO } from 'src/app/Models/restaurante';
 import { AdministracionService } from 'src/app/Services/administracion.service';
 import { LoginService } from 'src/app/Services/auth/login.service';
@@ -16,8 +17,8 @@ export class RestauranteListadoComponent implements OnInit{
   userLoginOn:boolean=false;
   restaurantes!: RestauranteDTO[];
   displayedColumns: string[] = ['nombre', 'email', 'ciudad', 'direccion','acciones'];
-  restauranteExito: string = "";
-  restauranteError: string = "";
+  restauranteExito: any = null;
+  restauranteError: any = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,8 +34,10 @@ export class RestauranteListadoComponent implements OnInit{
       next:(userLoginOn)=>{
         this.userLoginOn=userLoginOn;
         if(this.userLoginOn){
-          this.mensajesService.getSuccessMessage().subscribe(mensaje => {
+          this.mensajesService.getSuccessMessage().pipe(filter(mensaje => mensaje !== null))
+          .subscribe(mensaje => {
             this.restauranteExito = mensaje;
+            setTimeout(() => this.mensajesService.clearSuccessMessage(), 200);
           });
           this.administracionService.getRestaurantes().subscribe({
             next: (restaurantes) => {

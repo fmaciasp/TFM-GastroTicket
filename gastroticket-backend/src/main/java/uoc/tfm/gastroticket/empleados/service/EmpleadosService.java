@@ -139,7 +139,10 @@ public class EmpleadosService {
     }
 
     public void eliminarEmpleado(long id) {
-        empleadoRepo.deleteById(id);
+        EmpleadosDTO empleado = empleadoRepo.findById(id).get();
+        User user = userRepository.findById(empleado.getUserId()).get();
+        userRepository.delete(user);
+        empleadoRepo.delete(empleado);
     }
 
     public void enviarCorreo(String email, String activacionLink) {

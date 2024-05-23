@@ -16,7 +16,7 @@ export class RestauranteFormularioComponent {
 
   userLoginOn:boolean=false;
   isUpdateMode: boolean;
-  restauranteError: string = "";
+  restauranteError: any = null;
   restaurante!: RestauranteDTO;
   editRestaurante!: RestauranteDTO;
   restauranteForm: FormGroup;

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.io.IOException;
 import jakarta.transaction.Transactional;
-import uoc.tfm.gastroticket.cupones.model.CuponCanjeadoDTO;
 import uoc.tfm.gastroticket.cupones.service.CuponesService;
 import uoc.tfm.gastroticket.email.EmailService;
 import uoc.tfm.gastroticket.restaurantes.model.RestaurantesDTO;

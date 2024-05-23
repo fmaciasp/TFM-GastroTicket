@@ -20,28 +20,30 @@ import { RestauranteListadoComponent } from './Components/administracion/restaur
 import { RestauranteFormularioComponent } from './Components/administracion/restaurantes/restaurante-formulario/restaurante-formulario.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import {MatIconModule} from '@angular/material/icon';
-import {MatSelectModule} from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 import { RegistroComponent } from './registro/registro.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatButtonModule} from '@angular/material/button';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { EmpleadoFormComponent } from './Components/dashboard/dash-empresas/empleado-form/empleado-form.component';
 import { ActivarCuentaComponent } from './Components/activar-cuenta/activar-cuenta.component';
 import { InicioComponent } from './Components/inicio/inicio.component';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { CardComponent } from './Components/card/card.component';
 import { FiltroPorCiudadPipe } from './pipes/filtro-por-ciudad.pipe';
 import { DialogComponent } from './Components/dialog/dialog.component';
 import { FormsModule } from '@angular/forms';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { QRCodeModule } from 'angularx-qrcode';
 import { DashEmpleadoComponent } from './Components/dashboard/dash-empleado/dash-empleado.component';
 import { DialogCuponComponent } from './Components/dialog-cupon/dialog-cupon.component';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { DialogCanjearComponent } from './Components/dialog-canjear/dialog-canjear.component';
+import { PermisoDenegadoComponent } from './Components/permiso-denegado/permiso-denegado.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -66,7 +68,8 @@ import { DialogCanjearComponent } from './Components/dialog-canjear/dialog-canje
     DialogComponent,
     DashEmpleadoComponent,
     DialogCuponComponent,
-    DialogCanjearComponent
+    DialogCanjearComponent,
+    PermisoDenegadoComponent
   ],
   imports: [
     BrowserModule,
@@ -86,7 +89,8 @@ import { DialogCanjearComponent } from './Components/dialog-canjear/dialog-canje
     MatTooltipModule,
     QRCodeModule,
     MatTabsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptorService, multi:true},

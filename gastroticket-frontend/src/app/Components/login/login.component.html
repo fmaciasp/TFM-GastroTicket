@@ -3,10 +3,10 @@
     <img src="../../../assets/logo.png"
       style="width: 185px;" alt="logo">
   </div>
-  <div *ngIf="loginError!=''" class="alert alert-danger" role="alert">
+  <div *ngIf="loginError!=null" class="alert alert-danger" role="alert">
     {{loginError}}
   </div>
-  <div *ngIf="loginExito!=''" class="alert alert-success" role="alert">
+  <div *ngIf="loginExito!=null" class="alert alert-success" role="alert">
     {{loginExito}}
   </div>
   

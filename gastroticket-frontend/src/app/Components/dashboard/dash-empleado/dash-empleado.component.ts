@@ -21,7 +21,7 @@ export class DashEmpleadoComponent implements OnInit, AfterViewInit {
   userLoginOn:boolean=false;
   userId:number = -1;
   codigo: string ="";
-  empleadoError: string = "";
+  empleadoError: any = null;
   cupon!: CuponDTO;
   displayedColumnsCuponesCanjeados: string[] = ['restaurante', 'importeFactura', 'descuentoAplicado', 'pagado', 'fecha'];
   displayedColumnsMiCupon: string[] = ['codigo', 'importe', 'fecha', 'cupon'];
