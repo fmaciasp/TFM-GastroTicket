@@ -7,21 +7,23 @@
         <div class="mb-3"></div>
 
         <form [formGroup]="canjearCuponForm"
-        (ngSubmit)="canjearCupon()">
+            (ngSubmit)="canjearCupon()">
 
-        <mat-form-field class="w-100">
-            <mat-label>Introduce el importe de la factura</mat-label>
-            <input matInput formControlName="importe" type="number" id="importe">
-            <mat-error *ngIf="canjearCuponForm.get('importe')?.invalid && (canjearCuponForm.get('importe')?.dirty || canjearCuponForm.get('importe')?.touched)">
-              <span *ngIf="canjearCuponForm.get('importe')?.errors?.['required']">El importe es <strong>obligatorio</strong></span>
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field class="w-100">
-            <mat-label>Introduce código del cupon</mat-label>
-            <input matInput formControlName="codigoCupon" type="text" id="codigoCupon">
-          </mat-form-field>
-          
-          <button class="btn btn-primary">Guardar</button>
+            <mat-form-field class="w-100">
+                <mat-label>Introduce el importe de la factura</mat-label>
+                <input matInput formControlName="importe" type="number" id="importe">
+                <mat-error *ngIf="canjearCuponForm.get('importe')?.invalid && (canjearCuponForm.get('importe')?.dirty || canjearCuponForm.get('importe')?.touched)">
+                <span *ngIf="canjearCuponForm.get('importe')?.errors?.['required']">El importe es <strong>obligatorio</strong></span>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-100">
+                <mat-label>Introduce código del cupon</mat-label>
+                <input matInput formControlName="codigoCupon" type="text" id="codigoCupon">
+            </mat-form-field>
+
+            <button class="btn btn-secondary startCamara" type="button" (click)="action.isStart ? action.stop() : action.start()">{{action.isStart ? 'Parar escaneo' : 'Escanear'}}</button>
+            <button class="btn btn-primary">Guardar</button>
+            <ngx-scanner-qrcode #action="scanner" [isBeep]="false" style="width:500px; height:500px; margin-top: 30px;"></ngx-scanner-qrcode>
         </form>
 
     </mat-tab>

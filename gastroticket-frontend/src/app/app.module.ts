@@ -44,6 +44,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { DialogCanjearComponent } from './Components/dialog-canjear/dialog-canjear.component';
 import { PermisoDenegadoComponent } from './Components/permiso-denegado/permiso-denegado.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgxScannerQrcodeModule, LOAD_WASM } from 'ngx-scanner-qrcode';
+
+LOAD_WASM().subscribe();
 
 @NgModule({
   declarations: [
@@ -90,7 +93,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     QRCodeModule,
     MatTabsModule,
     MatPaginatorModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    NgxScannerQrcodeModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass:JwtInterceptorService, multi:true},

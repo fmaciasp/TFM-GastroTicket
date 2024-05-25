@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { filter, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, filter, switchMap, tap } from 'rxjs';
 import { CuponCanjeadoDTO } from 'src/app/Models/cuponCanjeado';
 import { LoginService } from 'src/app/Services/auth/login.service';
 import { RestaurantesService } from 'src/app/Services/restaurantes.service';
@@ -11,6 +11,7 @@ import { DialogCanjearComponent } from '../../dialog-canjear/dialog-canjear.comp
 import { EmpleadoService } from 'src/app/Services/empleado.service';
 import { MensajesService } from 'src/app/Services/mensajes.service';
 import { DatePipe } from '@angular/common';
+import { NgxScannerQrcodeComponent, ScannerQRCodeResult } from 'ngx-scanner-qrcode';
 
 @Component({
   selector: 'app-dash-restaurantes',
@@ -18,7 +19,8 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./dash-restaurantes.component.css'],
   providers: [DatePipe]
 })
-export class DashRestaurantesComponent {
+export class DashRestaurantesComponent implements OnInit, AfterViewInit {
+  @ViewChild('action', { static: false }) action!: NgxScannerQrcodeComponent;
 
   userLoginOn:boolean=false;
   userId:number = -1;
@@ -40,7 +42,7 @@ export class DashRestaurantesComponent {
     private router: Router,
     private formBuilder: FormBuilder, 
     private mensajeService: MensajesService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
   ){ 
     this.canjearCuponForm = this.formBuilder.group({
       importe:['', Validators.required],
@@ -50,6 +52,22 @@ export class DashRestaurantesComponent {
 
   ngOnInit(): void {
     this.cargarVentas();
+  }
+
+  ngAfterViewInit() {
+    if (this.action && this.action.data) {
+      this.action.data.subscribe((result: ScannerQRCodeResult[]) => {
+        if (result && result.length > 0) {
+          this.canjearCuponForm.patchValue({
+            codigoCupon: result[0].value
+          });
+          this.action.isBeep = false;
+          if (this.action.isBeep) {
+            this.action.isBeep = false;
+          }
+        }
+      });
+    }
   }
 
   cargarVentas(){
@@ -138,6 +156,7 @@ export class DashRestaurantesComponent {
         this.canjearCuponForm.get(key)?.markAsPristine();
         this.canjearCuponForm.get(key)?.markAsUntouched();
     });
-}
+  }
+
 
 }
