@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogCuponComponent } from '../../dialog-cupon/dialog-cupon.component';
 import { LoginService } from 'src/app/Services/auth/login.service';
-import { concatMap, filter, forkJoin, map, switchMap, tap } from 'rxjs';
+import { Subscription, concatMap, filter, forkJoin, map, switchMap, tap } from 'rxjs';
 import { EmpleadoService } from 'src/app/Services/empleado.service';
 import { CuponDTO } from 'src/app/Models/cupon';
 import { CuponCanjeadoDTO } from 'src/app/Models/cuponCanjeado';
@@ -16,8 +16,10 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./dash-empleado.component.css'],
   providers: [DatePipe]
 })
-export class DashEmpleadoComponent implements OnInit, AfterViewInit {
+export class DashEmpleadoComponent implements OnInit, AfterViewInit, OnDestroy {
   
+  private subscription!: Subscription;
+
   userLoginOn:boolean=false;
   userId:number = -1;
   codigo: string ="";
@@ -40,8 +42,14 @@ export class DashEmpleadoComponent implements OnInit, AfterViewInit {
     this.cuponesCanjeados.paginator = this.paginator;
   }
 
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
   ngOnInit(): void {
-    this.loginService.currentUserId.pipe(
+    this.subscription = this.loginService.currentUserId.pipe(
       filter(userId => !!userId), // Filtra solo si el ID del usuario está definido
       tap((userId) => {
         this.userId = parseInt(userId || "-1"); // Almacena el ID del usuario como número

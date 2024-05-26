@@ -17,6 +17,7 @@ export class AdminGuard implements CanActivate {
               map((userLoginRole) => {
                 if(userLoginRole == ''){
                     this.router.navigateByUrl('/login');
+                    return false;    
                 }
                 if (userLoginRole !== 'ADMIN') {
                     this.router.navigateByUrl("/permiso-denegado")

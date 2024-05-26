@@ -15,8 +15,10 @@ export class EmpleadoGuard implements CanActivate {
       ): Observable<boolean> {
           return this.loginService.currentUserRole.pipe(
               map((userLoginRole) => {
+                console.log("userloginrole: " + userLoginRole)
                 if(userLoginRole == ''){
                     this.router.navigateByUrl('/login');
+                    return false;
                 }
                 if (userLoginRole !== 'EMPLEADO') {
                     this.router.navigateByUrl("/permiso-denegado")

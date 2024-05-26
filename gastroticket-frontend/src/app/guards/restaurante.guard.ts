@@ -17,6 +17,7 @@ export class RestauranteGuard implements CanActivate {
               map((userLoginRole) => {
                 if(userLoginRole == ''){
                     this.router.navigateByUrl('/login');
+                    return false;    
                 }
                 if (userLoginRole !== 'RESTAURANTE') {
                     this.router.navigateByUrl("/permiso-denegado")

@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { BehaviorSubject, filter, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Subscription, filter, switchMap, tap } from 'rxjs';
 import { CuponCanjeadoDTO } from 'src/app/Models/cuponCanjeado';
 import { LoginService } from 'src/app/Services/auth/login.service';
 import { RestaurantesService } from 'src/app/Services/restaurantes.service';
@@ -19,8 +19,9 @@ import { NgxScannerQrcodeComponent, ScannerQRCodeResult } from 'ngx-scanner-qrco
   styleUrls: ['./dash-restaurantes.component.css'],
   providers: [DatePipe]
 })
-export class DashRestaurantesComponent implements OnInit, AfterViewInit {
+export class DashRestaurantesComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('action', { static: false }) action!: NgxScannerQrcodeComponent;
+  private subscription!: Subscription;
 
   userLoginOn:boolean=false;
   userId:number = -1;
@@ -70,8 +71,14 @@ export class DashRestaurantesComponent implements OnInit, AfterViewInit {
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
   cargarVentas(){
-    this.loginService.currentUserId.pipe(
+    this.subscription = this.loginService.currentUserId.pipe(
       filter(userId => !!userId), 
       tap((userId) => {
         this.userId = parseInt(userId || "-1"); 
@@ -85,11 +92,10 @@ export class DashRestaurantesComponent implements OnInit, AfterViewInit {
     ).subscribe({
       next: (cupones) => {
         this.cupones = new MatTableDataSource<CuponCanjeadoDTO>(cupones);
-        console.log("cupones: ", cupones);
         this.cupones.data.forEach(cupon => {
           this.sumaTotal += cupon.importeFactura;
           this.sumaDescontado += cupon.importeDescontado;
-      });
+        });
       },
       error: (error) => {
         console.error("Error:", error)
@@ -128,6 +134,7 @@ export class DashRestaurantesComponent implements OnInit, AfterViewInit {
             } else if (result === "error") {
               this.resetForm();
               this.mensajeService.getErrorMessage().subscribe(mensaje => {
+                console.log("error: " + mensaje)
                 this.restauranteError = mensaje;
               });
             }
@@ -157,6 +164,5 @@ export class DashRestaurantesComponent implements OnInit, AfterViewInit {
         this.canjearCuponForm.get(key)?.markAsUntouched();
     });
   }
-
 
 }

@@ -17,6 +17,7 @@ export class EmpleadoFormGuard implements CanActivate {
               map((userLoginRole) => {
                 if(userLoginRole == ''){
                     this.router.navigateByUrl('/login');
+                    return false;    
                 }
                 if (userLoginRole !== 'EMPLEADO') {
                     this.router.navigateByUrl("/permiso-denegado")
