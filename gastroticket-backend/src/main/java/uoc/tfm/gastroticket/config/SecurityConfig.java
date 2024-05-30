@@ -41,7 +41,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         @Override
         public void addCorsMappings(@SuppressWarnings("null") CorsRegistry registry) {
                 registry.addMapping("/**") // Permite todas las URL
-                                .allowedOrigins("*") // Permite solicitudes desde cualquier origen
+                                .allowedOrigins("http://localhost:4200") // Permite solicitudes solo desde nuestro
+                                                                         // frontend
                                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Permite todos los métodos
                                                                                            // HTTP
                                 .allowedHeaders("*"); // Permite todas las cabeceras
