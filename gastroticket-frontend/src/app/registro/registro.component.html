@@ -1,5 +1,9 @@
 <div class="container">
-    <h2 class="text-center mb-3">Formulario de registro</h2>
+    <div class="text-center mb-4">
+      <img src="../../../assets/logo.png"
+        style="width: 185px;" alt="logo">
+    </div>
+    <h5 class="text-center mb-3">Registro</h5>
     <form [formGroup]="registroForm">
       <div class="d-flex justify-content-center">
         <div class="w-50">
@@ -83,7 +87,7 @@
       </div>
   
       <div class="d-flex justify-content-center">
-        <button type="submit" (click)="registro()" mat-flat-button color="primary" class="btn btn-primary btn-block mb-4">Registrarse</button>
+        <button type="submit" (click)="registro()" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Registrarse</button>
       </div>
     </form>
   </div>
