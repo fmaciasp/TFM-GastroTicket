@@ -86,9 +86,12 @@ public class AuthService {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public ResponseEntity<?> registerAdmin(RegisterRequest request) {
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setRole(Role.ADMIN);
+        User user = User.builder()
+                .username(request.username)
+                .password(passwordEncoder.encode(request.password))
+                .role(Role.ADMIN)
+                .build();
+
         user = userRepository.save(user);
 
         if (user != null) {
