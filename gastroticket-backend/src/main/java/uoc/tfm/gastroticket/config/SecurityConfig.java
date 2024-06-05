@@ -40,9 +40,11 @@ public class SecurityConfig implements WebMvcConfigurer {
 
         @Override
         public void addCorsMappings(@SuppressWarnings("null") CorsRegistry registry) {
+                String url = "https://gastroticket.netlify.app/";
+                // String url = "http://localhost:4200";
                 registry.addMapping("/**") // Permite todas las URL
-                                .allowedOrigins("http://localhost:4200") // Permite solicitudes solo desde nuestro
-                                                                         // frontend
+                                .allowedOrigins(url) // Permite solicitudes solo desde nuestro
+                                                     // frontend
                                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Permite todos los métodos
                                                                                            // HTTP
                                 .allowedHeaders("*"); // Permite todas las cabeceras
