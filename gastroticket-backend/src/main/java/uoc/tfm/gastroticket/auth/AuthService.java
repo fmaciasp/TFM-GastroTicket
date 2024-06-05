@@ -84,8 +84,7 @@ public class AuthService {
         return AuthResponse.builder().token(jwtService.getToken(user)).role(user.getRole()).build();
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public ResponseEntity<?> registerAdmin(RegisterRequest request) {
+    public AuthResponse registerAdmin(RegisterRequest request) {
         User user = User.builder()
                 .username(request.username)
                 .password(passwordEncoder.encode(request.password))
@@ -98,8 +97,7 @@ public class AuthService {
             emailService.enviarEmail(user, "Administador", Role.ADMIN.toString());
         }
 
-        return new ResponseEntity(Collections.singletonMap("mensaje", "El administrador se ha creado correctamente"),
-                HttpStatus.OK);
+        return AuthResponse.builder().token(jwtService.getToken(user)).role(user.getRole()).build();
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
