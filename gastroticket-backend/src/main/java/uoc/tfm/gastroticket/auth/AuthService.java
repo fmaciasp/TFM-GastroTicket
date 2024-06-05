@@ -90,7 +90,6 @@ public class AuthService {
                 .build();
 
         user = userRepository.save(user);
-        System.out.println("user: " + user);
 
         return AuthResponse.builder().token(jwtService.getToken(user)).role(user.getRole()).build();
     }
