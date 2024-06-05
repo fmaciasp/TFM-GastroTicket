@@ -32,8 +32,6 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    @Autowired
-    private EmailService emailService;
 
     public AuthResponse login(LoginRequest request) {
         try {
@@ -92,10 +90,6 @@ public class AuthService {
                 .build();
 
         user = userRepository.save(user);
-
-        if (user != null) {
-            emailService.enviarEmail(user, "Administador", Role.ADMIN.toString());
-        }
 
         return AuthResponse.builder().token(jwtService.getToken(user)).role(user.getRole()).build();
     }
