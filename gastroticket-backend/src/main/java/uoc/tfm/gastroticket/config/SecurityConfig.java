@@ -1,7 +1,9 @@
 package uoc.tfm.gastroticket.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,7 +13,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
 import uoc.tfm.gastroticket.jwt.JwtAuthenticationFilter;
 
@@ -22,6 +23,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 
         private final JwtAuthenticationFilter jwtAuthenticationFilter;
         private final AuthenticationProvider authProvider;
+        @Autowired
+        private Environment env;
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -41,8 +44,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
         @Override
         public void addCorsMappings(@SuppressWarnings("null") CorsRegistry registry) {
-                String url = System.getenv("BASE_URL");
-                System.out.println("url: " + url);
+                String url = System.getenv("BASE_URL_CORS");
                 registry.addMapping("/**") // Permite todas las URL
                                 .allowedOrigins(url) // Permite solicitudes solo desde nuestro
                                                      // frontend
