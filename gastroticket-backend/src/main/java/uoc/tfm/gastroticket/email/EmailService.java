@@ -5,6 +5,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
@@ -56,10 +57,7 @@ public class EmailService {
     }
 
     public String getBaseUrl() {
-        // local
-        String url = "http://localhost:4200/";
-        // produccion
-        // String url = "";
+        String url = Dotenv.load().get("BASE_URL");
 
         return url;
     }

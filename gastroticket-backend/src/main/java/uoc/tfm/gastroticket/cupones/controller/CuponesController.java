@@ -86,14 +86,19 @@ public class CuponesController {
 
     @PostMapping("canjear")
     public ResponseEntity<?> canjearCupon(@RequestBody CuponCanjeadoDTO cuponCanjeadoRequestDTO) {
-        cuponService.canjearCupon(
-                cuponCanjeadoRequestDTO.getCuponId(),
-                cuponCanjeadoRequestDTO.getUserId(),
-                cuponCanjeadoRequestDTO.getImporteDescontado(),
-                cuponCanjeadoRequestDTO.getImporteFactura(),
-                cuponCanjeadoRequestDTO.getEmpleadoId(),
-                cuponCanjeadoRequestDTO.getRestauranteId());
-        return new ResponseEntity<>(Collections.singletonMap("mensaje", "Cupón validado correctamente"), HttpStatus.OK);
+        try {
+            cuponService.canjearCupon(
+                    cuponCanjeadoRequestDTO.getCuponId(),
+                    cuponCanjeadoRequestDTO.getUserId(),
+                    cuponCanjeadoRequestDTO.getImporteDescontado(),
+                    cuponCanjeadoRequestDTO.getImporteFactura(),
+                    cuponCanjeadoRequestDTO.getEmpleadoId(),
+                    cuponCanjeadoRequestDTO.getRestauranteId());
+            return new ResponseEntity<>(Collections.singletonMap("mensaje", "Cupón validado correctamente"),
+                    HttpStatus.OK);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 
 }

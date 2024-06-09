@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
 import uoc.tfm.gastroticket.jwt.JwtAuthenticationFilter;
 
@@ -40,8 +41,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
         @Override
         public void addCorsMappings(@SuppressWarnings("null") CorsRegistry registry) {
-                String url = "https://gastroticket.netlify.app/";
-                // String url = "http://localhost:4200";
+                String url = Dotenv.load().get("BASE_URL");
                 registry.addMapping("/**") // Permite todas las URL
                                 .allowedOrigins(url) // Permite solicitudes solo desde nuestro
                                                      // frontend

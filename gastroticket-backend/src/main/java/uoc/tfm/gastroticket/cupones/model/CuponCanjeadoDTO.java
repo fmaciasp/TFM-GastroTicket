@@ -18,8 +18,8 @@ public class CuponCanjeadoDTO {
     @GeneratedValue
     private Long id;
     private Long cuponId;
-    private Long importeDescontado;
-    private Long importeFactura;
+    private double importeDescontado;
+    private double importeFactura;
     private Long userId;
     private Long empleadoId;
     private Long restauranteId;

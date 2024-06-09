@@ -20,7 +20,7 @@ public class CuponesDTO {
     private Long id;
     @Column(unique = true)
     private String codigo;
-    private Long importe;
+    private double importe;
     @Column(unique = true)
     private Long empleadoId;
     private Date fechaUltimoUso;

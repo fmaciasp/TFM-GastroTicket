@@ -105,13 +105,14 @@ public class CuponesService {
         }
 
         CuponesDTO cupon = cuponRepo.findByEmpleadoId(empleado.getId());
-        long importeCupon = cupon.getImporte();
-        long total = importeCupon + importe;
+        double importeCupon = cupon.getImporte();
+        double total = importeCupon + importe;
         cupon.setImporte(total);
         cuponRepo.save(cupon);
     }
 
-    public void canjearCupon(long cuponId, long userId, long importeDescontado, long importeFactura, long empleadoId,
+    public void canjearCupon(long cuponId, long userId, double importeDescontado, double importeFactura,
+            long empleadoId,
             long restauranteId) {
 
         Calendar _calendar = Calendar.getInstance();
@@ -144,8 +145,8 @@ public class CuponesService {
                 importeDescontado = importeFactura;
             }
 
-            EmpleadosDTO empleado = empleadoRepo.findById(empleadoId).get();
-            EmpresasDTO empresa = empresaRepo.findById(empleado.getEmpresaId()).get();
+            EmpleadosDTO empleado = empleadoRepo.findById(empleadoId).orElseThrow();
+            EmpresasDTO empresa = empresaRepo.findById(empleado.getEmpresaId()).orElseThrow();
 
             cupon.setImporte(cupon.getImporte() - importeDescontado);
             cupon.setFechaUltimoUso(hoy);
@@ -165,6 +166,7 @@ public class CuponesService {
 
         } catch (RuntimeException e) {
             e.printStackTrace();
+            throw new RuntimeException("No se ha podido efectuar la venta porque no se encuentra el usuario");
         }
     }
 

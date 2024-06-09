@@ -18,7 +18,7 @@ public class EmpleadosCuponesDTO {
     private long empresaId;
     private Long userId;
     private Long idCupon;
-    private Long importeCupon;
+    private double importeCupon;
     private Date fechaUltimoUso;
     private String codigoCupon;
 }
