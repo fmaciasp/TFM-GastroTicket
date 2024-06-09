@@ -44,7 +44,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
         @Override
         public void addCorsMappings(@SuppressWarnings("null") CorsRegistry registry) {
-                String url = System.getenv("BASE_URL_CORS");
+                String url = System.getenv("BASE_URL");
                 registry.addMapping("/**") // Permite todas las URL
                                 .allowedOrigins(url) // Permite solicitudes solo desde nuestro
                                                      // frontend
