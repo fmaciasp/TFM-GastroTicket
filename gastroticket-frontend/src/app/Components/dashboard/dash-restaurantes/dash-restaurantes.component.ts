@@ -130,11 +130,11 @@ export class DashRestaurantesComponent implements OnInit, AfterViewInit, OnDestr
             if (result === "exito") {
               this.canjearCuponForm.reset();
               this.restauranteExito = "Se ha efectuado la venta";
+              this.restauranteError = null;
               this.cargarVentas();
             } else if (result === "error") {
               this.resetForm();
               this.mensajeService.getErrorMessage().subscribe(mensaje => {
-                console.log("error: " + mensaje)
                 this.restauranteError = mensaje;
               });
             }
@@ -147,8 +147,8 @@ export class DashRestaurantesComponent implements OnInit, AfterViewInit, OnDestr
 
   calculatePagado(element: any): string {
     const importeFactura = element.importeFactura || 0;
-    const importeGastado = element.importeGastado || 0;
-    const pagado = importeFactura - importeGastado;
+    const importeDescontado = element.importeDescontado || 0;
+    const pagado = importeFactura - importeDescontado;
     return pagado.toFixed(2);
   }
   

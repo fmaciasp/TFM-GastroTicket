@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs';
 import { EmpleadoDTO } from 'src/app/Models/empleado';
 import { EmpleadoRequest } from 'src/app/Models/empleadoRequest';
 import { AdministracionService } from 'src/app/Services/administracion.service';

@@ -46,6 +46,8 @@ export class DialogCanjearComponent {
       restauranteId: this.restauranteId
     }
 
+    console.log("this.canjearCupon: " + this.canjearCupon.importeFactura);
+
     this.restauranteService.canjearCupon(this.canjearCupon).subscribe({
       next: () => {
         this.dialogRef.close("exito");

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { LoginRequest } from './loginRequest';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { JwtDto } from 'src/app/Models/JwDto';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 import { Observable, catchError, throwError, BehaviorSubject, tap } from 'rxjs';
 import { User } from './user';
 

@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 import { EmpleadoDTO } from '../Models/empleado';
 import { HttpClient } from '@angular/common/http';
-import { identifierName } from '@angular/compiler';
-import { EmpleadoCuponDTO } from '../Models/empleadoCupon';
 import { EmpleadoRequest } from '../Models/empleadoRequest';
 
 const API_URL = environment.APIEndpoint;

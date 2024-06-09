@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { RegistroRequest } from './registroRequest';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, tap, catchError, throwError, map } from 'rxjs';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 import { Registro } from './registro';
 import { ActivateRequest } from './activateRequest';
 

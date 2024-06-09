@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { User } from 'src/app/Services/auth/user';
 import { UserService } from 'src/app/Services/user/user.service';
-import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-personal-details',

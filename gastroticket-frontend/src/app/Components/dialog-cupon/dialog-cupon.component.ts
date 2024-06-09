@@ -12,11 +12,9 @@ export class DialogCuponComponent {
 
   codigo!: string;
   errorEnSubmit: boolean = false;
- // cuponCarga!: CuponCargaDTO;
 
 
   constructor(
-    private empleadoService: EmpleadoService,
     public dialogRef: MatDialogRef<DialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { 

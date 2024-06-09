@@ -1,5 +1,6 @@
 <div class="container">
-    <h1>Editar empresa</h1>
+  <h1 *ngIf="modoEditar">Editar empresa</h1>
+  <h1 *ngIf="!modoEditar">Nueva empresa</h1>
     <div *ngIf="empresaError!=null" class="alert alert-danger" role="alert">
       {{empresaError}}
     </div>

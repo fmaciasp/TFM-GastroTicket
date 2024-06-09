@@ -1,5 +1,6 @@
 <div class="container">
-    <h1>Editar restaurante</h1>
+    <h1 *ngIf="modoEditar">Editar restaurante</h1>
+    <h1 *ngIf="!modoEditar">Nuevo restaurante</h1>
     <div *ngIf="restauranteError!=null" class="alert alert-danger" role="alert">
         {{restauranteError}}
       </div>

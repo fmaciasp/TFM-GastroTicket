@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { EmpresaDTO } from '../Models/empresa';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 import { RestauranteDTO } from '../Models/restaurante';
 import { Router } from '@angular/router';
 
