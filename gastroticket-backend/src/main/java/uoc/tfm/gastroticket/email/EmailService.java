@@ -57,7 +57,7 @@ public class EmailService {
     }
 
     public String getBaseUrl() {
-        String url = Dotenv.load().get("BASE_URL");
+        String url = System.getenv("BASE_URL");
 
         return url;
     }
