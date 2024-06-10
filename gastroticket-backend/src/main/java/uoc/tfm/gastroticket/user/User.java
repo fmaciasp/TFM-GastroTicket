@@ -14,7 +14,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,16 +24,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "userdto", uniqueConstraints = { @UniqueConstraint(columnNames = { "username", "activationToken" }) })
+@Table(name = "userdto")
 public class User implements UserDetails {
     @Id
     @GeneratedValue
     Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     String username;
     String password;
     @Enumerated(EnumType.STRING)
     Role role;
+    @Column(unique = true)
     String activationToken;
 
     @Override

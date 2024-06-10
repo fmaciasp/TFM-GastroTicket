@@ -1,11 +1,11 @@
 package uoc.tfm.gastroticket.email;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
@@ -24,12 +24,13 @@ public class EmailService {
     private UserRepository userRepository;
     @Autowired
     private JwtService jwtService;
+    @Value("${BASE_URL}")
+    private String url;
 
     public void enviarEmail(User user, String nombre, String rol) {
         String token = jwtService.getTokenRegistro(user, Role.EMPRESA.toString());
         user.setActivationToken(token);
         userRepository.save(user);
-        String url = getBaseUrl();
         url = url.concat("activate?token=");
         url = url.concat(token);
         String htmlContent = "<html><body><h1>¡¡Bienvenido/a a GastroTicket " + nombre + "!!</h1>"
@@ -54,12 +55,6 @@ public class EmailService {
         helper.setText(text, true);
 
         javaMailSender.send(message);
-    }
-
-    public String getBaseUrl() {
-        String url = System.getenv("BASE_URL");
-
-        return url;
     }
 
 }

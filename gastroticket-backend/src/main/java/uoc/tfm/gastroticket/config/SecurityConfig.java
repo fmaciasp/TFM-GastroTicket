@@ -1,9 +1,8 @@
 package uoc.tfm.gastroticket.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,8 +22,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 
         private final JwtAuthenticationFilter jwtAuthenticationFilter;
         private final AuthenticationProvider authProvider;
-        @Autowired
-        private Environment env;
+        @Value("${BASE_URL}")
+        private String url;
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -44,7 +43,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 
         @Override
         public void addCorsMappings(@SuppressWarnings("null") CorsRegistry registry) {
-                String url = System.getenv("BASE_URL");
                 registry.addMapping("/**") // Permite todas las URL
                                 .allowedOrigins(url) // Permite solicitudes solo desde nuestro
                                                      // frontend
