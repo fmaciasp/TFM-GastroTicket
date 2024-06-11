@@ -39,7 +39,7 @@ public class EmailService {
                 + "</body></html>";
 
         try {
-            sendEmail(/* _user.getUsername() */"franmacias91@gmail.com",
+            sendEmail(user.getUsername(),
                     "Active su cuenta en GastroTicket", htmlContent, token);
         } catch (MessagingException e) {
             e.printStackTrace();
