@@ -128,7 +128,6 @@ export class RestauranteFormularioComponent {
     const userId = this.restauranteForm.get('userId')?.value;
 
     if(this.restauranteId){
-      console.log("nombre: " + nombre)
       this.editRestaurante = {
           id: this.restauranteId,
           nombre: nombre,
@@ -139,12 +138,10 @@ export class RestauranteFormularioComponent {
       };
       this.administracionService.editarRestaurante(this.editRestaurante).subscribe({
         next: (res) => {
-          console.log("res: "+res);
           this.mensajesService.sendSuccessMessage(res)
           this.router.navigate(['/restaurantes'])
         },
         error: (error) => {
-          console.error('editarRestaurante restaurante-formulario.component error', error);
           this.restauranteError = error.error;
         }
       });

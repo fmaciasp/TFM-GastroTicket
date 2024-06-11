@@ -147,7 +147,7 @@ export class EmpresaFormularioComponent implements OnInit {
         },
         error: (error) => {
           console.error('No se ha podido crear una nueva empresa', error);
-          this.empresaError = error;
+          this.empresaError = error.error;
         }
       })
     }

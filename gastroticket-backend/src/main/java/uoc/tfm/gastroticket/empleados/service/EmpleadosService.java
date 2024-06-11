@@ -75,11 +75,14 @@ public class EmpleadosService {
         return empleadoRepo.findByUserId(userId);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public ResponseEntity<?> createEmpleado(String nombre, String apellidos, String email, String telefono,
+    public void createEmpleado(String nombre, String apellidos, String email, String telefono,
             long empresaId) {
         User _user = new User();
         EmpleadosDTO _empleado = new EmpleadosDTO();
+
+        if (userRepository.findByUsername(email).orElse(null) != null) {
+            throw new RuntimeException("El correo electrónico ya está en uso");
+        }
 
         try {
             _user.setRole(Role.EMPLEADO);
@@ -97,26 +100,26 @@ public class EmpleadosService {
             cuponesService.createCupon(_empleado.getId());
 
         } catch (IOException e) {
-            return new ResponseEntity("Error al crear al empleado", HttpStatus.BAD_REQUEST);
+            throw new RuntimeException("Error al crear al empleado");
         }
 
         if (_user != null && _empleado != null) {
             emailService.enviarEmail(_user, _empleado.getNombre(),
                     Role.EMPLEADO.toString());
         }
-
-        return new ResponseEntity(Collections.singletonMap("mensaje", "El empleado se ha creado correctamente"),
-                HttpStatus.OK);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public ResponseEntity<?> editarEmpleado(long id, String nombre, String apellidos, String email, String telefono) {
+    public void editarEmpleado(long id, String nombre, String apellidos, String email, String telefono) {
         try {
             EmpleadosDTO _empleado = empleadoRepo.findById(id).get();
             if (_empleado.getUserId() != null) {
                 User user = userRepository.findById(_empleado.getUserId()).orElse(null);
                 if (user == null) {
                     throw new RuntimeException("Usuario no encontrado");
+                }
+                User user_aux = userRepository.findByUsername(email).orElse(null);
+                if (user_aux != null && user_aux.getId() != user.getId()) {
+                    throw new RuntimeException("El email ya está en uso");
                 }
                 user.setUsername(email);
                 userRepository.save(user);
@@ -127,14 +130,11 @@ public class EmpleadosService {
                 _empleado.setTelefono(telefono);
                 empleadoRepo.save(_empleado);
             } else {
-                return new ResponseEntity("No se ha encontrado el usuario", HttpStatus.NOT_FOUND);
+                throw new RuntimeException("Usuario no encontrado");
             }
         } catch (IOException e) {
-            return new ResponseEntity("Error al editar al empleado", HttpStatus.BAD_REQUEST);
+            throw new RuntimeException("Error al editar al empleado");
         }
-
-        return new ResponseEntity(Collections.singletonMap("mensaje", "El empleado se ha actualizado correctamente"),
-                HttpStatus.OK);
 
     }
 

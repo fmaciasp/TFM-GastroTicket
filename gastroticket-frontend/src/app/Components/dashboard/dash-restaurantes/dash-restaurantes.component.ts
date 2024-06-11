@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subscription, filter, switchMap, tap } from 'rxjs';
+import { Subscription, filter, switchMap, tap } from 'rxjs';
 import { CuponCanjeadoDTO } from 'src/app/Models/cuponCanjeado';
 import { LoginService } from 'src/app/Services/auth/login.service';
 import { RestaurantesService } from 'src/app/Services/restaurantes.service';

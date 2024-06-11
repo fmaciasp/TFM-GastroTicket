@@ -3,6 +3,7 @@ package uoc.tfm.gastroticket.restaurantes.service;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,35 +47,31 @@ public class RestaurantesService {
         return restauranteRepo.findByUserId(id);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public ResponseEntity<?> createRestaurante(String nombre, String email, String ciudad, String direccion) {
+    public void createRestaurante(String nombre, String email, String ciudad, String direccion) {
         User _user = new User();
         RestaurantesDTO _restaurante = new RestaurantesDTO();
-        try {
-            _user.setUsername(email);
-            _user.setRole(Role.RESTAURANTE);
-            _user = userRepository.save(_user);
 
-            _restaurante.setNombre(nombre);
-            _restaurante.setCorreo(email);
-            _restaurante.setCiudad(ciudad);
-            _restaurante.setDireccion(direccion);
-            _restaurante.setUserId(_user.getId());
-            restauranteRepo.save(_restaurante);
-        } catch (IOException e) {
-            return new ResponseEntity("Error al crear el restaurante", HttpStatus.BAD_REQUEST);
+        if (userRepository.findByUsername(email).orElse(null) != null) {
+            throw new RuntimeException("El correo electrónico ya está en uso");
         }
+
+        _user.setUsername(email);
+        _user.setRole(Role.RESTAURANTE);
+        _user = userRepository.save(_user);
+
+        _restaurante.setNombre(nombre);
+        _restaurante.setCorreo(email);
+        _restaurante.setCiudad(ciudad);
+        _restaurante.setDireccion(direccion);
+        _restaurante.setUserId(_user.getId());
+        restauranteRepo.save(_restaurante);
 
         if (_user != null && _restaurante != null) {
             emailService.enviarEmail(_user, _restaurante.getNombre(), Role.RESTAURANTE.toString());
         }
-
-        return new ResponseEntity(Collections.singletonMap("mensaje", "La empresa se ha creado correctamente"),
-                HttpStatus.OK);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public ResponseEntity<?> editarRestaurante(long id, String nombre, String email, String ciudad, String direccion) {
+    public void editarRestaurante(long id, String nombre, String email, String ciudad, String direccion) {
         try {
             RestaurantesDTO _restaurante = restauranteRepo.findById(id).get();
             if (_restaurante.getUserId() != null) {
@@ -90,17 +87,14 @@ public class RestaurantesService {
                 _restaurante.setDireccion(direccion);
                 restauranteRepo.save(_restaurante);
             } else {
-                return new ResponseEntity("No existe el usuario", HttpStatus.NOT_FOUND);
+                throw new RuntimeException("No existe el usuario");
             }
         } catch (IOException e) {
-            return new ResponseEntity("Error al editar el restaurante", HttpStatus.BAD_REQUEST);
+            throw new RuntimeException("Error al editar el restaurante");
         }
-        return new ResponseEntity(Collections.singletonMap("mensaje", "La empresa se ha actualizado correctamente"),
-                HttpStatus.OK);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public ResponseEntity<?> eliminarRestaurante(long id) {
+    public void eliminarRestaurante(long id) {
         try {
             if (restauranteRepo.existsById(id)) {
                 RestaurantesDTO _restaurante = restauranteRepo.findById(id).get();
@@ -114,9 +108,7 @@ public class RestaurantesService {
                 restauranteRepo.delete(_restaurante);
             }
         } catch (IOException e) {
-            return new ResponseEntity("Error al eliminar el restaurante", HttpStatus.BAD_REQUEST);
+            throw new RuntimeException("Error al eliminar el restaurante");
         }
-        return new ResponseEntity(Collections.singletonMap("mensaje", "El restaurante se ha eliminado correctamente"),
-                HttpStatus.OK);
     }
 }

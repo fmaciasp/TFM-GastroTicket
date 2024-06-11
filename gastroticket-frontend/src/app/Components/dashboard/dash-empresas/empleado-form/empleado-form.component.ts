@@ -98,7 +98,6 @@ export class EmpleadoFormComponent implements OnInit {
     const request = new EmpleadoRequest(this.empleadoId, this.userId, 0);
     this.empresaService.getEmpleado(request).subscribe({
       next: (empleado) => {
-        console.log("empleado: " + empleado.nombre);
         this.empleado = {
           id: empleado.id,
           nombre: empleado.nombre,
@@ -165,13 +164,12 @@ export class EmpleadoFormComponent implements OnInit {
       };
       this.empresaService.editarEmpleado(this.editEmpleado).subscribe({
         next: (res) => {
-          console.log("res: " + res.mensaje);
           this.mensajesService.sendSuccessMessage(res.mensaje)
           this.router.navigate(['/dash-empresa'])
         },
         error: (error) => {
-          console.error('editarEmpresa empleado-formulario.component error', error);
-          this.empleadoError = error;
+          this.empleadoError = error.error;
+          this.guardando = false;
         },
         complete: () => {
           this.guardando = false;

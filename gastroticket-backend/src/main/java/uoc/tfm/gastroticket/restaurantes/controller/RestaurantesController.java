@@ -53,10 +53,17 @@ public class RestaurantesController {
 
     @PostMapping("create")
     public ResponseEntity<?> createRestaurante(@RequestBody RestaurantesDTO restaurante) {
-        restaurantesService.createRestaurante(restaurante.getNombre(), restaurante.getCorreo(), restaurante.getCiudad(),
-                restaurante.getDireccion());
-        return new ResponseEntity<>(Collections.singletonMap("mensaje", "Se ha creado el restaurante correctamente"),
-                HttpStatus.CREATED);
+        try {
+            restaurantesService.createRestaurante(restaurante.getNombre(), restaurante.getCorreo(),
+                    restaurante.getCiudad(),
+                    restaurante.getDireccion());
+            return new ResponseEntity<>(
+                    Collections.singletonMap("mensaje", "Se ha creado el restaurante correctamente"),
+                    HttpStatus.CREATED);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
+
     }
 
     @PostMapping("editar")

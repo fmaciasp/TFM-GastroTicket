@@ -17,6 +17,7 @@ public class EmpresasDTO {
     @GeneratedValue
     private Long id;
     private String nombre;
+    @Column(unique = true)
     private String email;
     @Column(unique = true)
     private Long userId;

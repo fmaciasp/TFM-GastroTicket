@@ -82,7 +82,7 @@ public class EmpresasController {
                     Collections.singletonMap("mensaje", "No se ha encontrado la empresa con id " + id),
                     HttpStatus.NOT_FOUND);
         } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 }

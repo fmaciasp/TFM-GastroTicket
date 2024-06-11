@@ -103,17 +103,14 @@ public class EmpleadosController {
 
     @PostMapping("create")
     public ResponseEntity<?> createEmpleado(@RequestBody EmpleadosDTO empleado, HttpServletRequest request) {
-        if (empleadosService.getEmpleadoByEmail(empleado.getEmail()) == null) {
+        try {
             empleadosService.createEmpleado(empleado.getNombre(), empleado.getApellidos(),
                     empleado.getEmail(), empleado.getTelefono(),
                     empleado.getEmpresaId());
             return new ResponseEntity<>(Collections.singletonMap("mensaje", "Se ha creado el empleado correctamente"),
                     HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(
-                    Collections.singletonMap("mensaje",
-                            "No se ha podido crear el empleado porque ya existe ese correo"),
-                    HttpStatus.CONFLICT);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 

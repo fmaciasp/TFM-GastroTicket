@@ -18,7 +18,9 @@ public class EmpleadosDTO {
     private Long id;
     private String nombre;
     private String apellidos;
+    @Column(unique = true)
     private String email;
+    @Column(unique = true)
     private String telefono;
     private long empresaId;
     @Column(unique = true)

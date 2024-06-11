@@ -41,37 +41,33 @@ public class EmpresasService {
         return empresaRepo.findByUserId(id);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public ResponseEntity<?> createEmpresa(String nombre, String email, HttpServletRequest request) {
+    @Transactional
+    public void createEmpresa(String nombre, String email, HttpServletRequest request) {
         User _user = null;
         EmpresasDTO _empresa = null;
-        try {
-            _user = new User();
-            _user.setUsername(email);
-            _user.setRole(Role.EMPRESA);
-            _user = userRepository.save(_user);
 
-            _empresa = new EmpresasDTO();
-            _empresa.setNombre(nombre);
-            _empresa.setEmail(email);
-            _empresa.setUserId(_user.getId());
-            empresaRepo.save(_empresa);
-
-        } catch (IOException e) {
-            return new ResponseEntity("Error al crear la empresa", HttpStatus.BAD_REQUEST);
+        if (userRepository.findByUsername(email).orElse(null) != null) {
+            throw new RuntimeException("El correo electrónico ya está en uso");
         }
+
+        _user = new User();
+        _user.setUsername(email);
+        _user.setRole(Role.EMPRESA);
+        _user = userRepository.save(_user);
+
+        _empresa = new EmpresasDTO();
+        _empresa.setNombre(nombre);
+        _empresa.setEmail(email);
+        _empresa.setUserId(_user.getId());
+        _empresa = empresaRepo.save(_empresa);
 
         if (_user != null && _empresa != null) {
             emailService.enviarEmail(_user, _empresa.getNombre(), Role.EMPRESA.toString());
         }
 
-        return new ResponseEntity(Collections.singletonMap("mensaje", "La empresa se ha creado correctamente"),
-                HttpStatus.OK);
-
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public ResponseEntity<?> editarEmpresa(long id, String nombre, String email) {
+    public void editarEmpresa(long id, String nombre, String email) {
         try {
             EmpresasDTO _empresa = empresaRepo.findById(id).get();
             if (_empresa.getUserId() != null) {
@@ -86,17 +82,14 @@ public class EmpresasService {
                 _empresa.setEmail(email);
                 empresaRepo.save(_empresa);
             } else
-                return new ResponseEntity("No se ha encontrado el usuario", HttpStatus.NOT_FOUND);
+                throw new RuntimeException("No se ha encontrado el usuario");
 
         } catch (IOException e) {
-            return new ResponseEntity("Error al editar la empresa", HttpStatus.BAD_REQUEST);
+            throw new RuntimeException("Error al editar la empresa");
         }
-        return new ResponseEntity(Collections.singletonMap("mensaje", "La empresa se ha actualizado correctamente"),
-                HttpStatus.OK);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public ResponseEntity<?> eliminarEmpresa(long id) {
+    public void eliminarEmpresa(long id) {
         try {
             if (empresaRepo.existsById(id)) {
                 EmpresasDTO _empresa = empresaRepo.findById(id).get();
@@ -109,9 +102,7 @@ public class EmpresasService {
                 empresaRepo.deleteById(id);
             }
         } catch (IOException e) {
-            return new ResponseEntity("Error al eliminar la empresa", HttpStatus.BAD_REQUEST);
+            throw new RuntimeException("Error al eliminar la empresa");
         }
-        return new ResponseEntity(Collections.singletonMap("mensaje", "La empresa se ha eliminado correctamente"),
-                HttpStatus.OK);
     }
 }
