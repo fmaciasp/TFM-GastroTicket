@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import lombok.RequiredArgsConstructor;
@@ -32,23 +31,13 @@ public class SecurityConfig implements WebMvcConfigurer {
                                                 csrf -> csrf.disable())
                                 .authorizeHttpRequests(authRequest -> authRequest
                                                 .requestMatchers("/auth/**").permitAll()
-                                                .requestMatchers("/**").permitAll()
+                                                .requestMatchers("/api/restaurantes/restaurantes-activos").permitAll()
                                                 .anyRequest().authenticated())
                                 .sessionManagement(sessionManager -> sessionManager
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authenticationProvider(authProvider)
                                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                                 .build();
-        }
-
-        @Override
-        public void addCorsMappings(@SuppressWarnings("null") CorsRegistry registry) {
-                registry.addMapping("/**") // Permite todas las URL
-                                .allowedOrigins(url) // Permite solicitudes solo desde nuestro
-                                                     // frontend
-                                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Permite todos los métodos
-                                                                                           // HTTP
-                                .allowedHeaders("*"); // Permite todas las cabeceras
         }
 
 }
